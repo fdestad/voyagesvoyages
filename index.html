@@ -185,7 +185,7 @@ html, body {
   z-index: 10;
 }
 .btn-back-home {
-  background: rgba(255,255,255,0.15);
+  : rgba(255,255,255,0.15);
   border: none;
   color: white;
   padding: 8px 12px;
@@ -199,7 +199,7 @@ html, body {
 #voyage-header {
   padding: 16px;
   border-bottom: 1px solid var(--cream-dark);
-  background: transparent;
+  : transparent;
 }
 #voyage-name-wrap {
   display: flex; align-items: center; gap: 10px;
@@ -211,12 +211,12 @@ html, body {
 #voyage-name-input {
   flex: 1; font-family: 'Playfair Display', serif;
   font-size: 22px; font-weight: 700; color: var(--ink);
-  border: none; background: transparent; outline: none;
+  border: none; : transparent; outline: none;
 }
 .voyage-meta { font-size: 13px; color: var(--ink-soft); margin-top: 6px; margin-left: 26px; }
 
 #search-zone {
-  padding: 16px; background: transparent;
+  padding: 16px; : transparent;
   border-bottom: 1px solid var(--cream-dark); z-index: 5;
 }
 #search-wrap { position: relative; }
@@ -233,7 +233,7 @@ html, body {
 
 #autocomplete {
   position: absolute; top: calc(100% + 4px); left: 0; right: 0;
-  background: var(--white); border: 1px solid var(--cream-dark);
+  : var(--white); border: 1px solid var(--cream-dark);
   border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
   max-height: 250px; overflow-y: auto; z-index: 9999; display: none;
 }
@@ -249,7 +249,7 @@ html, body {
 
 #btn-manual-add {
   display: block; width: 100%; margin-top: 12px;
-  background: none; border: 1px dashed var(--ink-soft);
+  : none; border: 1px dashed var(--ink-soft);
   color: var(--ink-mid); padding: 10px; font-size: 13px;
   border-radius: var(--radius-sm); cursor: pointer;
   font-family: inherit; font-weight: 500;
@@ -264,39 +264,39 @@ html, body {
 }
 .etape-item:not(:last-child)::after {
   content: ''; position: absolute; left: 15px; top: 32px; width: 2px; bottom: -8px;
-  background: var(--cream-dark);
+  : var(--cream-dark);
 }
 .etape-num {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--navy); color: white;
+  : var(--navy); color: white;
   font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; z-index: 1;
 }
 .etape-content {
-  flex: 1; background: var(--cream); border-radius: var(--radius-sm);
+  flex: 1; : var(--cream); border-radius: var(--radius-sm);
   padding: 12px; border: 1px solid var(--cream-dark);
 }
 .etape-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .etape-city { font-size: 16px; font-weight: 700; color: var(--ink); }
 .etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
-.etape-del { color: #c44; background: none; border: none; font-size: 18px; padding: 4px; }
+.etape-del { color: #c44; : none; border: none; font-size: 18px; padding: 4px; }
 .etape-dates { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
 .etape-date-input {
   flex: 1; font-size: 12px; font-family: inherit;
   border: 1px solid var(--cream-dark); border-radius: 6px;
-  padding: 6px; background: var(--white); outline: none;
+  padding: 6px; : var(--white); outline: none;
 }
 
 /* =============================================
    VUE : CARTE
    ============================================= */
 #view-map { position: relative; }
-#map { flex: 1; width: 100%; height: 100%; background: #e8dfc8; }
+#map { flex: 1; width: 100%; height: 100%; : #e8dfc8; }
 #map.selecting { cursor: crosshair; }
 
 .manual-mode-bar {
   position: absolute; top: 0; left: 0; right: 0;
-  background: var(--teal); color: white;
+  : var(--teal); color: white;
   padding: 12px; text-align: center; font-size: 14px; font-weight: 700;
   z-index: 1000; box-shadow: var(--shadow-md); display: none;
 }
@@ -308,7 +308,7 @@ html, body {
 .fab {
   position: absolute; bottom: 24px; right: 24px;
   width: 64px; height: 64px; border-radius: 50%;
-  background: var(--orange); color: white; border: none;
+  : var(--orange); color: white; border: none;
   box-shadow: 0 4px 12px rgba(224,123,57,.4); font-size: 24px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; z-index: 1000; transition: transform 0.2s ease;
@@ -319,12 +319,12 @@ html, body {
    MODAL & TOAST
    ============================================= */
 #modal-overlay {
-  position: fixed; inset: 0; background: rgba(28,53,87,.7); backdrop-filter: blur(4px);
+  position: fixed; inset: 0; : rgba(28,53,87,.7); backdrop-filter: blur(4px);
   z-index: 9000; display: none; align-items: center; justify-content: center;
 }
 #modal-overlay.open { display: flex; }
 #modal {
-  background: var(--white); border-radius: var(--radius);
+  : var(--white); border-radius: var(--radius);
   padding: 24px; width: 90%; max-width: 400px; box-shadow: var(--shadow-lg);
 }
 .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 20px; color: var(--ink); }
@@ -336,7 +336,7 @@ html, body {
 .swatch.selected { border-color: var(--ink); transform: scale(1.15); }
 .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 .modal-actions button { padding: 12px 20px; border-radius: 24px; font-size: 15px; font-weight: 700; font-family: inherit; border: none; cursor: pointer; }
-.btn-cancel { background: var(--cream); color: var(--ink-mid); }
+.btn-cancel { : var(--cream); color: var(--ink-mid); }
 .btn-confirm { background: var(--orange); color: white; }
 
 #toast {
@@ -351,7 +351,7 @@ html, body {
 .leaflet-popup-content-wrapper { border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; }
 </style>
 </head>
-<body>
+<body class="azulejo-bg">
 
 <div id="app">
 
