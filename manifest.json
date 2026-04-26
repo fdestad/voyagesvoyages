@@ -6,7 +6,29 @@
       "src": "https://cdn-icons-png.flaticon.com/512/561/561971.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/561/561971.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://raw.githubusercontent.com/GoogleChrome/lighthouse-stack-packs/master/packs/pwa/assets/pwa-screenshot.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Application sur ordinateur"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/GoogleChrome/lighthouse-stack-packs/master/packs/pwa/assets/pwa-screenshot.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Application sur mobile"
     }
   ],
   "start_url": "./index.html",
