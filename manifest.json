@@ -1,0 +1,17 @@
+{
+  "short_name": "Voyages",
+  "name": "Voyages Voyages",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/128/13881/13881723.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#F5EFE0",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#1C3557"
+}
