@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Voyages</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+<style>
+/* =============================================
+   DESIGN TOKENS
+   ============================================= */
+:root {
+  --cream:       #F5EFE0;
+  --cream-dark:  #EDE4CF;
+  --orange:      #E07B39;
+  --orange-deep: #C05E1F;
+  --orange-pale: #F5C49A;
+  --teal:        #2A7F7F;
+  --navy:        #1C3557;
+  --ink:         #2C2418;
+  --ink-mid:     #5C4E38;
+  --ink-soft:    #9C8E78;
+  --white:       #FFFDF7;
+  --shadow-sm:   0 2px 8px rgba(44,36,24,.10);
+  --shadow-md:   0 6px 24px rgba(44,36,24,.15);
+  --shadow-lg:   0 16px 48px rgba(44,36,24,.20);
+  --radius:      14px;
+  --radius-sm:   8px;
+  --transition:  0.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.azulejo-bg {
+  background-color: var(--cream);
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23E07B39' stroke-width='0.6' opacity='0.18'%3E%3Crect x='5' y='5' width='50' height='50' rx='3'/%3E%3Crect x='12' y='12' width='36' height='36' rx='2'/%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3Cline x1='5' y1='5' x2='25' y2='25'/%3E%3Cline x1='55' y1='5' x2='35' y2='25'/%3E%3Cline x1='5' y1='55' x2='25' y2='35'/%3E%3Cline x1='55' y1='55' x2='35' y2='35'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.view {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  display: none;
+  flex-direction: column;
+  background: var(--cream);
+  overflow: hidden;
+}
+/* La classe active gère l'affichage. Par défaut, l'accueil l'a. */
+.view.active {
+  display: flex;
+}
+
+/* =============================================
+   VUE : ACCUEIL
+   ============================================= */
+#view-home {
+  align-items: center;
+  overflow-y: auto;
+  padding: 40px 24px;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.home-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.home-header p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.btn-large-primary {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px;
+  border-radius: 30px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  margin-bottom: 40px;
+}
+.btn-large-primary:active { transform: scale(0.96); }
+
+#home-trips-section {
+  width: 100%;
+  max-width: 400px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-mid);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--cream-dark);
+  padding-bottom: 8px;
+}
+
+#home-trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-trip-card {
+  background: var(--white);
+  border: 1.5px solid var(--cream-dark);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.home-trip-card:active { background: var(--cream); transform: translateY(2px); }
+.htc-color {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.htc-info { flex: 1; }
+.htc-name { font-weight: 700; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
+.htc-meta { font-size: 13px; color: var(--ink-soft); }
+.htc-del {
+  padding: 8px;
+  color: var(--ink-soft);
+  font-size: 18px;
+  background: none; border: none;
+}
+
+/* =============================================
+   VUE : VOYAGE DETAIL
+   ============================================= */
+#view-trip { background: var(--white); }
+
+.view-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--navy);
+  color: var(--white);
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+.btn-back-home {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#voyage-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--cream-dark);
+  background: var(--cream);
+}
+#voyage-name-wrap {
+  display: flex; align-items: center; gap: 10px;
+}
+#voyage-color-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  flex-shrink: 0; border: 2px solid rgba(0,0,0,.1);
+}
+#voyage-name-input {
+  flex: 1; font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--ink);
+  border: none; background: transparent; outline: none;
+}
+.voyage-meta { font-size: 13px; color: var(--ink-soft); margin-top: 6px; margin-left: 26px; }
+
+#search-zone {
+  padding: 16px; background: var(--white);
+  border-bottom: 1px solid var(--cream-dark); z-index: 5;
+}
+#search-wrap { position: relative; }
+#search-input {
+  width: 100%; padding: 12px 14px 12px 38px;
+  border: 2px solid var(--cream-dark); border-radius: var(--radius-sm);
+  font-size: 15px; font-family: inherit; outline: none;
+}
+#search-input:focus { border-color: var(--orange); }
+#search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-soft); font-size: 16px; pointer-events: none;
+}
+
+#autocomplete {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--white); border: 1px solid var(--cream-dark);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+  max-height: 250px; overflow-y: auto; z-index: 9999; display: none;
+}
+#autocomplete.open { display: block; }
+.ac-item {
+  padding: 12px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.ac-item .city-pin { font-size: 16px; }
+.ac-item .city-name { font-size: 15px; font-weight: 500; color: var(--ink); }
+.ac-item .city-country { font-size: 12px; color: var(--ink-soft); }
+
+#btn-manual-add {
+  display: block; width: 100%; margin-top: 12px;
+  background: none; border: 1px dashed var(--ink-soft);
+  color: var(--ink-mid); padding: 10px; font-size: 13px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: inherit; font-weight: 500;
+}
+
+#etapes-list {
+  flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 100px;
+}
+.etape-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 12px; position: relative;
+}
+.etape-item:not(:last-child)::after {
+  content: ''; position: absolute; left: 15px; top: 32px; width: 2px; bottom: -8px;
+  background: var(--cream-dark);
+}
+.etape-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--navy); color: white;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; z-index: 1;
+}
+.etape-content {
+  flex: 1; background: var(--cream); border-radius: var(--radius-sm);
+  padding: 12px; border: 1px solid var(--cream-dark);
+}
+.etape-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.etape-city { font-size: 16px; font-weight: 700; color: var(--ink); }
+.etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.etape-del { color: #c44; background: none; border: none; font-size: 18px; padding: 4px; }
+.etape-dates { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+.etape-date-input {
+  flex: 1; font-size: 12px; font-family: inherit;
+  border: 1px solid var(--cream-dark); border-radius: 6px;
+  padding: 6px; background: var(--white); outline: none;
+}
+
+/* =============================================
+   VUE : CARTE
+   ============================================= */
+#view-map { position: relative; }
+#map { flex: 1; width: 100%; height: 100%; background: #e8dfc8; }
+#map.selecting { cursor: crosshair; }
+
+.manual-mode-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  background: var(--teal); color: white;
+  padding: 12px; text-align: center; font-size: 14px; font-weight: 700;
+  z-index: 1000; box-shadow: var(--shadow-md); display: none;
+}
+.manual-mode-bar.active { display: block; }
+
+/* =============================================
+   FAB (Floating Action Button)
+   ============================================= */
+.fab {
+  position: absolute; bottom: 24px; right: 24px;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--orange); color: white; border: none;
+  box-shadow: 0 4px 12px rgba(224,123,57,.4); font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 1000; transition: transform 0.2s ease;
+}
+.fab:active { transform: scale(0.9); }
+
+/* =============================================
+   MODAL & TOAST
+   ============================================= */
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(28,53,87,.7); backdrop-filter: blur(4px);
+  z-index: 9000; display: none; align-items: center; justify-content: center;
+}
+#modal-overlay.open { display: flex; }
+#modal {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; width: 90%; max-width: 400px; box-shadow: var(--shadow-lg);
+}
+.modal-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 20px; color: var(--ink); }
+.modal-field { margin-bottom: 16px; }
+.modal-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px; text-transform: uppercase; }
+.modal-field input[type="text"] { width: 100%; padding: 12px; border: 2px solid var(--cream-dark); border-radius: var(--radius-sm); font-size: 16px; font-family: inherit; }
+.color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; transition: var(--transition); }
+.swatch.selected { border-color: var(--ink); transform: scale(1.15); }
+.modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+.modal-actions button { padding: 12px 20px; border-radius: 24px; font-size: 15px; font-weight: 700; font-family: inherit; border: none; cursor: pointer; }
+.btn-cancel { background: var(--cream); color: var(--ink-mid); }
+.btn-confirm { background: var(--orange); color: white; }
+
+#toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--white); padding: 12px 24px;
+  border-radius: 30px; font-size: 14px; font-weight: 500;
+  opacity: 0; transition: all 0.3s ease; z-index: 9999; white-space: nowrap; pointer-events: none;
+}
+#toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* LEAFLET OVERRIDES */
+.leaflet-popup-content-wrapper { border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <div id="view-home" class="view azulejo-bg active">
+    <div class="home-header">
+      <h1>Voyages</h1>
+      <p>Planifiez vos itinéraires à travers le monde.</p>
+    </div>
+    
+    <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
+
+    <div id="home-trips-section" style="display:none;">
+      <div class="section-title">Mes voyages</div>
+      <div id="home-trips-list"></div>
+    </div>
+  </div>
+
+  <div id="view-trip" class="view">
+    <header class="view-header">
+      <button class="btn-back-home" onclick="navigate('view-home')">🏠 Accueil</button>
+    </header>
+
+    <div id="voyage-header">
+      <div id="voyage-name-wrap">
+        <div id="voyage-color-dot"></div>
+        <input id="voyage-name-input" type="text" placeholder="Nom du voyage"/>
+      </div>
+      <div class="voyage-meta" id="voyage-meta"></div>
+    </div>
+
+    <div id="search-zone">
+      <div id="search-wrap">
+        <span id="search-icon">🔍</span>
+        <input id="search-input" type="text" placeholder="Rechercher une ville…" autocomplete="off"/>
+        <div id="autocomplete"></div>
+      </div>
+      <button id="btn-manual-add" onclick="activateManualMode()">📍 Placer une destination manuellement</button>
+    </div>
+
+    <div id="etapes-list"></div>
+
+    <button class="fab" onclick="navigate('view-map')">🗺️</button>
+  </div>
+
+  <div id="view-map" class="view">
+    <div class="manual-mode-bar" id="manual-mode-bar">
+      Cliquez sur la carte pour ajouter une étape
+    </div>
+    
+    <div id="map"></div>
+    
+    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">📋</button>
+  </div>
+
+</div>
+
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal">
+    <div class="modal-title">Nouveau voyage ✈️</div>
+    <div class="modal-field">
+      <label>Nom du voyage</label>
+      <input type="text" id="modal-name" placeholder="ex : Roadtrip 2026" onkeydown="if(event.key==='Enter')confirmNewVoyage()"/>
+    </div>
+    <div class="modal-field">
+      <label>Couleur</label>
+      <div class="color-swatches" id="color-swatches"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-confirm" onclick="confirmNewVoyage()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// ============================================================
+// CONFIGURATION & ETAT
+// ============================================================
+const VOYAGE_COLORS = ['#E07B39','#2A7F7F','#1C3557','#8B4513','#C44D8C','#4A7C59'];
+let state = { voyages: [], activeVoyageId: null };
+let cities = [];       
+let map, layers = {};  
+let manualMode = false;
+
+// ============================================================
+// PERSISTANCE & INITIALISATION
+// ============================================================
+function saveState() { 
+  localStorage.setItem('voyages_app_mobi_v3', JSON.stringify(state)); 
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('voyages_app_mobi_v3');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.voyages)) {
+        state = parsed;
+      }
+    }
+  } catch(e) { console.error("Erreur State", e); }
+  
+  // Sécuriser les données corrompues
+  if (!state.voyages) state.voyages = [];
+  state.voyages.forEach(v => { if (!v.etapes) v.etapes = []; });
+}
+
+// Ce chargement se fait de manière asynchrone SANS bloquer la page d'accueil !
+async function loadCities() {
+  try {
+    const resp = await fetch('./cities.json');
+    if (resp.ok) {
+      const data = await resp.json();
+      if (Array.isArray(data)) cities = data;
+    }
+  } catch(e) {
+    console.log("Villes de secours chargées");
+    cities = [
+      {name:"Paris",country:"France",lat:48.8566,lon:2.3522},
+      {name:"Lyon",country:"France",lat:45.7640,lon:4.8357},
+      {name:"Marseille",country:"France",lat:43.2965,lon:5.3698},
+      {name:"Madrid",country:"Espagne",lat:40.4168,lon:-3.7038},
+      {name:"Barcelone",country:"Espagne",lat:41.3851,lon:2.1734},
+      {name:"Rome",country:"Italie",lat:41.9028,lon:12.4964}
+    ]; 
+  }
+}
+
+// ============================================================
+// NAVIGATION ENTRE VUES
+// ============================================================
+function navigate(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
+  
+  if (viewId === 'view-home') {
+    state.activeVoyageId = null;
+    renderHome();
+  } 
+  else if (viewId === 'view-trip') {
+    renderTrip();
+  } 
+  else if (viewId === 'view-map') {
+    initMap();
+    setTimeout(() => {
+      map.invalidateSize(); 
+      renderAllMaps();
+      fitMapToActiveVoyage();
+    }, 100);
+  }
+}
+
+// ============================================================
+// VUE : ACCUEIL
+// ============================================================
+function renderHome() {
+  const section = document.getElementById('home-trips-section');
+  const list = document.getElementById('home-trips-list');
+  list.innerHTML = '';
+
+  if (state.voyages.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  state.voyages.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'home-trip-card';
+    card.onclick = () => { state.activeVoyageId = v.id; navigate('view-trip'); };
+    
+    const stepsLen = v.etapes ? v.etapes.length : 0;
+    const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+    
+    card.innerHTML = `
+      <div class="htc-color" style="background:${v.color}"></div>
+      <div class="htc-info">
+        <div class="htc-name">${v.name}</div>
+        <div class="htc-meta">${stepsText}</div>
+      </div>
+      <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ============================================================
+// VUE : VOYAGE
+// ============================================================
+function getActiveVoyage() { 
+  return state.voyages.find(v => v.id === state.activeVoyageId); 
+}
+
+function renderTrip() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return navigate('view-home');
+
+  document.getElementById('voyage-color-dot').style.background = voyage.color;
+  document.getElementById('voyage-name-input').value = voyage.name;
+  
+  const stepsLen = voyage.etapes ? voyage.etapes.length : 0;
+  document.getElementById('voyage-meta').textContent = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+
+  const list = document.getElementById('etapes-list');
+  list.innerHTML = '';
+
+  if (stepsLen === 0) {
+    list.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--ink-soft); line-height: 1.5;">Aucune étape.<br>Utilisez la recherche ci-dessus pour commencer.</div>';
+    return;
+  }
+
+  voyage.etapes.forEach((e, i) => {
+    const item = document.createElement('div');
+    item.className = 'etape-item';
+    item.innerHTML = `
+      <div class="etape-num">${i + 1}</div>
+      <div class="etape-content">
+        <div class="etape-top">
+          <div>
+            <div class="etape-city">${e.city}</div>
+            <div class="etape-country">${e.country}</div>
+          </div>
+          <button class="etape-del" onclick="removeEtape(${i})">🗑</button>
+        </div>
+        <div class="etape-dates">
+          <input class="etape-date-input" type="date" value="${e.dateArr||''}" onchange="updateDate(${i},'dateArr',this.value)"/>
+          <span style="font-size:12px; color:var(--ink-soft)">→</span>
+          <input class="etape-date-input" type="date" value="${e.dateDep||''}" onchange="updateDate(${i},'dateDep',this.value)"/>
+        </div>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+document.getElementById('voyage-name-input').addEventListener('input', function() {
+  const v = getActiveVoyage();
+  if (v) { v.name = this.value; saveState(); }
+});
+
+// ============================================================
+// CARTE & MODE MANUEL
+// ============================================================
+function initMap() {
+  if (map) return; 
+  map = L.map('map', { center: [48, 10], zoom: 4, zoomControl: false });
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
+  map.on('click', onMapClick);
+}
+
+function renderAllMaps() {
+  Object.keys(layers).forEach(id => { map.removeLayer(layers[id]); delete layers[id]; });
+  const active = getActiveVoyage();
+  if(!active || !active.etapes) return;
+
+  const layer = L.layerGroup().addTo(map);
+  layers[active.id] = layer;
+
+  if (active.etapes.length > 1) {
+    const coords = active.etapes.map(e => [e.lat, e.lon]);
+    L.polyline(coords, { color: active.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
+  }
+
+  active.etapes.forEach((e, i) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${active.color}"/>
+      <circle cx="16" cy="16" r="10" fill="white"/>
+      <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${active.color}">${i+1}</text>
+    </svg>`;
+    const icon = L.divIcon({ html: svg, className: '', iconSize: [32,40], iconAnchor: [16,40], popupAnchor: [0,-42] });
+    L.marker([e.lat, e.lon], { icon }).bindPopup(`<b style="font-size:14px">${e.city}</b><br><span style="color:#888">${e.country}</span>`).addTo(layer);
+  });
+}
+
+function fitMapToActiveVoyage() {
+  const v = getActiveVoyage();
+  if (!v || !v.etapes || !v.etapes.length) { map.setView([48, 10], 4); return; }
+  const coords = v.etapes.map(e => [e.lat, e.lon]);
+  if (coords.length === 1) map.setView(coords[0], 6);
+  else map.fitBounds(L.latLngBounds(coords), { padding: [40, 40] });
+}
+
+function activateManualMode() {
+  manualMode = true;
+  document.getElementById('manual-mode-bar').classList.add('active');
+  document.getElementById('map').classList.add('selecting');
+  navigate('view-map');
+}
+
+function cancelManualMode() {
+  manualMode = false;
+  document.getElementById('manual-mode-bar').classList.remove('active');
+  document.getElementById('map').classList.remove('selecting');
+}
+
+function onMapClick(e) {
+  if (!manualMode) return;
+  const cityName = prompt("Nom de cette destination ?");
+  if (cityName && cityName.trim()) {
+    addEtapeToActiveVoyage({ name: cityName.trim(), country: "Point manuel", lat: e.latlng.lat, lon: e.latlng.lng });
+    cancelManualMode();
+    navigate('view-trip');
+  }
+}
+
+// ============================================================
+// RECHERCHE
+// ============================================================
+const searchInput = document.getElementById('search-input');
+const acList = document.getElementById('autocomplete');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (q.length < 2 || !cities.length) { acList.classList.remove('open'); return; }
+  
+  let res = cities.filter(c => c.name.toLowerCase().startsWith(q)).slice(0, 5);
+  if (!res.length) res = cities.filter(c => c.name.toLowerCase().includes(q)).slice(0, 5);
+  
+  acList.innerHTML = '';
+  if(res.length) {
+    res.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'ac-item';
+      div.innerHTML = `<span class="city-pin">📍</span><div><div class="city-name">${c.name}</div><div class="city-country">${c.country||''}</div></div>`;
+      div.onclick = () => { addEtapeToActiveVoyage(c); searchInput.value = ''; acList.classList.remove('open'); };
+      acList.appendChild(div);
+    });
+    acList.classList.add('open');
+  } else {
+    acList.classList.remove('open');
+  }
+});
+
+document.addEventListener('click', e => { 
+  if (!document.getElementById('search-wrap').contains(e.target)) acList.classList.remove('open'); 
+});
+
+// ============================================================
+// ACTIONS DATA
+// ============================================================
+function addEtapeToActiveVoyage(city) {
+  const v = getActiveVoyage();
+  v.etapes.push({ city: city.name, country: city.country, lat: city.lat, lon: city.lon, dateArr: '', dateDep: '' });
+  saveState(); 
+  renderTrip(); 
+  toast(`📍 ${city.name} ajouté`);
+}
+
+function removeEtape(index) {
+  getActiveVoyage().etapes.splice(index, 1);
+  saveState(); 
+  renderTrip();
+}
+
+function updateDate(index, field, value) {
+  getActiveVoyage().etapes[index][field] = value;
+  saveState();
+}
+
+function deleteVoyage(id, e) {
+  e.stopPropagation();
+  if(confirm("Supprimer ce voyage ?")) {
+    state.voyages = state.voyages.filter(v => v.id !== id);
+    saveState(); 
+    renderHome(); 
+    toast("Voyage supprimé");
+  }
+}
+
+// ============================================================
+// MODAL & TOAST
+// ============================================================
+let pendingColor = VOYAGE_COLORS[0];
+function openNewVoyageModal() {
+  pendingColor = VOYAGE_COLORS[state.voyages.length % VOYAGE_COLORS.length];
+  const swatches = document.getElementById('color-swatches');
+  swatches.innerHTML = '';
+  
+  VOYAGE_COLORS.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch' + (c === pendingColor ? ' selected' : '');
+    s.style.background = c;
+    s.onclick = () => { 
+      pendingColor = c; 
+      swatches.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected')); 
+      s.classList.add('selected'); 
+    };
+    swatches.appendChild(s);
+  });
+  
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function confirmNewVoyage() {
+  const name = document.getElementById('modal-name').value.trim() || 'Nouveau voyage';
+  const id = 'v' + Date.now();
+  state.voyages.push({ id, name, color: pendingColor, etapes: [] });
+  state.activeVoyageId = id;
+  closeModal(); 
+  saveState();
+  navigate('view-trip');
+  toast("Voyage créé !");
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; 
+  el.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('visible'), 2500);
+}
+
+// ============================================================
+// Lancement
+// ============================================================
+window.onload = function() {
+  loadState();
+  renderHome(); // On affiche tout de suite, sans attendre
+  loadCities(); // Charge silencieusement en fond
+};
+</script>
+</body>
+</html>
