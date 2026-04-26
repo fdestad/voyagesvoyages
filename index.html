@@ -784,8 +784,9 @@ window.onload = function() {
 };
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi.hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGV2ID0+IHsgfSk7')
-      .catch(err => console.log('SW registration failed:', err));
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Chrome a validé le Service Worker !', reg))
+      .catch(err => console.error('Échec de l\'enregistrement :', err));
   });
 }
 </script>
