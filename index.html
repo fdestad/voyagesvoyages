@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1C3557">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Voyages</title>
@@ -780,6 +782,12 @@ window.onload = function() {
   renderHome(); // On affiche tout de suite, sans attendre
   loadCities(); // Charge silencieusement en fond
 };
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi.hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGV2ID0+IHsgfSk7')
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>
