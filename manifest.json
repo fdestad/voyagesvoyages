@@ -3,13 +3,13 @@
   "name": "Voyages Voyages",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3698/3698516.png",
+      "src": "https://raw.githubusercontent.com/fdestad/voyagesvoyages/refs/heads/main/logo512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3698/3698516.png",
+      "src": "https://raw.githubusercontent.com/fdestad/voyagesvoyages/refs/heads/main/logo512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
@@ -32,8 +32,8 @@
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#F5EFE0",
+  "background_color": "#F1E5CB",
   "display": "standalone",
   "scope": "./",
-  "theme_color": "#1C3557"
+  "theme_color": "#E07B39"
 }
