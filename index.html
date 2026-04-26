@@ -382,8 +382,8 @@ html, body {
 /* =============================================
    VUE : CARTE GLOBALE
    ============================================= */
-#view-global-map { position: relative; flex-direction: column; }
-#global-map { flex: 1; width: 100%; height: 100%; background: #e8dfc8; }
+#view-global-map { position: absolute; top:0; left:0; right:0; bottom:0; flex-direction: column; }
+#global-map { flex: 1; width: 100%; min-height: 0; background: #e8dfc8; }
 </style>
 </head>
 <body>
@@ -443,8 +443,6 @@ html, body {
     <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">🏛️</button>
   </div>
 
-</div>
-
   <div id="view-global-map" class="view">
     <div class="view-header" style="z-index:10; position:relative;">
       <button class="btn-back-home" id="global-map-back-btn">← Retour</button>
@@ -456,8 +454,10 @@ html, body {
       padding:10px 14px; box-shadow:var(--shadow-md);
       font-size:13px; max-width:200px; display:none;
     "></div>
-    <div id="global-map"></div>
+    <div id="global-map" style="flex:1; width:100%; min-height:0;"></div>
   </div>
+
+</div>
 
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
@@ -836,16 +836,19 @@ function navigateGlobalMap() {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-global-map').classList.add('active');
 
-  if (!globalMap) {
-    globalMap = L.map('global-map', { center: [20, 10], zoom: 2, zoomControl: false });
-    L.control.zoom({ position: 'topright' }).addTo(globalMap);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(globalMap);
-  }
-
-  setTimeout(() => {
-    globalMap.invalidateSize();
-    renderGlobalMap();
-  }, 100);
+  // requestAnimationFrame garantit que le conteneur a une taille avant que Leaflet s'initialise
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!globalMap) {
+        globalMap = L.map('global-map', { center: [20, 10], zoom: 2, zoomControl: false });
+        L.control.zoom({ position: 'topright' }).addTo(globalMap);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(globalMap);
+      } else {
+        globalMap.invalidateSize();
+      }
+      renderGlobalMap();
+    });
+  });
 }
 
 function renderGlobalMap() {
