@@ -353,8 +353,8 @@ html, body {
 
   <div id="view-home" class="view azulejo-bg active">
     <div class="home-header">
-      <h1>Voyages</h1>
-      <p>Planifiez vos itinéraires à travers le monde.</p>
+      <h1>Voyages Voyages</h1>
+      <p>plus loin que la nuit et le jour</p>
     </div>
     
     <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
@@ -367,7 +367,7 @@ html, body {
 
   <div id="view-trip" class="view">
     <header class="view-header">
-      <button class="btn-back-home" onclick="navigate('view-home')">🏠 Accueil</button>
+      <button class="btn-back-home" onclick="navigate('view-home')">🛖 Accueil</button>
     </header>
 
     <div id="voyage-header">
@@ -399,17 +399,17 @@ html, body {
     
     <div id="map"></div>
     
-    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">📋</button>
+    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">🏛️</button>
   </div>
 
 </div>
 
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
-    <div class="modal-title">Nouveau voyage ✈️</div>
+    <div class="modal-title">Nouveau départ 🛩️</div>
     <div class="modal-field">
       <label>Nom du voyage</label>
-      <input type="text" id="modal-name" placeholder="ex : Roadtrip 2026" onkeydown="if(event.key==='Enter')confirmNewVoyage()"/>
+      <input type="text" id="modal-name" placeholder="ex : Alicante 2026" onkeydown="if(event.key==='Enter')confirmNewVoyage()"/>
     </div>
     <div class="modal-field">
       <label>Couleur</label>
