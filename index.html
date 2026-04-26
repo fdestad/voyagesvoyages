@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Voyages - Itinéraires</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --cream:       #F5EFE0;
+  --cream-dark:  #EDE4CF;
+  --orange:      #E07B39;
+  --orange-deep: #C05E1F;
+  --navy:        #1C3557;
+  --ink:         #2C2418;
+  --ink-soft:    #9C8E78;
+  --white:       #FFFDF7;
+  --shadow-lg:   0 10px 30px rgba(44,36,24,0.15);
+  --radius:      16px;
+  --transition:  0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* RESET */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* VUES */
+.view {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background: var(--cream);
+  z-index: 10;
+}
+.view.active { display: flex; }
+
+/* --- VUE ACCUEIL (Style Manuscrit) --- */
+#view-home {
+  justify-content: center;
+  align-items: center;
+  background-image: 
+    linear-gradient(rgba(245, 239, 224, 0.8), rgba(245, 239, 224, 0.8)),
+    url("https://www.transparenttextures.com/patterns/old-map.png"), /* Texture papier */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' opacity='0.1'%3E%3Cpath d='M200,100 Q250,50 400,150 T600,100 T700,300 T500,500 T200,450 Z' fill='none' stroke='%23C05E1F' stroke-width='2'/%3E%3C/svg%3E"); /* Silhouette Europe filigrane simple */
+  background-size: cover, auto, contain;
+  background-position: center;
+  z-index: 100;
+}
+.home-menu { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 280px; z-index: 2; }
+
+/* --- VUE VOYAGE --- */
+.top-nav {
+  background: var(--navy);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn-back { background: none; border: none; fill: white; width: 24px; cursor: pointer; }
+
+#view-voyage { overflow-y: auto; padding-bottom: 100px; }
+.voyage-content-wrap { padding: 20px; }
+
+/* RECHERCHE & AJOUT MANUEL */
+#search-input {
+  width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--cream-dark);
+  font-family: inherit; margin-bottom: 10px; outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.btn-manual {
+  background: none;
+  border: 1px dashed var(--orange);
+  color: var(--orange-deep);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  width: 100%;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+/* --- VUE CARTE --- */
+#map { height: 100%; width: 100%; }
+
+/* BOUTONS FLOTTANTS (FAB) */
+.fab {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  border: none;
+  z-index: 1000;
+  cursor: pointer;
+  fill: white;
+}
+.fab-back-list { left: 25px; right: auto; background: var(--navy); }
+
+/* STYLE ELEMENTS */
+.btn-main {
+  padding: 16px; border-radius: 12px; border: none; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.btn-primary { background: var(--orange); color: white; }
+.btn-secondary { background: rgba(255,255,255,0.7); color: var(--navy); backdrop-filter: blur(5px); }
+
+.etape-item {
+  background: var(--white); margin-bottom: 10px; padding: 15px; border-radius: 12px;
+  border-left: 4px solid var(--orange); display: flex; justify-content: space-between; align-items: center;
+}
+
+/* MODAL */
+#modal-overlay {
+  position: fixed; inset:0; background: rgba(28, 53, 87, 0.6); backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center; z-index: 2000;
+}
+#modal { background: var(--cream); width: 85%; padding: 25px; border-
