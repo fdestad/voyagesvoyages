@@ -217,50 +217,26 @@ html, body {
   transform: scale(0.95) !important;
 }
 
-/* Photo background */
+/* La boîte qui contiendra la carte */
 .htc-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
   background-color: var(--navy);
-  transition: transform 0.6s ease;
-}
-.home-trip-card:hover .htc-bg {
-  transform: scale(1.04);
+  z-index: 0;
 }
 
-/* Gradient overlay */
+/* Le voile de couleur (dégradé génératif) */
 .htc-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    160deg,
-    rgba(224,123,57,0.55) 0%,
-    rgba(192,90,20,0.60) 40%,
-    rgba(28,30,20,0.82) 75%,
-    rgba(12,18,10,0.93) 100%
-  );
+  z-index: 1; /* Positionné entre la carte et le texte */
+  pointer-events: none;
 }
 
-/* Filtre crème/orangé unifié par-dessus la photo */
-.htc-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(245,200,140,0.18);
-  mix-blend-mode: multiply;
-}
-
-/* Shimmer loader */
-.htc-bg.loading {
-  background: linear-gradient(110deg, #1C3557 0%, #264a73 40%, #1C3557 60%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite linear;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+/* On s'assure que le texte reste lisible au-dessus */
+.htc-content {
+  z-index: 2;
+  position: relative;
 }
 
 /* Color accent bar */
@@ -804,6 +780,24 @@ html, body {
 // ============================================================
 const VOYAGE_COLORS = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51','#CF5C78'];
 let state = { voyages: [], activeVoyageId: null };
+   // Fonction pour créer un nombre unique à partir du nom de la ville
+function stringToHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return hash;
+}
+
+// Fonction qui génère le dégradé visuel à 50% d'opacité
+function generateGenerativeGradient(cityName, baseColor) {
+  const hash = stringToHash(cityName);
+  const angle = Math.abs(hash) % 360; // L'angle change selon la ville
+  const color1 = baseColor + '80';    // Couleur du voyage + 50% d'opacité
+  const secondaryHue = (angle + (hash % 40)) % 360;
+  const color2 = `hsla(${secondaryHue}, 60%, 20%, 0.5)`; // Une variante sombre
+  return `linear-gradient(${angle}deg, ${color1} 0%, ${color2} 100%)`;
+}
 let map, layers = {};  
 let manualMode = false;
 let toastTimer;
@@ -1044,6 +1038,8 @@ function renderHome() {
     globalMapBtn.style.display = 'none';
     dataBar.style.display = 'none';
     return;
+  // On attend un tout petit peu que le navigateur affiche les tuiles avant de dessiner les cartes
+  setTimeout(initHomeCardMaps, 100);
   }
 
   globalMapBtn.style.display = 'block';
@@ -1063,15 +1059,21 @@ function renderHome() {
     const firstCountry = (v.etapes && v.etapes.length > 0) ? v.etapes[0].country : null;
     const locationTag = firstCity ? firstCity : '&nbsp;';
 
+    // On récupère les infos pour le dégradé
+    const firstEtape = (v.etapes && v.etapes.length > 0) ? v.etapes[0] : null;
+    const cityName = firstEtape ? firstEtape.city : "Voyage";
+    const bgGradient = generateGenerativeGradient(cityName, v.color);
+
     card.innerHTML = `
-      <div class="htc-bg loading" id="htc-bg-${v.id}"></div>
-      <div class="htc-overlay"></div>
-      <div class="htc-color-bar" style="background:${v.color}"></div>
-      <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
-      <div class="htc-content">
+      <div id="htc-map-${v.id}" class="htc-bg"></div>
+      <div class="htc-overlay" style="background: ${bgGradient}"></div>
+      <div class="htc-color-bar" style="background: ${v.color}"></div>
+      <button class="htc-open-btn"><span>→</span></button>
+      
+      <div class="htc-content" onclick="openVoyage('${v.id}')">
         <div class="htc-name">${v.name}</div>
         <div class="htc-meta-row">
-          <div class="htc-meta">${stepsText}</div>
+          <div class="htc-meta">📍 ${firstEtape ? firstEtape.city : 'Destination'} • ${v.etapes.length} étapes</div>
           <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
         </div>
       </div>
@@ -2011,6 +2013,31 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then(reg => console.log('Chrome a validé le Service Worker !', reg))
       .catch(err => console.error('Échec de l\'enregistrement :', err));
+  });
+}
+function initHomeCardMaps() {
+  state.voyages.forEach(v => {
+    const mapContainer = document.getElementById(`htc-map-${v.id}`);
+    if (!mapContainer) return;
+
+    // On vérifie s'il y a une étape pour centrer la carte
+    const firstEtape = (v.etapes && v.etapes.length > 0) ? v.etapes[0] : null;
+    const center = firstEtape ? [firstEtape.lat, firstEtape.lon] : [46.2, 2.2]; // France par défaut
+    const zoom = firstEtape ? 12 : 4;
+
+    // Création de la mini-carte (statique pour la performance)
+    const miniMap = L.map(mapContainer, {
+      center: center,
+      zoom: zoom,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      touchZoom: false
+    });
+
+    // On utilise un style de carte épuré (CartoDB Voyager)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png').addTo(miniMap);
   });
 }
 </script>
