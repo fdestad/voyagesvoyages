@@ -186,6 +186,34 @@ html, body {
   background: none; border: none;
 }
 
+/* Barre export/import */
+#home-data-bar {
+  display: none;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream-dark);
+  justify-content: center;
+  gap: 24px;
+}
+.btn-data {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-data:hover { color: var(--ink-mid); }
+.btn-data:active { color: var(--ink); }
+
 /* =============================================
    VUE : VOYAGE DETAIL
    ============================================= */
@@ -523,6 +551,12 @@ html, body {
       <div class="section-title">Mes voyages</div>
       <div id="home-trips-list"></div>
     </div>
+
+    <div id="home-data-bar">
+      <button class="btn-data" onclick="exportVoyages()">↓ Exporter</button>
+      <button class="btn-data" onclick="document.getElementById('import-input').click()">↑ Importer</button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importVoyages(this)"/>
+    </div>
   </div>
 
   <div id="view-trip" class="view">
@@ -733,16 +767,19 @@ function renderHome() {
   const section = document.getElementById('home-trips-section');
   const list = document.getElementById('home-trips-list');
   const globalMapBtn = document.getElementById('btn-global-map-home');
+  const dataBar = document.getElementById('home-data-bar');
   list.innerHTML = '';
 
   if (state.voyages.length === 0) {
     section.style.display = 'none';
     globalMapBtn.style.display = 'none';
+    dataBar.style.display = 'none';
     return;
   }
 
   globalMapBtn.style.display = 'block';
   section.style.display = 'block';
+  dataBar.style.display = 'flex';
   state.voyages.forEach(v => {
     const card = document.createElement('div');
     card.className = 'home-trip-card';
@@ -761,6 +798,45 @@ function renderHome() {
     `;
     list.appendChild(card);
   });
+}
+
+// ============================================================
+// EXPORT / IMPORT
+// ============================================================
+function exportVoyages() {
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = new Date().toISOString().slice(0, 10);
+  a.href     = url;
+  a.download = `voyages-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📦 Voyages exportés');
+}
+
+function importVoyages(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed || !Array.isArray(parsed.voyages)) throw new Error('Format invalide');
+      // Fusionne les voyages importés avec les voyages existants (évite les doublons par id)
+      const existingIds = new Set(state.voyages.map(v => v.id));
+      const newVoyages  = parsed.voyages.filter(v => !existingIds.has(v.id));
+      state.voyages.push(...newVoyages);
+      saveState();
+      renderHome();
+      toast(`✅ ${newVoyages.length} voyage(s) importé(s)`);
+    } catch(err) {
+      toast('⚠️ Fichier non reconnu');
+    }
+    input.value = ''; // reset pour permettre un re-import du même fichier
+  };
+  reader.readAsText(file);
 }
 
 // ============================================================
@@ -834,7 +910,7 @@ function buildEtapeItem(e, i, voyage) {
         </div>
 
         <span class="edit-label">Notes</span>
-        <textarea class="etape-notes-input" placeholder="Expositions, soirées, matchs de foot..." 
+        <textarea class="etape-notes-input" placeholder="Hôtel, à faire, idées…" 
           onchange="updateNote(${i},this.value); refreshEtapeReadView(${i})"
           oninput="updateNote(${i},this.value)">${e.notes||''}</textarea>
 
