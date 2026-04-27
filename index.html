@@ -1288,27 +1288,39 @@ function toast(msg) {
 // ============================================================
 const weatherCache = {}; // clé: "lat,lon,dateArr,dateDep"
 
-// Classifie les codes WMO en libellé simple + icône
-function wxCodeToLabel(code, isSnow) {
-  if (code === 0)               return { icon: '☀️', label: 'Beau temps' };
-  if (code <= 2)                return { icon: '🌤️', label: 'Quelques nuages' };
-  if (code === 3)               return { icon: '☁️', label: 'Couvert' };
-  if (code >= 45 && code <= 48) return { icon: '🌫️', label: 'Brouillard' };
-  if (code >= 51 && code <= 55) return { icon: '🌦️', label: 'Bruine' };
-  if (code >= 61 && code <= 65) return { icon: '🌧️', label: 'Pluie' };
-  if (code >= 66 && code <= 67) return { icon: '🌨️', label: 'Pluie verglaçante' };
-  if (code >= 71 && code <= 77) return { icon: '❄️', label: 'Neige' };
-  if (code >= 80 && code <= 82) return { icon: '🌦️', label: 'Averses' };
-  if (code >= 85 && code <= 86) return { icon: '🌨️', label: 'Averses de neige' };
-  if (code >= 95 && code <= 99) return { icon: '⛈️', label: 'Orages' };
-  return { icon: '🌡️', label: 'Temps variable' };
+// Attribue un score de severite (0 = grand beau, 10 = orages) a un code WMO
+function wxCodeToScore(code) {
+  if (code === 0)               return 0;
+  if (code <= 2)                return 1;
+  if (code === 3)               return 2;
+  if (code >= 45 && code <= 48) return 3;
+  if (code >= 51 && code <= 55) return 4;
+  if (code >= 71 && code <= 77) return 5;
+  if (code >= 85 && code <= 86) return 5;
+  if (code >= 61 && code <= 65) return 6;
+  if (code >= 80 && code <= 82) return 6;
+  if (code >= 66 && code <= 67) return 7;
+  if (code >= 95 && code <= 99) return 10;
+  return 3;
+}
+
+// Convertit un score moyen en libelle + icone + modificateur nuance
+function wxScoreToLabel(avgScore) {
+  if (avgScore < 0.5)  return { icon: '☀️',  label: 'Beau temps',     nuance: false };
+  if (avgScore < 1.5)  return { icon: '🌤️', label: 'Beau temps',      nuance: avgScore > 1.0 };
+  if (avgScore < 2.5)  return { icon: '⛅',  label: 'Quelques nuages', nuance: false };
+  if (avgScore < 3.5)  return { icon: '☁️',  label: 'Temps couvert',   nuance: avgScore < 3.0 };
+  if (avgScore < 5.0)  return { icon: '🌦️', label: 'Temps mitige',    nuance: avgScore < 4.2 };
+  if (avgScore < 6.5)  return { icon: '🌧️', label: 'Pluie',           nuance: avgScore < 5.8 };
+  if (avgScore < 8.5)  return { icon: '🌧️', label: 'Mauvais temps',   nuance: avgScore < 7.5 };
+  return                        { icon: '⛈️', label: 'Orages',          nuance: true  };
 }
 
 // Agrège les données journalières sur une plage de dates
 function aggregateDailyData(data, dateArr, dateDep) {
   const times = data.daily.time;
-  const tmax = data.daily.temperature_2m_max;
-  const tmin = data.daily.temperature_2m_min;
+  const tmax  = data.daily.temperature_2m_max;
+  const tmin  = data.daily.temperature_2m_min;
   const codes = data.daily.weathercode;
 
   const from = dateArr || dateDep;
@@ -1318,15 +1330,12 @@ function aggregateDailyData(data, dateArr, dateDep) {
   times.forEach((t, i) => { if (t >= from && t <= to) indices.push(i); });
   if (!indices.length) return null;
 
-  const avgMax = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
-  const avgMin = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
+  const avgMax   = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
+  const avgMin   = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
+  // Score moyen pondéré sur tous les jours du séjour
+  const avgScore = indices.reduce((s, i) => s + wxCodeToScore(codes[i]), 0) / indices.length;
 
-  // Code météo dominant : le plus fréquent parmi les jours couverts
-  const freq = {};
-  indices.forEach(i => { freq[codes[i]] = (freq[codes[i]] || 0) + 1; });
-  const dominantCode = parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
-
-  return { avgMax, avgMin, dominantCode };
+  return { avgMax, avgMin, avgScore };
 }
 
 async function fetchWeather(etape, index) {
@@ -1371,11 +1380,9 @@ async function fetchWeather(etape, index) {
       if (!samples.length) { renderWeatherBadge(index, null); return; }
       const avgMax = Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length);
       const avgMin = Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length);
-      // Code dominant sur tous les échantillons
-      const freq = {};
-      samples.forEach(x => { freq[x.dominantCode] = (freq[x.dominantCode] || 0) + 1; });
-      const dominantCode = parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
-      result = { avgMax, avgMin, dominantCode, isHistorical: true };
+      // Score moyen sur tous les échantillons historiques
+      const avgScore = samples.reduce((s, x) => s + x.avgScore, 0) / samples.length;
+      result = { avgMax, avgMin, avgScore, isHistorical: true };
     } else {
       // Prévisions réelles
       const from = dateArr || dateDep;
@@ -1407,8 +1414,11 @@ function renderWeatherBadge(index, result) {
   if (!badge) return;
   if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
 
-  const { icon, label } = wxCodeToLabel(result.dominantCode);
-  const prefix = result.isHistorical ? 'Généralement ' : '';
+  const { icon, label, nuance } = wxScoreToLabel(result.avgScore);
+  const histPrefix  = result.isHistorical ? 'Généralement ' : '';
+  const nuancePrefix = (!result.isHistorical && nuance) ? 'Plutôt ' : '';
+  const prefix = histPrefix || nuancePrefix;
+
   badge.classList.toggle('wx-historical', result.isHistorical);
   badge.style.display = 'flex';
   badge.innerHTML = `
