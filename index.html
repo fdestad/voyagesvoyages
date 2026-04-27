@@ -931,24 +931,46 @@ async function fetchCityPhoto(cityName, countryName) {
   const key = (cityName + ',' + countryName).toLowerCase();
   if (photoCache[key]) return photoCache[key];
 
-  // Cherche la photo via Wikimedia (API gratuite, sans clé)
+  // 1) Wikipedia pageimages API (CORS OK, retourne la photo principale de la page)
   try {
-    const query = encodeURIComponent(cityName + ' ' + countryName);
-    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cityName)}`;
-    const resp = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(cityName)}&prop=pageimages&format=json&pithumbsize=800&origin=*`;
+    const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
     if (resp.ok) {
       const data = await resp.json();
-      if (data.thumbnail && data.thumbnail.source) {
-        // Upscale the thumbnail
-        const src = data.thumbnail.source.replace(/\/\d+px-/, '/600px-');
-        photoCache[key] = src;
-        return src;
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        const page = Object.values(pages)[0];
+        if (page && page.thumbnail && page.thumbnail.source) {
+          photoCache[key] = page.thumbnail.source;
+          return page.thumbnail.source;
+        }
       }
     }
   } catch(e) {}
 
-  // Fallback: Unsplash Source (sans clé API, gratuit)
-  const fallback = `https://source.unsplash.com/600x400/?${encodeURIComponent(cityName + ' city travel')}`;
+  // 2) Wikimedia Commons search
+  try {
+    const q = encodeURIComponent(cityName + ' ' + (countryName || ''));
+    const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&prop=imageinfo&iiprop=url&iiurlwidth=800&format=json&origin=*&gsrlimit=3`;
+    const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (resp.ok) {
+      const data = await resp.json();
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        for (const p of Object.values(pages)) {
+          const info = p.imageinfo && p.imageinfo[0];
+          if (info && info.thumburl && /\.(jpg|jpeg|png|webp)/i.test(info.thumburl)) {
+            photoCache[key] = info.thumburl;
+            return info.thumburl;
+          }
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 3) Picsum fallback — seed déterministe sur le nom de ville (toujours dispo)
+  const seed = [...cityName].reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const fallback = `https://picsum.photos/seed/${seed}/800/500`;
   photoCache[key] = fallback;
   return fallback;
 }
@@ -1041,8 +1063,9 @@ function renderHome() {
           bg.classList.remove('loading');
         };
         img.onerror = () => {
-          // Try direct unsplash fallback
-          const fb = `https://source.unsplash.com/600x400/?${encodeURIComponent(firstCity + ' travel landscape')}`;
+          // Picsum fallback deterministe
+          const seed = [...firstCity].reduce((a, c) => a + c.charCodeAt(0), 0);
+          const fb = `https://picsum.photos/seed/${seed + 1}/800/500`;
           bg.style.backgroundImage = `url('${fb}')`;
           bg.classList.remove('loading');
         };
