@@ -217,26 +217,50 @@ html, body {
   transform: scale(0.95) !important;
 }
 
-/* La boîte qui contiendra la carte */
+/* Photo background */
 .htc-bg {
   position: absolute;
   inset: 0;
+  background-size: cover;
+  background-position: center;
   background-color: var(--navy);
-  z-index: 0;
+  transition: transform 0.6s ease;
+}
+.home-trip-card:hover .htc-bg {
+  transform: scale(1.04);
 }
 
-/* Le voile de couleur (dégradé génératif) */
+/* Gradient overlay */
 .htc-overlay {
   position: absolute;
   inset: 0;
-  z-index: 1; /* Positionné entre la carte et le texte */
-  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    rgba(224,123,57,0.55) 0%,
+    rgba(192,90,20,0.60) 40%,
+    rgba(28,30,20,0.82) 75%,
+    rgba(12,18,10,0.93) 100%
+  );
 }
 
-/* On s'assure que le texte reste lisible au-dessus */
-.htc-content {
-  z-index: 2;
-  position: relative;
+/* Filtre crème/orangé unifié par-dessus la photo */
+.htc-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(245,200,140,0.18);
+  mix-blend-mode: multiply;
+}
+
+/* Shimmer loader */
+.htc-bg.loading {
+  background: linear-gradient(110deg, #1C3557 0%, #264a73 40%, #1C3557 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Color accent bar */
@@ -780,24 +804,6 @@ html, body {
 // ============================================================
 const VOYAGE_COLORS = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51','#CF5C78'];
 let state = { voyages: [], activeVoyageId: null };
-   // Fonction pour créer un nombre unique à partir du nom de la ville
-function stringToHash(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return hash;
-}
-
-// Fonction qui génère le dégradé visuel à 50% d'opacité
-function generateGenerativeGradient(cityName, baseColor) {
-  const hash = stringToHash(cityName);
-  const angle = Math.abs(hash) % 360; // L'angle change selon la ville
-  const color1 = baseColor + '80';    // Couleur du voyage + 50% d'opacité
-  const secondaryHue = (angle + (hash % 40)) % 360;
-  const color2 = `hsla(${secondaryHue}, 60%, 20%, 0.5)`; // Une variante sombre
-  return `linear-gradient(${angle}deg, ${color1} 0%, ${color2} 100%)`;
-}
 let map, layers = {};  
 let manualMode = false;
 let toastTimer;
@@ -923,6 +929,99 @@ function navigate(viewId) {
 // ============================================================
 const photoCache = {};
 
+async function fetchCityPhoto(cityName, countryName, lat, lon) {
+  const key = (cityName + ',' + (countryName||'')).toLowerCase();
+  if (photoCache[key]) return photoCache[key];
+
+  // 1) Wikimedia geosearch : trouve les monuments/lieux touristiques
+  //    proches des coordonnées GPS et retourne leurs photos.
+  //    C'est l'API la plus fiable pour des images touristiques de qualité.
+  if (lat && lon) {
+    try {
+      const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord=${lat}|${lon}&gslimit=10&format=json&origin=*`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (resp.ok) {
+        const data = await resp.json();
+        const hits = data.query && data.query.geosearch;
+        if (hits && hits.length > 0) {
+          // Cherche une photo parmi les premiers résultats
+          for (const hit of hits.slice(0, 5)) {
+            const imgUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(hit.title)}&prop=pageimages&format=json&pithumbsize=900&pilimit=1&origin=*`;
+            const ir = await fetch(imgUrl, { signal: AbortSignal.timeout(4000) });
+            if (!ir.ok) continue;
+            const id = await ir.json();
+            const pages = id.query && id.query.pages;
+            if (pages) {
+              const page = Object.values(pages)[0];
+              if (page && page.thumbnail && page.thumbnail.source) {
+                // Filtre les photos peu visuelles (drapeaux, blasons, cartes)
+                const src = page.thumbnail.source;
+                if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
+                  photoCache[key] = src;
+                  return src;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 2) Wikipedia pageimages sur le nom de la ville
+  try {
+    // Cherche d'abord "<Ville> cityscape" ou "<Ville> skyline" pour des vues panoramiques
+    for (const suffix of [' skyline', ' cityscape', '']) {
+      const title = encodeURIComponent(cityName + suffix);
+      const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=pageimages&format=json&pithumbsize=900&origin=*`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(4000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        const page = Object.values(pages)[0];
+        if (page && page.thumbnail && page.thumbnail.source) {
+          const src = page.thumbnail.source;
+          if (!/flag|coat|arms|logo|shield|seal|crest/i.test(src)) {
+            photoCache[key] = src;
+            return src;
+          }
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 3) Wikimedia Commons : cherche "<ville> landmark" ou "<ville> panorama"
+  try {
+    for (const suffix of [' landmark', ' panorama', ' tourist']) {
+      const q = encodeURIComponent(cityName + suffix);
+      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*&gsrlimit=5`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        for (const p of Object.values(pages)) {
+          const info = p.imageinfo && p.imageinfo[0];
+          if (info && info.thumburl && /\.(jpg|jpeg|png|webp)/i.test(info.thumburl)) {
+            const src = info.thumburl;
+            if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
+              photoCache[key] = src;
+              return src;
+            }
+          }
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 4) Picsum fallback esthétique (seed déterministe = même image à chaque fois)
+  const seed = [...(cityName + countryName)].reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const fallback = `https://picsum.photos/seed/${seed}/900/600`;
+  photoCache[key] = fallback;
+  return fallback;
+}
+
 let carouselIndex = 0;
 let carouselDragging = false;
 let carouselDragStartX = 0;
@@ -945,14 +1044,11 @@ function renderHome() {
     globalMapBtn.style.display = 'none';
     dataBar.style.display = 'none';
     return;
-  // On attend un tout petit peu que le navigateur affiche les tuiles avant de dessiner les cartes
-  setTimeout(initHomeCardMaps, 100);
   }
 
   globalMapBtn.style.display = 'block';
   section.style.display = 'block';
   dataBar.style.display = 'flex';
-
   carouselIndex = 0;
 
   state.voyages.forEach((v, idx) => {
@@ -962,59 +1058,34 @@ function renderHome() {
 
     const stepsLen = v.etapes ? v.etapes.length : 0;
     const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
-    const firstCity = (v.etapes && v.etapes.length > 0) ? v.etapes[0].city : null;
-    const firstCountry = (v.etapes && v.etapes.length > 0) ? v.etapes[0].country : null;
-    const locationTag = firstCity ? firstCity : '&nbsp;';
 
-    // On récupère les infos pour le dégradé
-    const firstEtape = (v.etapes && v.etapes.length > 0) ? v.etapes[0] : null;
-    const cityName = firstEtape ? firstEtape.city : "Voyage";
-    const bgGradient = generateGenerativeGradient(cityName, v.color);
-
+    // On utilise un ID unique pour le conteneur de la mini-carte
     card.innerHTML = `
       <div id="htc-map-${v.id}" class="htc-bg"></div>
-      <div class="htc-overlay" style="background: ${bgGradient}"></div>
-      <div class="htc-color-bar" style="background: ${v.color}"></div>
-      <button class="htc-open-btn"><span>→</span></button>
-      
-      <div class="htc-content" onclick="openVoyage('${v.id}')">
+      <div class="htc-overlay"></div>
+      <div class="htc-color-bar" style="background:${v.color}"></div>
+      <div class="htc-content" onclick="openVoyage('${v.id}', event)">
         <div class="htc-name">${v.name}</div>
         <div class="htc-meta-row">
-          <div class="htc-meta">📍 ${firstEtape ? firstEtape.city : 'Destination'} • ${v.etapes.length} étapes</div>
+          <div class="htc-meta">${stepsText}</div>
           <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
         </div>
       </div>
+      <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
     `;
-
-    // Click to open (not on delete button)
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
-      if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
-      openVoyage(v.id, e);
-    });
-
     track.appendChild(card);
 
-    // Dot
     if (dots) {
       const dot = document.createElement('div');
       dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
-      dot.dataset.index = idx;
-      dot.addEventListener('click', () => goToSlide(idx));
+      dot.onclick = () => goToSlide(idx);
       dots.appendChild(dot);
     }
-
-    // Load photo async — passe les coords GPS de la 1ère étape
-    const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
-    const firstLat = firstEtape ? firstEtape.lat : null;
-    const firstLon = firstEtape ? firstEtape.lon : null;
+  });
 
   initCarousel();
-}
-
-function openVoyage(id, e) {
-  state.activeVoyageId = id;
-  navigate('view-trip');
+  // On attend un tout petit peu que le navigateur affiche les cartes avant de dessiner
+  setTimeout(initHomeCardMaps, 100);
 }
 
 function initCarousel() {
@@ -1895,31 +1966,61 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('Échec de l\'enregistrement :', err));
   });
 }
+// Affiche une mini-carte interactive pour chaque voyage sur l'accueil
 function initHomeCardMaps() {
   state.voyages.forEach(v => {
     const mapContainer = document.getElementById(`htc-map-${v.id}`);
     if (!mapContainer) return;
 
-    // On vérifie s'il y a une étape pour centrer la carte
+    // On centre sur la première étape ou par défaut sur la France
     const firstEtape = (v.etapes && v.etapes.length > 0) ? v.etapes[0] : null;
-    const center = firstEtape ? [firstEtape.lat, firstEtape.lon] : [46.2, 2.2]; // France par défaut
-    const zoom = firstEtape ? 12 : 4;
+    const center = firstEtape ? [firstEtape.lat, firstEtape.lon] : [46.2, 2.2];
+    const zoom = firstEtape ? 11 : 4;
 
-    // Création de la mini-carte (statique pour la performance)
+    // Création de la mini-carte (options pour désactiver les interactions)
     const miniMap = L.map(mapContainer, {
       center: center,
       zoom: zoom,
       zoomControl: false,
       attributionControl: false,
       dragging: false,
+      doubleClickZoom: false,
       scrollWheelZoom: false,
       touchZoom: false
     });
 
-    // On utilise un style de carte épuré (CartoDB Voyager)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png').addTo(miniMap);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(miniMap);
+
+    // Dessin du trajet s'il y a des étapes
+    if (v.etapes && v.etapes.length > 0) {
+      const coords = v.etapes.map(e => [e.lat, e.lon]);
+      if (coords.length > 1) {
+        L.polyline(coords, { color: v.color, weight: 3, opacity: 0.6, dashArray: '5, 8' }).addTo(miniMap);
+      }
+      v.etapes.forEach((e) => {
+        L.circleMarker([e.lat, e.lon], {
+          radius: 4, color: 'white', weight: 1, fillColor: v.color, fillOpacity: 1
+        }).addTo(miniMap);
+      });
+      if (coords.length > 1) miniMap.fitBounds(coords, { padding: [20, 20] });
+    }
   });
 }
+
+// Gère le redimensionnement pour que le carrousel reste centré
+window.addEventListener('resize', () => {
+  if (state.voyages.length > 0) {
+    const track = document.getElementById('carousel-track');
+    const wrapper = document.getElementById('carousel-wrapper');
+    if (!track || !wrapper) return;
+    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 16;
+    const wrapperW = wrapper.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${offset}px)`;
+  }
+});
 </script>
 </body>
 </html>
