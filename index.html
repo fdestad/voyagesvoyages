@@ -287,34 +287,138 @@ html, body {
 #etapes-list {
   flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 100px;
 }
+
+/* ── ROW : handle + num + card ── */
 .etape-item {
-  display: flex; align-items: flex-start; gap: 12px;
+  display: flex; align-items: flex-start; gap: 10px;
   margin-bottom: 12px; position: relative;
 }
 .etape-item:not(:last-child)::after {
-  content: ''; position: absolute; left: 15px; top: 32px; width: 2px; bottom: -8px;
-  background: var(--cream-dark);
+  content: ''; position: absolute; left: 38px; top: 32px; width: 2px; bottom: -8px;
+  background: var(--cream-dark); z-index: 0;
 }
+
+/* drag handle */
+.etape-handle {
+  width: 20px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 4px; padding-top: 8px; cursor: grab; flex-shrink: 0;
+  opacity: 0.35; transition: opacity 0.15s;
+  touch-action: none;
+}
+.etape-handle:active { cursor: grabbing; }
+.etape-item:hover .etape-handle { opacity: 0.7; }
+.etape-handle span {
+  display: block; width: 14px; height: 2px; background: var(--ink-mid); border-radius: 2px;
+}
+
 .etape-num {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--navy); color: white;
   font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; z-index: 1;
 }
+
+/* ── CARD ── */
 .etape-content {
-  flex: 1; background: var(--cream); border-radius: var(--radius-sm);
-  padding: 12px; border: 1px solid var(--cream-dark);
+  flex: 1; background: var(--white); border-radius: var(--radius-sm);
+  border: 1.5px solid var(--cream-dark);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
 }
-.etape-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.etape-item.dragging .etape-content {
+  box-shadow: var(--shadow-lg); opacity: 0.85;
+}
+.etape-item.drag-over .etape-content {
+  border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-pale);
+}
+
+/* READ VIEW */
+.etape-read {
+  padding: 12px 14px;
+}
+.etape-read-top {
+  display: flex; justify-content: space-between; align-items: center;
+}
 .etape-city { font-size: 16px; font-weight: 700; color: var(--ink); }
-.etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
-.etape-del { color: #c44; background: none; border: none; font-size: 18px; padding: 4px; }
-.etape-dates { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+.etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
+.etape-read-dates {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px; font-size: 12px; color: var(--ink-mid);
+  font-weight: 500;
+}
+.etape-read-dates .date-badge {
+  background: var(--cream); border-radius: 6px; padding: 3px 8px;
+  font-size: 12px; color: var(--ink-mid);
+}
+.etape-read-notes {
+  margin-top: 7px; font-size: 12px; color: var(--ink-mid);
+  line-height: 1.5; font-style: italic; padding-left: 2px;
+  white-space: pre-wrap;
+}
+.btn-edit-etape {
+  background: none; border: 1.5px solid var(--cream-dark);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 12px; font-weight: 600; color: var(--ink-mid);
+  font-family: inherit; cursor: pointer; flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-edit-etape:active { background: var(--cream); }
+
+/* EDIT VIEW */
+.etape-edit {
+  padding: 12px 14px; background: #fffcf7;
+  border-top: 2px solid var(--orange);
+  display: none;
+}
+.etape-edit.open { display: block; }
+.edit-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+}
+.edit-header-city { font-size: 14px; font-weight: 700; color: var(--ink); }
+.btn-close-edit {
+  background: none; border: none; font-size: 18px; color: var(--ink-soft);
+  cursor: pointer; padding: 2px 6px; line-height: 1;
+}
+.edit-label {
+  font-size: 11px; font-weight: 700; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; margin-top: 10px;
+  display: block;
+}
+.etape-dates-row { display: flex; gap: 8px; align-items: center; }
 .etape-date-input {
   flex: 1; font-size: 12px; font-family: inherit;
-  border: 1px solid var(--cream-dark); border-radius: 6px;
-  padding: 6px; background: var(--white); outline: none;
+  border: 1.5px solid var(--cream-dark); border-radius: 6px;
+  padding: 6px 8px; background: var(--white); outline: none;
+  color: var(--ink);
 }
+.etape-date-input:focus { border-color: var(--orange); }
+.etape-notes-input {
+  width: 100%; font-size: 12px; font-family: inherit;
+  border: 1.5px solid var(--cream-dark); border-radius: 6px;
+  padding: 8px; background: var(--white); outline: none;
+  color: var(--ink); resize: vertical; min-height: 56px; line-height: 1.5;
+}
+.etape-notes-input:focus { border-color: var(--orange); }
+
+/* Color swatches in edit */
+.edit-color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.etape-swatch {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2.5px solid transparent; cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.etape-swatch.selected { border-color: var(--ink); transform: scale(1.2); }
+
+.edit-actions {
+  display: flex; justify-content: flex-end; margin-top: 14px;
+}
+.btn-del-etape {
+  background: none; border: 1.5px solid #e57373;
+  color: #c62828; border-radius: 20px;
+  padding: 5px 14px; font-size: 12px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.btn-del-etape:active { background: #fdecea; }
 
 /* =============================================
    VUE : CARTE
@@ -603,6 +707,155 @@ function getActiveVoyage() {
   return state.voyages.find(v => v.id === state.activeVoyageId); 
 }
 
+function formatDate(d) {
+  if (!d) return null;
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function buildEtapeItem(e, i, voyage) {
+  const item = document.createElement('div');
+  item.className = 'etape-item';
+  item.dataset.index = i;
+  item.draggable = true;
+
+  // Dates display
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
+    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
+    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+
+  const notesHtml = e.notes 
+    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
+    : '';
+
+  // Color swatches for edit panel
+  const swatchesHtml = VOYAGE_COLORS.map(c => 
+    `<div class="etape-swatch${c === voyage.color ? ' selected' : ''}" style="background:${c}" data-color="${c}" onclick="selectVoyageColor(this,'${c}')"></div>`
+  ).join('');
+
+  item.innerHTML = `
+    <div class="etape-handle"><span></span><span></span><span></span></div>
+    <div class="etape-num">${i + 1}</div>
+    <div class="etape-content">
+
+      <div class="etape-read">
+        <div class="etape-read-top">
+          <div>
+            <div class="etape-city">${e.city}</div>
+            <div class="etape-country">${e.country}</div>
+          </div>
+          <button class="btn-edit-etape" onclick="toggleEditPanel(this)">Éditer</button>
+        </div>
+        ${datesHtml}
+        ${notesHtml}
+      </div>
+
+      <div class="etape-edit">
+        <div class="edit-header">
+          <span class="edit-header-city">✏️ ${e.city}</span>
+          <button class="btn-close-edit" onclick="toggleEditPanel(this)">✕</button>
+        </div>
+
+        <span class="edit-label">Dates</span>
+        <div class="etape-dates-row">
+          <input class="etape-date-input" type="date" placeholder="Arrivée" value="${e.dateArr||''}" 
+            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i})"/>
+          <span style="font-size:12px;color:var(--ink-soft)">→</span>
+          <input class="etape-date-input" type="date" placeholder="Départ" value="${e.dateDep||''}" 
+            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i})"/>
+        </div>
+
+        <span class="edit-label">Notes</span>
+        <textarea class="etape-notes-input" placeholder="Hôtel, à faire, idées…" 
+          onchange="updateNote(${i},this.value); refreshEtapeReadView(${i})"
+          oninput="updateNote(${i},this.value)">${e.notes||''}</textarea>
+
+        <span class="edit-label">Couleur du voyage</span>
+        <div class="edit-color-row" data-voyage-colors>${swatchesHtml}</div>
+
+        <div class="edit-actions">
+          <button class="btn-del-etape" onclick="removeEtape(${i})">🗑 Supprimer</button>
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  // Drag & drop (mouse)
+  item.addEventListener('dragstart', onDragStart);
+  item.addEventListener('dragover',  onDragOver);
+  item.addEventListener('drop',      onDrop);
+  item.addEventListener('dragend',   onDragEnd);
+
+  // Touch drag (long-press → drag)
+  const handle = item.querySelector('.etape-handle');
+  setupTouchDrag(handle, item);
+
+  return item;
+}
+
+function toggleEditPanel(btn) {
+  const content = btn.closest('.etape-content');
+  const editPanel = content.querySelector('.etape-edit');
+  const isOpen = editPanel.classList.contains('open');
+  // Close all other open panels first
+  document.querySelectorAll('.etape-edit.open').forEach(p => p.classList.remove('open'));
+  if (!isOpen) editPanel.classList.add('open');
+}
+
+function refreshEtapeReadView(index) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  const e = voyage.etapes[index];
+  const items = document.querySelectorAll('.etape-item');
+  const item = [...items].find(it => parseInt(it.dataset.index) === index);
+  if (!item) return;
+
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
+    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
+    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+  const notesHtml = e.notes 
+    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
+    : '';
+
+  const readTop = item.querySelector('.etape-read-top');
+  // Remove old dates/notes
+  item.querySelectorAll('.etape-read-dates, .etape-read-notes').forEach(el => el.remove());
+  readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
+}
+
+function selectVoyageColor(el, color) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.color = color;
+  saveState();
+  // Update all swatch groups
+  document.querySelectorAll('[data-voyage-colors] .etape-swatch').forEach(s => {
+    s.classList.toggle('selected', s.dataset.color === color);
+  });
+  document.getElementById('voyage-color-dot').style.background = color;
+  // Refresh map markers color
+  if (document.getElementById('view-map').classList.contains('active')) {
+    renderAllMaps();
+  }
+}
+
+function updateNote(index, value) {
+  const v = getActiveVoyage();
+  if (v && v.etapes[index] !== undefined) {
+    v.etapes[index].notes = value;
+    saveState();
+  }
+}
+
 function renderTrip() {
   const voyage = getActiveVoyage();
   if (!voyage) return navigate('view-home');
@@ -622,26 +875,111 @@ function renderTrip() {
   }
 
   voyage.etapes.forEach((e, i) => {
-    const item = document.createElement('div');
-    item.className = 'etape-item';
-    item.innerHTML = `
-      <div class="etape-num">${i + 1}</div>
-      <div class="etape-content">
-        <div class="etape-top">
-          <div>
-            <div class="etape-city">${e.city}</div>
-            <div class="etape-country">${e.country}</div>
-          </div>
-          <button class="etape-del" onclick="removeEtape(${i})">🗑</button>
-        </div>
-        <div class="etape-dates">
-          <input class="etape-date-input" type="date" value="${e.dateArr||''}" onchange="updateDate(${i},'dateArr',this.value)"/>
-          <span style="font-size:12px; color:var(--ink-soft)">→</span>
-          <input class="etape-date-input" type="date" value="${e.dateDep||''}" onchange="updateDate(${i},'dateDep',this.value)"/>
-        </div>
-      </div>
-    `;
-    list.appendChild(item);
+    list.appendChild(buildEtapeItem(e, i, voyage));
+  });
+}
+
+// ============================================================
+// DRAG & DROP — MOUSE
+// ============================================================
+let dragSrcIndex = null;
+
+function onDragStart(e) {
+  dragSrcIndex = parseInt(this.dataset.index);
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+  this.classList.add('drag-over');
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  const targetIndex = parseInt(this.dataset.index);
+  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+  const voyage = getActiveVoyage();
+  const moved = voyage.etapes.splice(dragSrcIndex, 1)[0];
+  voyage.etapes.splice(targetIndex, 0, moved);
+  saveState();
+  renderTrip();
+}
+
+function onDragEnd() {
+  document.querySelectorAll('.etape-item').forEach(it => {
+    it.classList.remove('dragging', 'drag-over');
+  });
+  dragSrcIndex = null;
+}
+
+// ============================================================
+// TOUCH DRAG — Long press on handle
+// ============================================================
+function setupTouchDrag(handle, item) {
+  let longPressTimer = null;
+  let isDragging = false;
+  let startY = 0;
+  let clone = null;
+  let offsetY = 0;
+
+  handle.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+    longPressTimer = setTimeout(() => {
+      isDragging = true;
+      item.classList.add('dragging');
+      // Create visual clone
+      clone = item.cloneNode(true);
+      clone.style.cssText = `
+        position:fixed; z-index:9999; width:${item.offsetWidth}px; left:${item.getBoundingClientRect().left}px;
+        top:${item.getBoundingClientRect().top}px; opacity:0.88; pointer-events:none;
+        box-shadow: 0 16px 48px rgba(44,36,24,.25); transform: scale(1.02);
+        transition: none;
+      `;
+      document.body.appendChild(clone);
+      offsetY = startY - item.getBoundingClientRect().top;
+      if (navigator.vibrate) navigator.vibrate(40);
+    }, 400);
+  }, { passive: true });
+
+  handle.addEventListener('touchmove', function(e) {
+    if (!isDragging) { clearTimeout(longPressTimer); return; }
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    clone.style.top = (y - offsetY) + 'px';
+
+    // Find element under touch
+    clone.style.display = 'none';
+    const el = document.elementFromPoint(e.touches[0].clientX, y);
+    clone.style.display = '';
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+    if (targetItem && targetItem !== item) targetItem.classList.add('drag-over');
+  }, { passive: false });
+
+  handle.addEventListener('touchend', function(e) {
+    clearTimeout(longPressTimer);
+    if (!isDragging) return;
+    isDragging = false;
+    item.classList.remove('dragging');
+    if (clone) { clone.remove(); clone = null; }
+
+    const y = e.changedTouches[0].clientY;
+    const el = document.elementFromPoint(e.changedTouches[0].clientX, y);
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+
+    if (targetItem && targetItem !== item) {
+      const srcIdx = parseInt(item.dataset.index);
+      const tgtIdx = parseInt(targetItem.dataset.index);
+      const voyage = getActiveVoyage();
+      const moved = voyage.etapes.splice(srcIdx, 1)[0];
+      voyage.etapes.splice(tgtIdx, 0, moved);
+      saveState();
+      renderTrip();
+    }
   });
 }
 
@@ -753,7 +1091,7 @@ document.addEventListener('click', e => {
 // ============================================================
 function addEtapeToActiveVoyage(city) {
   const v = getActiveVoyage();
-  v.etapes.push({ city: city.name, country: city.country, lat: city.lat, lon: city.lon, dateArr: '', dateDep: '' });
+  v.etapes.push({ city: city.name, country: city.country, lat: city.lat, lon: city.lon, dateArr: '', dateDep: '', notes: '' });
   saveState(); 
   renderTrip(); 
   toast(`📍 ${city.name} ajouté`);
