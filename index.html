@@ -70,150 +70,643 @@ html, body {
   background: var(--cream);
   overflow: hidden;
 }
-.view.active { display: flex; }
+/* La classe active gère l'affichage. Par défaut, l'accueil l'a. */
+.view.active {
+  display: flex;
+}
 
 /* =============================================
    VUE : ACCUEIL
    ============================================= */
-#view-home { align-items: center; overflow-y: auto; padding: 40px 24px 48px; }
+#view-home {
+  align-items: center;
+  overflow-y: auto;
+  padding: 40px 24px;
+  padding-bottom: 48px;
+}
 
-.home-header { text-align: center; margin-bottom: 40px; }
-.home-header h1 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--navy); margin-bottom: 12px; }
-.home-header p { color: var(--ink-soft); font-size: 15px; line-height: 1.5; }
+.home-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.home-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.home-header p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+}
 
-.btn-large-primary { width: 100%; max-width: 320px; padding: 16px; border-radius: 30px; background: var(--orange); color: white; border: none; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: var(--shadow-md); transition: var(--transition); margin-bottom: 40px; }
+.btn-large-primary {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px;
+  border-radius: 30px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  margin-bottom: 40px;
+}
 .btn-large-primary:active { transform: scale(0.96); }
 
-.btn-large-secondary { width: 100%; max-width: 320px; padding: 14px; border-radius: 30px; background: var(--navy); color: white; border: none; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; box-shadow: var(--shadow-sm); transition: var(--transition); margin-bottom: 40px; margin-top: -28px; }
+.btn-large-secondary {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px;
+  border-radius: 30px;
+  background: var(--navy);
+  color: white;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  margin-bottom: 40px;
+  margin-top: -28px;
+}
 .btn-large-secondary:active { transform: scale(0.96); }
 
-#home-trips-section { width: 100%; }
-.section-title { font-size: 13px; font-weight: 700; color: var(--ink-mid); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; border-bottom: 1px solid var(--cream-dark); padding-bottom: 8px; }
+#home-trips-section {
+  width: 100%;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-mid);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--cream-dark);
+  padding-bottom: 8px;
+}
 
 /* ── CAROUSEL ── */
-#home-trips-list { position: relative; width: 100vw; margin-left: -24px; padding: 0 24px 12px 24px; overflow: hidden; }
-.carousel-track-wrapper { overflow: hidden; width: 100%; cursor: grab; user-select: none; }
+#home-trips-list {
+  position: relative;
+  width: 100vw;
+  margin-left: -24px;
+  padding: 0 24px 12px 24px;
+  overflow: hidden;
+}
+
+.carousel-track-wrapper {
+  overflow: hidden;
+  width: 100%;
+  cursor: grab;
+  user-select: none;
+}
 .carousel-track-wrapper:active { cursor: grabbing; }
-.carousel-track { display: flex; gap: 16px; transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); will-change: transform; }
-.carousel-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
-.carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cream-dark); transition: all 0.3s ease; cursor: pointer; }
-.carousel-dot.active { background: var(--orange); width: 20px; border-radius: 3px; }
+
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.carousel-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.carousel-dot.active {
+  background: var(--orange);
+  width: 20px;
+  border-radius: 3px;
+}
 
 /* ── TRIP CARD ── */
 .home-trip-card {
-  position: relative; flex-shrink: 0;
-  width: calc(100vw - 72px); max-width: 340px; height: 220px;
-  border-radius: 20px; overflow: hidden; cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  width: calc(100vw - 72px);
+  max-width: 340px;
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
   box-shadow: 0 8px 32px rgba(28,53,87,.25), 0 2px 8px rgba(0,0,0,.15);
   transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
   transform: scale(0.97);
 }
-.home-trip-card.carousel-active-card { transform: scale(1); box-shadow: 0 16px 48px rgba(28,53,87,.35), 0 4px 16px rgba(0,0,0,.2); }
-.home-trip-card:active { transform: scale(0.95) !important; }
-
-/* Map container in card */
-.htc-map-container {
-  position: absolute; inset: 0;
-  background: #e8dfc8; z-index: 0;
-  pointer-events: none; /* Disable map interaction on home */
+.home-trip-card.carousel-active-card {
+  transform: scale(1);
+  box-shadow: 0 16px 48px rgba(28,53,87,.35), 0 4px 16px rgba(0,0,0,.2);
+}
+.home-trip-card:active {
+  transform: scale(0.95) !important;
 }
 
-/* Generative Gradient Overlay */
+/* Photo background */
+.htc-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--navy);
+  transition: transform 0.6s ease;
+}
+.home-trip-card:hover .htc-bg {
+  transform: scale(1.04);
+}
+
+/* Gradient overlay */
 .htc-overlay {
-  position: absolute; inset: 0;
-  z-index: 1;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     160deg,
-    rgba(255,255,255,0.1) 0%,
-    rgba(28,53,87,0.4) 50%,
-    rgba(0,0,0,0.7) 100%
+    rgba(224,123,57,0.55) 0%,
+    rgba(192,90,20,0.60) 40%,
+    rgba(28,30,20,0.82) 75%,
+    rgba(12,18,10,0.93) 100%
   );
 }
 
-.htc-color-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 5; }
+/* Filtre crème/orangé unifié par-dessus la photo */
+.htc-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(245,200,140,0.18);
+  mix-blend-mode: multiply;
+}
 
-.htc-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 2; }
-.htc-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 26px; color: white; text-align: center; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+/* Shimmer loader */
+.htc-bg.loading {
+  background: linear-gradient(110deg, #1C3557 0%, #264a73 40%, #1C3557 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-.htc-meta-row { position: absolute; bottom: 14px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between; }
-.htc-meta { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
-.htc-open-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; color: white; cursor: pointer; }
-.htc-del { padding: 8px; color: rgba(255,255,255,0.6); font-size: 18px; background: none; border: none; cursor: pointer; }
+/* Color accent bar */
+.htc-color-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 20px 20px 0 0;
+}
+
+/* Card content */
+.htc-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 18px 16px;
+}
+.htc-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 26px;
+  color: white;
+  line-height: 1.2;
+  text-align: center;
+  text-shadow: 0 2px 16px rgba(0,0,0,.5);
+  letter-spacing: .01em;
+}
+.htc-meta-row {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.htc-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+.htc-del {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+.htc-del:hover { background: rgba(224,123,57,0.6); }
+.htc-del:active { transform: scale(0.88); background: rgba(224,123,57,0.8); }
+
+/* Top-right open arrow */
+.htc-open-btn {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.htc-open-btn:hover { background: rgba(255,255,255,0.3); }
+.htc-del {
+  padding: 8px;
+  color: var(--ink-soft);
+  font-size: 18px;
+  background: none; border: none;
+}
 
 /* Barre export/import */
-#home-data-bar { display: none; width: 100%; max-width: 400px; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--cream-dark); justify-content: center; gap: 24px; }
-.btn-data { background: none; border: none; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--ink-soft); cursor: pointer; padding: 4px 0; display: flex; align-items: center; gap: 5px; }
+#home-data-bar {
+  display: none;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream-dark);
+  justify-content: center;
+  gap: 24px;
+}
+.btn-data {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-data:hover { color: var(--ink-mid); }
+.btn-data:active { color: var(--ink); }
 
 /* =============================================
-   AUTRES VUES (SANS CHANGEMENTS)
+   VUE : VOYAGE DETAIL
    ============================================= */
 #view-trip { background: var(--white); }
-.view-header { display: flex; align-items: center; padding: 16px; background: var(--navy); color: var(--white); gap: 16px; box-shadow: var(--shadow-sm); z-index: 10; }
-.btn-back-home, .btn-nav-map { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 12px; border-radius: 20px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
-.btn-nav-map { margin-left: auto; }
 
-#voyage-header { padding: 16px; border-bottom: 1px solid var(--cream-dark); background: var(--cream); }
-#voyage-name-wrap { display: flex; align-items: center; gap: 10px; }
-#voyage-color-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(0,0,0,.1); }
-#voyage-name-input { flex: 1; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); border: none; background: transparent; outline: none; }
+.view-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--navy);
+  color: var(--white);
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+.btn-back-home {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-nav-map {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+#voyage-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--cream-dark);
+  background: var(--cream);
+}
+#voyage-name-wrap {
+  display: flex; align-items: center; gap: 10px;
+}
+#voyage-color-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  flex-shrink: 0; border: 2px solid rgba(0,0,0,.1);
+}
+#voyage-name-input {
+  flex: 1; font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--ink);
+  border: none; background: transparent; outline: none;
+}
 .voyage-meta { font-size: 13px; color: var(--ink-soft); margin-top: 6px; margin-left: 26px; }
 
-#search-zone { padding: 16px; background: var(--white); border-bottom: 1px solid var(--cream-dark); z-index: 5; }
+#search-zone {
+  padding: 16px; background: var(--white);
+  border-bottom: 1px solid var(--cream-dark); z-index: 5;
+}
 #search-wrap { position: relative; }
-#search-input { width: 100%; padding: 12px 14px 12px 38px; border: 2px solid var(--cream-dark); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; outline: none; }
-#search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-soft); font-size: 16px; }
-#autocomplete { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--white); border: 1px solid var(--cream-dark); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); max-height: 250px; overflow-y: auto; z-index: 9999; display: none; }
+#search-input {
+  width: 100%; padding: 12px 14px 12px 38px;
+  border: 2px solid var(--cream-dark); border-radius: var(--radius-sm);
+  font-size: 15px; font-family: inherit; outline: none;
+}
+#search-input:focus { border-color: var(--orange); }
+#search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-soft); font-size: 16px; pointer-events: none;
+}
+
+#autocomplete {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--white); border: 1px solid var(--cream-dark);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+  max-height: 250px; overflow-y: auto; z-index: 9999; display: none;
+}
 #autocomplete.open { display: block; }
-.ac-item { padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--cream-dark); }
-#btn-manual-add { display: block; width: 100%; margin-top: 12px; background: none; border: 1px dashed var(--ink-soft); color: var(--ink-mid); padding: 10px; font-size: 13px; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; }
+.ac-item {
+  padding: 12px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.ac-item .city-pin { font-size: 16px; }
+.ac-item .city-name { font-size: 15px; font-weight: 500; color: var(--ink); }
+.ac-item .city-country { font-size: 12px; color: var(--ink-soft); }
 
-#etapes-list { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 100px; }
-.etape-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; position: relative; }
-.etape-item:not(:last-child)::after { content: ''; position: absolute; left: 38px; top: 32px; width: 2px; bottom: -8px; background: var(--cream-dark); z-index: 0; }
-.etape-handle { width: 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 8px; cursor: grab; opacity: 0.35; touch-action: none; }
-.etape-handle span { display: block; width: 14px; height: 2px; background: var(--ink-mid); border-radius: 2px; }
-.etape-num { width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
-.etape-content { flex: 1; background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--cream-dark); overflow: hidden; transition: box-shadow 0.2s; }
+#btn-manual-add {
+  display: block; width: 100%; margin-top: 12px;
+  background: none; border: 1px dashed var(--ink-soft);
+  color: var(--ink-mid); padding: 10px; font-size: 13px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: inherit; font-weight: 500;
+}
 
-.etape-read { padding: 12px 14px; }
+#etapes-list {
+  flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 100px;
+}
+
+/* ── ROW : handle + num + card ── */
+.etape-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 12px; position: relative;
+}
+.etape-item:not(:last-child)::after {
+  content: ''; position: absolute; left: 38px; top: 32px; width: 2px; bottom: -8px;
+  background: var(--cream-dark); z-index: 0;
+}
+
+/* drag handle */
+.etape-handle {
+  width: 20px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 4px; padding-top: 8px; cursor: grab; flex-shrink: 0;
+  opacity: 0.35; transition: opacity 0.15s;
+  touch-action: none;
+}
+.etape-handle:active { cursor: grabbing; }
+.etape-item:hover .etape-handle { opacity: 0.7; }
+.etape-handle span {
+  display: block; width: 14px; height: 2px; background: var(--ink-mid); border-radius: 2px;
+}
+
+.etape-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--navy); color: white;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; z-index: 1;
+}
+
+/* ── CARD ── */
+.etape-content {
+  flex: 1; background: var(--white); border-radius: var(--radius-sm);
+  border: 1.5px solid var(--cream-dark);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.etape-item.dragging .etape-content {
+  box-shadow: var(--shadow-lg); opacity: 0.85;
+}
+.etape-item.drag-over .etape-content {
+  border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-pale);
+}
+
+/* READ VIEW */
+.etape-read {
+  padding: 12px 14px;
+}
+.etape-read-top {
+  display: flex; justify-content: space-between; align-items: center;
+}
 .etape-city { font-size: 16px; font-weight: 700; color: var(--ink); }
-.etape-read-dates { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--ink-mid); }
-.etape-read-dates .date-badge { background: var(--cream); border-radius: 6px; padding: 3px 8px; }
+.etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
+.etape-read-dates {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px; font-size: 12px; color: var(--ink-mid);
+  font-weight: 500;
+}
+.etape-read-dates .date-badge {
+  background: var(--cream); border-radius: 6px; padding: 3px 8px;
+  font-size: 12px; color: var(--ink-mid);
+}
+.etape-read-notes {
+  margin-top: 7px; font-size: 12px; color: var(--ink-mid);
+  line-height: 1.5; font-style: italic; padding-left: 2px;
+  white-space: pre-wrap;
+}
 
-.etape-weather { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 6px 10px; background: var(--cream); border-radius: 8px; font-size: 12px; min-height: 28px; }
-.wx-temps { margin-left: auto; font-weight: 600; }
+/* ── MÉTÉO ── */
+.etape-weather {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--cream); border-radius: 8px;
+  font-size: 12px; color: var(--ink-mid);
+  min-height: 28px;
+}
+.etape-weather .wx-icon { font-size: 15px; flex-shrink: 0; }
+.etape-weather .wx-label { font-weight: 500; color: var(--ink); }
+.etape-weather .wx-temps { color: var(--ink-soft); margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.etape-weather .wx-loading { color: var(--ink-soft); font-style: italic; }
+.etape-weather.wx-historical { background: #eef4f0; }
+.etape-weather.wx-historical .wx-label { color: var(--teal); }
+.btn-edit-etape {
+  background: none; border: 1.5px solid var(--cream-dark);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 12px; font-weight: 600; color: var(--ink-mid);
+  font-family: inherit; cursor: pointer; flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-edit-etape:active { background: var(--cream); }
 
-.etape-edit { padding: 12px 14px; background: #fffcf7; border-top: 2px solid var(--orange); display: none; }
+/* EDIT VIEW */
+.etape-edit {
+  padding: 12px 14px; background: #fffcf7;
+  border-top: 2px solid var(--orange);
+  display: none;
+}
 .etape-edit.open { display: block; }
-.etape-date-input, .etape-notes-input { width: 100%; border: 1.5px solid var(--cream-dark); border-radius: 6px; padding: 8px; font-family: inherit; font-size: 12px; margin-top: 4px; }
+.edit-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+}
+.edit-header-city { font-size: 14px; font-weight: 700; color: var(--ink); }
+.btn-close-edit {
+  background: none; border: none; font-size: 18px; color: var(--ink-soft);
+  cursor: pointer; padding: 2px 6px; line-height: 1;
+}
+.edit-label {
+  font-size: 11px; font-weight: 700; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; margin-top: 10px;
+  display: block;
+}
+.etape-dates-row { display: flex; gap: 8px; align-items: center; }
+.etape-date-input {
+  flex: 1; font-size: 12px; font-family: inherit;
+  border: 1.5px solid var(--cream-dark); border-radius: 6px;
+  padding: 6px 8px; background: var(--white); outline: none;
+  color: var(--ink);
+}
+.etape-date-input:focus { border-color: var(--orange); }
+.etape-notes-input {
+  width: 100%; font-size: 12px; font-family: inherit;
+  border: 1.5px solid var(--cream-dark); border-radius: 6px;
+  padding: 8px; background: var(--white); outline: none;
+  color: var(--ink); resize: vertical; min-height: 56px; line-height: 1.5;
+}
+.etape-notes-input:focus { border-color: var(--orange); }
 
-#view-map, #view-global-map { position: relative; }
-#map, #global-map { flex: 1; width: 100%; background: #e8dfc8; }
+/* Color swatches in edit */
+.edit-color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.etape-swatch {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2.5px solid transparent; cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.etape-swatch.selected { border-color: var(--ink); transform: scale(1.2); }
 
-.fab { position: absolute; bottom: 24px; right: 24px; width: 64px; height: 64px; border-radius: 50%; background: var(--orange); color: white; border: none; box-shadow: 0 4px 12px rgba(224,123,57,.4); font-size: 24px; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.edit-actions {
+  display: flex; justify-content: flex-end; margin-top: 14px;
+}
+.btn-del-etape {
+  background: none; border: 1.5px solid #e57373;
+  color: #c62828; border-radius: 20px;
+  padding: 5px 14px; font-size: 12px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.btn-del-etape:active { background: #fdecea; }
 
-#modal-overlay { position: fixed; inset: 0; background: rgba(28,53,87,.7); backdrop-filter: blur(4px); z-index: 9000; display: none; align-items: center; justify-content: center; }
+/* =============================================
+   VUE : CARTE
+   ============================================= */
+#view-map { position: relative; }
+#map { flex: 1; width: 100%; height: 100%; background: #e8dfc8; }
+#map.selecting { cursor: crosshair; }
+
+.manual-mode-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  background: var(--teal); color: white;
+  padding: 12px; text-align: center; font-size: 14px; font-weight: 700;
+  z-index: 1000; box-shadow: var(--shadow-md); display: none;
+}
+.manual-mode-bar.active { display: block; }
+
+/* =============================================
+   FAB (Floating Action Button)
+   ============================================= */
+.fab {
+  position: absolute; bottom: 24px; right: 24px;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--orange); color: white; border: none;
+  box-shadow: 0 4px 12px rgba(224,123,57,.4); font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 1000; transition: transform 0.2s ease;
+}
+.fab:active { transform: scale(0.9); }
+
+/* =============================================
+   MODAL & TOAST
+   ============================================= */
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(28,53,87,.7); backdrop-filter: blur(4px);
+  z-index: 9000; display: none; align-items: center; justify-content: center;
+}
 #modal-overlay.open { display: flex; }
-#modal { background: var(--white); border-radius: var(--radius); padding: 24px; width: 90%; max-width: 400px; }
-.swatch { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; }
+#modal {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; width: 90%; max-width: 400px; box-shadow: var(--shadow-lg);
+}
+.modal-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 20px; color: var(--ink); }
+.modal-field { margin-bottom: 16px; }
+.modal-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px; text-transform: uppercase; }
+.modal-field input[type="text"] { width: 100%; padding: 12px; border: 2px solid var(--cream-dark); border-radius: var(--radius-sm); font-size: 16px; font-family: inherit; }
+.color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; transition: var(--transition); }
 .swatch.selected { border-color: var(--ink); transform: scale(1.15); }
+.modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+.modal-actions button { padding: 12px 20px; border-radius: 24px; font-size: 15px; font-weight: 700; font-family: inherit; border: none; cursor: pointer; }
+.btn-cancel { background: var(--cream); color: var(--ink-mid); }
+.btn-confirm { background: var(--orange); color: white; }
 
-#toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--white); padding: 12px 24px; border-radius: 30px; font-size: 14px; opacity: 0; transition: all 0.3s ease; z-index: 9999; pointer-events: none; }
+#toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--white); padding: 12px 24px;
+  border-radius: 30px; font-size: 14px; font-weight: 500;
+  opacity: 0; transition: all 0.3s ease; z-index: 9999; white-space: nowrap; pointer-events: none;
+}
 #toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* LEAFLET OVERRIDES */
+.leaflet-popup-content-wrapper { border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; }
+
+/* =============================================
+   VUE : CARTE GLOBALE
+   ============================================= */
+#view-global-map { position: absolute; top:0; left:0; right:0; bottom:0; flex-direction: column; }
+#global-map { flex: 1; width: 100%; min-height: 0; background: #e8dfc8; }
 </style>
 </head>
 <body>
 
 <div id="app">
+
   <div id="view-home" class="view azulejo-bg active">
     <div class="home-header">
       <h1>Voyages Voyages</h1>
       <p>plus loin que la nuit et le jour</p>
     </div>
+    
     <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
-    <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;">🌍 Carte des voyages</button>
+    <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;"> Carte</button>
+
     <div id="home-trips-section" style="display:none;">
-      <div class="section-title">Mes voyages</div>
+      <div class="section-title" style="padding-left:0; margin-bottom:14px;">Mes voyages</div>
       <div id="home-trips-list">
         <div class="carousel-track-wrapper" id="carousel-wrapper">
           <div class="carousel-track" id="carousel-track"></div>
@@ -221,6 +714,7 @@ html, body {
         <div class="carousel-dots" id="carousel-dots"></div>
       </div>
     </div>
+
     <div id="home-data-bar">
       <button class="btn-data" onclick="exportVoyages()">↓ Exporter</button>
       <button class="btn-data" onclick="document.getElementById('import-input').click()">↑ Importer</button>
@@ -231,46 +725,71 @@ html, body {
   <div id="view-trip" class="view">
     <header class="view-header">
       <button class="btn-back-home" onclick="navigate('view-home')">🛖 Accueil</button>
-      <button class="btn-nav-map" onclick="navigateGlobalMap()">🌍 Carte globale</button>
+      <button class="btn-nav-map" onclick="navigateGlobalMap()">🌍 Carte des voyages</button>
     </header>
+
     <div id="voyage-header">
-      <div id="voyage-name-wrap"><div id="voyage-color-dot"></div><input id="voyage-name-input" type="text"/></div>
+      <div id="voyage-name-wrap">
+        <div id="voyage-color-dot"></div>
+        <input id="voyage-name-input" type="text" placeholder="Nom du voyage"/>
+      </div>
       <div class="voyage-meta" id="voyage-meta"></div>
     </div>
+
     <div id="search-zone">
       <div id="search-wrap">
         <span id="search-icon">🔍</span>
         <input id="search-input" type="text" placeholder="Rechercher une ville…" autocomplete="off"/>
         <div id="autocomplete"></div>
       </div>
-      <button id="btn-manual-add" onclick="activateManualMode()">📍 Placer manuellement</button>
+      <button id="btn-manual-add" onclick="activateManualMode()">📍 Placer une destination manuellement</button>
     </div>
+
     <div id="etapes-list"></div>
+
     <button class="fab" onclick="navigate('view-map')">🗺️</button>
   </div>
 
   <div id="view-map" class="view">
+    <div class="manual-mode-bar" id="manual-mode-bar">
+      Cliquez sur la carte pour ajouter une étape
+    </div>
+    
     <div id="map"></div>
-    <button class="fab" onclick="navigate('view-trip')">🏛️</button>
+    
+    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">🏛️</button>
   </div>
 
   <div id="view-global-map" class="view">
-    <div class="view-header">
+    <div class="view-header" style="z-index:10; position:relative;">
       <button class="btn-back-home" id="global-map-back-btn">← Retour</button>
-      <span style="color:white; font-weight:700;">Tous les voyages</span>
+      <span style="font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:white; margin-left:12px; flex:1;">Tous les voyages</span>
     </div>
-    <div id="global-map"></div>
+    <div id="global-map-legend" style="
+      position:absolute; top:64px; left:12px; z-index:900;
+      background:rgba(255,253,247,0.93); border-radius:10px;
+      padding:10px 14px; box-shadow:var(--shadow-md);
+      font-size:13px; max-width:200px; display:none;
+    "></div>
+    <div id="global-map" style="flex:1; width:100%; min-height:0;"></div>
   </div>
+
 </div>
 
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
     <div class="modal-title">Nouveau départ 🛩️</div>
-    <div class="modal-field"><input type="text" id="modal-name" placeholder="ex : Alicante 2026"/></div>
-    <div class="color-swatches" id="color-swatches" style="display:flex; gap:10px; margin:15px 0;"></div>
-    <div class="modal-actions" style="display:flex; justify-content:flex-end; gap:10px;">
-      <button onclick="closeModal()">Annuler</button>
-      <button class="btn-confirm" onclick="confirmNewVoyage()" style="background:var(--orange); color:white; padding:10px 20px; border-radius:20px; border:none;">Créer</button>
+    <div class="modal-field">
+      <label>Nom du voyage</label>
+      <input type="text" id="modal-name" placeholder="ex : Alicante 2026" onkeydown="if(event.key==='Enter')confirmNewVoyage()"/>
+    </div>
+    <div class="modal-field">
+      <label>Couleur</label>
+      <div class="color-swatches" id="color-swatches"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-confirm" onclick="confirmNewVoyage()">Créer</button>
     </div>
   </div>
 </div>
@@ -278,6 +797,7 @@ html, body {
 <div id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 // ============================================================
 // CONFIGURATION & ETAT
@@ -285,358 +805,1214 @@ html, body {
 const VOYAGE_COLORS = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51','#CF5C78'];
 let state = { voyages: [], activeVoyageId: null };
 let map, layers = {};  
-let weatherCache = {};
-let carouselIndex = 0;
+let manualMode = false;
+let toastTimer;
 
 // ============================================================
-// PERSISTANCE
+// PERSISTANCE & INITIALISATION
 // ============================================================
-function saveState() { localStorage.setItem('voyages_app_mobi_v3', JSON.stringify(state)); }
+function saveState() { 
+  localStorage.setItem('voyages_app_mobi_v3', JSON.stringify(state)); 
+}
+
 function loadState() {
-  const raw = localStorage.getItem('voyages_app_mobi_v3');
-  if (raw) state = JSON.parse(raw);
+  try {
+    const raw = localStorage.getItem('voyages_app_mobi_v3');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.voyages)) {
+        state = parsed;
+      }
+    }
+  } catch(e) { console.error("Erreur State", e); }
+  
+  // Sécuriser les données corrompues
+  if (!state.voyages) state.voyages = [];
   state.voyages.forEach(v => { if (!v.etapes) v.etapes = []; });
 }
 
 // ============================================================
-// RECHERCHE & AUTOCOMPLETE
+// RECHERCHE PHOTON (OpenStreetMap, gratuit, sans clé)
 // ============================================================
-const acList = document.getElementById('autocomplete');
-const searchInput = document.getElementById('search-input');
-let photonController = null;
-
-searchInput.addEventListener('input', e => {
-  const q = e.target.value.trim();
-  if (q.length < 2) { acList.classList.remove('open'); return; }
-  searchPhoton(q);
-});
+let photonDebounce = null;
+let photonController = null; // pour annuler les requêtes en vol
 
 async function searchPhoton(q) {
+  // Annule la requête précédente si elle est encore en cours
   if (photonController) photonController.abort();
   photonController = new AbortController();
+
+  // Indicateur de chargement
+  acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Recherche…</div>';
+  acList.classList.add('open');
+
   try {
-    const resp = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=fr`, { signal: photonController.signal });
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=fr`;
+    const resp = await fetch(url, { signal: photonController.signal });
+    if (!resp.ok) throw new Error('Photon error');
     const data = await resp.json();
-    const results = data.features.map(f => ({
-      name: f.properties.name,
-      country: f.properties.country || '',
-      lat: f.geometry.coordinates[1],
-      lon: f.geometry.coordinates[0]
-    }));
+
+    // On accepte city, town, village, municipality
+    const VALID_TYPES = new Set(['city','town','village','municipality']);
+    const results = data.features
+      .filter(f => VALID_TYPES.has(f.properties.type))
+      .slice(0, 6)
+      .map(f => ({
+        name: f.properties.name,
+        // On ajoute l'état/région pour lever les ambiguïtés (ex: "Lyon, Auvergne-Rhône-Alpes")
+        region: f.properties.state || f.properties.county || '',
+        country: f.properties.country || '',
+        lat: f.geometry.coordinates[1],  // GeoJSON = [lon, lat] !
+        lon: f.geometry.coordinates[0]
+      }));
+
     renderAutocomplete(results);
-  } catch(e) {}
+  } catch(e) {
+    if (e.name === 'AbortError') return; // requête annulée volontairement, pas une erreur
+    console.warn('Photon indisponible', e);
+    acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Service indisponible</div>';
+  }
 }
 
 function renderAutocomplete(results) {
   acList.innerHTML = '';
-  if (!results.length) { acList.classList.remove('open'); return; }
-  results.forEach(r => {
+  if (!results.length) {
+    acList.classList.remove('open');
+    return;
+  }
+  results.forEach(c => {
     const div = document.createElement('div');
     div.className = 'ac-item';
-    div.innerHTML = `<div><b>${r.name}</b> <small>${r.country}</small></div>`;
-    div.onclick = () => { addEtape(r.name, r.country, r.lat, r.lon); acList.classList.remove('open'); searchInput.value = ''; };
+    const subtitle = [c.region, c.country].filter(Boolean).join(', ');
+    div.innerHTML = `
+      <span class="city-pin">📍</span>
+      <div>
+        <div class="city-name">${c.name}</div>
+        <div class="city-country">${subtitle}</div>
+      </div>`;
+    div.onclick = () => {
+      addEtapeToActiveVoyage(c);
+      searchInput.value = '';
+      acList.classList.remove('open');
+    };
     acList.appendChild(div);
   });
   acList.classList.add('open');
 }
 
-function addEtape(city, country, lat, lon) {
-  const v = getActiveVoyage();
-  v.etapes.push({ city, country, lat, lon, id: Date.now(), notes: '', dateArr: '', dateDep: '' });
-  saveState();
-  renderTrip();
-  toast(`📍 ${city} ajouté`);
+// ============================================================
+// NAVIGATION ENTRE VUES
+// ============================================================
+function navigate(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
+  
+  if (viewId === 'view-home') {
+    state.activeVoyageId = null;
+    renderHome();
+  } 
+  else if (viewId === 'view-trip') {
+    renderTrip();
+  } 
+  else if (viewId === 'view-map') {
+    initMap();
+    setTimeout(() => {
+      map.invalidateSize(); 
+      renderAllMaps();
+      fitMapToActiveVoyage();
+    }, 100);
+  }
 }
 
 // ============================================================
-// VUE ACCUEIL : CAROUSEL & MINI-CARTES
+// VUE : ACCUEIL — CAROUSEL
 // ============================================================
+const photoCache = {};
+
+async function fetchCityPhoto(cityName, countryName, lat, lon) {
+  const key = (cityName + ',' + (countryName||'')).toLowerCase();
+  if (photoCache[key]) return photoCache[key];
+
+  // 1) Wikimedia geosearch : trouve les monuments/lieux touristiques
+  //    proches des coordonnées GPS et retourne leurs photos.
+  //    C'est l'API la plus fiable pour des images touristiques de qualité.
+  if (lat && lon) {
+    try {
+      const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord=${lat}|${lon}&gslimit=10&format=json&origin=*`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (resp.ok) {
+        const data = await resp.json();
+        const hits = data.query && data.query.geosearch;
+        if (hits && hits.length > 0) {
+          // Cherche une photo parmi les premiers résultats
+          for (const hit of hits.slice(0, 5)) {
+            const imgUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(hit.title)}&prop=pageimages&format=json&pithumbsize=900&pilimit=1&origin=*`;
+            const ir = await fetch(imgUrl, { signal: AbortSignal.timeout(4000) });
+            if (!ir.ok) continue;
+            const id = await ir.json();
+            const pages = id.query && id.query.pages;
+            if (pages) {
+              const page = Object.values(pages)[0];
+              if (page && page.thumbnail && page.thumbnail.source) {
+                // Filtre les photos peu visuelles (drapeaux, blasons, cartes)
+                const src = page.thumbnail.source;
+                if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
+                  photoCache[key] = src;
+                  return src;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 2) Wikipedia pageimages sur le nom de la ville
+  try {
+    // Cherche d'abord "<Ville> cityscape" ou "<Ville> skyline" pour des vues panoramiques
+    for (const suffix of [' skyline', ' cityscape', '']) {
+      const title = encodeURIComponent(cityName + suffix);
+      const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=pageimages&format=json&pithumbsize=900&origin=*`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(4000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        const page = Object.values(pages)[0];
+        if (page && page.thumbnail && page.thumbnail.source) {
+          const src = page.thumbnail.source;
+          if (!/flag|coat|arms|logo|shield|seal|crest/i.test(src)) {
+            photoCache[key] = src;
+            return src;
+          }
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 3) Wikimedia Commons : cherche "<ville> landmark" ou "<ville> panorama"
+  try {
+    for (const suffix of [' landmark', ' panorama', ' tourist']) {
+      const q = encodeURIComponent(cityName + suffix);
+      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*&gsrlimit=5`;
+      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const pages = data.query && data.query.pages;
+      if (pages) {
+        for (const p of Object.values(pages)) {
+          const info = p.imageinfo && p.imageinfo[0];
+          if (info && info.thumburl && /\.(jpg|jpeg|png|webp)/i.test(info.thumburl)) {
+            const src = info.thumburl;
+            if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
+              photoCache[key] = src;
+              return src;
+            }
+          }
+        }
+      }
+    }
+  } catch(e) {}
+
+  // 4) Picsum fallback esthétique (seed déterministe = même image à chaque fois)
+  const seed = [...(cityName + countryName)].reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const fallback = `https://picsum.photos/seed/${seed}/900/600`;
+  photoCache[key] = fallback;
+  return fallback;
+}
+
+let carouselIndex = 0;
+let carouselDragging = false;
+let carouselDragStartX = 0;
+let carouselDragDelta = 0;
+let carouselCardWidth = 0;
+
 function renderHome() {
   const section = document.getElementById('home-trips-section');
   const track = document.getElementById('carousel-track');
   const dots = document.getElementById('carousel-dots');
-  if (!track) return;
+  const globalMapBtn = document.getElementById('btn-global-map-home');
+  const dataBar = document.getElementById('home-data-bar');
 
+  if (!track) return;
   track.innerHTML = '';
   if (dots) dots.innerHTML = '';
 
   if (state.voyages.length === 0) {
     section.style.display = 'none';
-    document.getElementById('btn-global-map-home').style.display = 'none';
-    document.getElementById('home-data-bar').style.display = 'none';
+    globalMapBtn.style.display = 'none';
+    dataBar.style.display = 'none';
     return;
   }
 
+  globalMapBtn.style.display = 'block';
   section.style.display = 'block';
-  document.getElementById('btn-global-map-home').style.display = 'block';
-  document.getElementById('home-data-bar').style.display = 'flex';
+  dataBar.style.display = 'flex';
+
+  carouselIndex = 0;
 
   state.voyages.forEach((v, idx) => {
-    // Dot
-    const dot = document.createElement('div');
-    dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
-    dot.onclick = () => goToSlide(idx);
-    dots.appendChild(dot);
-
-    // Card
     const card = document.createElement('div');
     card.className = 'home-trip-card' + (idx === 0 ? ' carousel-active-card' : '');
-    card.onclick = () => openVoyage(v.id);
-    
-    // Generative Gradient based on voyage color
-    const gradient = `linear-gradient(160deg, ${v.color}22 0%, ${v.color}66 50%, #1C3557EE 100%)`;
+    card.dataset.index = idx;
+
+    const stepsLen = v.etapes ? v.etapes.length : 0;
+    const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+    const firstCity = (v.etapes && v.etapes.length > 0) ? v.etapes[0].city : null;
+    const firstCountry = (v.etapes && v.etapes.length > 0) ? v.etapes[0].country : null;
+    const locationTag = firstCity ? firstCity : '&nbsp;';
 
     card.innerHTML = `
-      <div id="map-card-${v.id}" class="htc-map-container"></div>
-      <div class="htc-overlay" style="background: ${gradient}"></div>
+      <div class="htc-bg loading" id="htc-bg-${v.id}"></div>
+      <div class="htc-overlay"></div>
       <div class="htc-color-bar" style="background:${v.color}"></div>
+      <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
       <div class="htc-content">
         <div class="htc-name">${v.name}</div>
-      </div>
-      <div class="htc-meta-row">
-        <div class="htc-meta">${v.etapes.length} étape(s)</div>
-        <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">🗑</button>
+        <div class="htc-meta-row">
+          <div class="htc-meta">${stepsText}</div>
+          <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
+        </div>
       </div>
     `;
+
+    // Click to open (not on delete button)
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
+      if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
+      openVoyage(v.id, e);
+    });
+
     track.appendChild(card);
+
+    // Dot
+    if (dots) {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+      dot.dataset.index = idx;
+      dot.addEventListener('click', () => goToSlide(idx));
+      dots.appendChild(dot);
+    }
+
+    // Load photo async — passe les coords GPS de la 1ère étape
+    const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
+    const firstLat = firstEtape ? firstEtape.lat : null;
+    const firstLon = firstEtape ? firstEtape.lon : null;
+    if (firstCity) {
+      fetchCityPhoto(firstCity, firstCountry || '', firstLat, firstLon).then(src => {
+        const bg = document.getElementById(`htc-bg-${v.id}`);
+        if (!bg) return;
+        const img = new Image();
+        img.onload = () => {
+          bg.style.backgroundImage = `url('${src}')`;
+          bg.classList.remove('loading');
+        };
+        img.onerror = () => {
+          // Picsum fallback deterministe
+          const seed = [...firstCity].reduce((a, c) => a + c.charCodeAt(0), 0);
+          const fb = `https://picsum.photos/seed/${seed + 1}/800/500`;
+          bg.style.backgroundImage = `url('${fb}')`;
+          bg.classList.remove('loading');
+        };
+        img.src = src;
+      });
+    } else {
+      // No city yet — use color gradient
+      const bg = document.getElementById(`htc-bg-${v.id}`);
+      if (bg) {
+        bg.style.background = `linear-gradient(135deg, ${v.color}cc, ${v.color}44)`;
+        bg.classList.remove('loading');
+      }
+    }
   });
 
   initCarousel();
-
-  // Initialiser les mini-cartes après rendu
-  state.voyages.forEach(v => {
-    renderMiniMap(v);
-  });
 }
 
-function renderMiniMap(v) {
-  const container = document.getElementById(`map-card-${v.id}`);
-  if (!container) return;
-  
-  const m = L.map(container, {
-    zoomControl: false, attributionControl: false,
-    dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(m);
-
-  if (v.etapes && v.etapes.length > 0) {
-    const pts = v.etapes.map(e => [e.lat, e.lon]);
-    L.polyline(pts, { color: v.color, weight: 3, opacity: 0.6, dashArray: '5, 5' }).addTo(m);
-    m.fitBounds(L.latLngBounds(pts).pad(0.5));
-  } else {
-    m.setView([46, 2], 3); // Europe par défaut
-  }
+function openVoyage(id, e) {
+  state.activeVoyageId = id;
+  navigate('view-trip');
 }
 
-// ============================================================
-// CAROUSEL LOGIC
-// ============================================================
 function initCarousel() {
   const wrapper = document.getElementById('carousel-wrapper');
   const track = document.getElementById('carousel-track');
   if (!wrapper || !track) return;
 
+  // Remove old listeners by cloning
+  const newWrapper = wrapper.cloneNode(false);
+  while (wrapper.firstChild) newWrapper.appendChild(wrapper.firstChild);
+  wrapper.parentNode.replaceChild(newWrapper, wrapper);
+  const w = newWrapper;
+
   carouselIndex = 0;
+  carouselDragging = false;
+  carouselDragDelta = 0;
+
+  function getCardWidth() {
+    const card = track.querySelector('.home-trip-card');
+    if (!card) return 0;
+    return card.offsetWidth + 16; // gap = 16px
+  }
+
+  function updateCarousel(instant) {
+    const cw = getCardWidth();
+    carouselCardWidth = cw;
+    // Center the active card
+    const wrapperW = w.offsetWidth;
+    const card = track.querySelector('.home-trip-card');
+    const cardW = card ? card.offsetWidth : 0;
+    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+    track.style.transform = `translateX(${offset}px)`;
+
+    // Update cards scale & dots
+    track.querySelectorAll('.home-trip-card').forEach((c, i) => {
+      c.classList.toggle('carousel-active-card', i === carouselIndex);
+    });
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === carouselIndex);
+    });
+  }
+
+  // Touch / Mouse drag
+  let startX = 0, startTranslate = 0, isDragging = false, moved = false;
+
+  function onPointerDown(e) {
+    isDragging = true;
+    moved = false;
+    carouselDragDelta = 0;
+    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+    track.style.transition = 'none';
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    const x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    carouselDragDelta = x - startX;
+    if (Math.abs(carouselDragDelta) > 5) moved = true;
+    const cw = getCardWidth();
+    const wrapperW = w.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const baseOffset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transform = `translateX(${baseOffset + carouselDragDelta}px)`;
+  }
+
+  function onPointerUp(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    carouselDragging = moved;
+    const total = state.voyages.length;
+    if (carouselDragDelta < -60 && carouselIndex < total - 1) carouselIndex++;
+    else if (carouselDragDelta > 60 && carouselIndex > 0) carouselIndex--;
+    updateCarousel(false);
+    setTimeout(() => { carouselDragging = false; }, 50);
+  }
+
+  w.addEventListener('mousedown', onPointerDown);
+  w.addEventListener('mousemove', onPointerMove);
+  w.addEventListener('mouseup', onPointerUp);
+  w.addEventListener('mouseleave', onPointerUp);
+  w.addEventListener('touchstart', onPointerDown, { passive: true });
+  w.addEventListener('touchmove', onPointerMove, { passive: true });
+  w.addEventListener('touchend', onPointerUp);
+
   updateCarousel(true);
-
-  let startX = 0, isDragging = false;
-  wrapper.onmousedown = e => { startX = e.pageX; isDragging = true; };
-  window.onmousemove = e => {
-    if (!isDragging) return;
-    const dx = e.pageX - startX;
-    if (Math.abs(dx) > 50) {
-      if (dx > 0) carouselIndex = Math.max(0, carouselIndex - 1);
-      else carouselIndex = Math.min(state.voyages.length - 1, carouselIndex + 1);
-      isDragging = false;
-      updateCarousel();
-    }
-  };
-  window.onmouseup = () => isDragging = false;
-  
-  // Touch
-  wrapper.ontouchstart = e => { startX = e.touches[0].pageX; isDragging = true; };
-  wrapper.ontouchmove = e => {
-    if (!isDragging) return;
-    const dx = e.touches[0].pageX - startX;
-    if (Math.abs(dx) > 50) {
-      if (dx > 0) carouselIndex = Math.max(0, carouselIndex - 1);
-      else carouselIndex = Math.min(state.voyages.length - 1, carouselIndex + 1);
-      isDragging = false;
-      updateCarousel();
-    }
-  };
+  setTimeout(() => updateCarousel(true), 50);
 }
 
-function updateCarousel(instant) {
+function goToSlide(idx) {
+  carouselIndex = idx;
   const track = document.getElementById('carousel-track');
-  const cards = track.querySelectorAll('.home-trip-card');
-  if (!cards.length) return;
-  const cardW = cards[0].offsetWidth + 16;
-  const offset = (window.innerWidth - cards[0].offsetWidth) / 2 - carouselIndex * cardW;
-  track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+  const wrapper = document.getElementById('carousel-wrapper');
+  if (!track || !wrapper) return;
+  const cw = track.querySelector('.home-trip-card')?.offsetWidth + 16 || 0;
+  const wrapperW = wrapper.offsetWidth;
+  const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+  const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+  track.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
   track.style.transform = `translateX(${offset}px)`;
-  
-  cards.forEach((c, i) => c.classList.toggle('carousel-active-card', i === carouselIndex));
+  track.querySelectorAll('.home-trip-card').forEach((c, i) => c.classList.toggle('carousel-active-card', i === carouselIndex));
   document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
-}
-
-function goToSlide(idx) { carouselIndex = idx; updateCarousel(); }
-
-// ============================================================
-// METEO (Open-Meteo)
-// ============================================================
-async function fetchWeather(etape, index) {
-  if (!etape.dateArr) return;
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${etape.lat}&longitude=${etape.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${etape.dateArr}&end_date=${etape.dateArr}`;
-  try {
-    const resp = await fetch(url);
-    const data = await resp.json();
-    if (data.daily) {
-      const t = Math.round(data.daily.temperature_2m_max[0]);
-      const badge = document.querySelectorAll('.etape-weather')[index];
-      if (badge) {
-        badge.innerHTML = `☀️ ${t}°C`;
-        badge.style.display = 'flex';
-      }
-    }
-  } catch(e) {}
-}
-
-// ============================================================
-// NAVIGATION & RENDU VOYAGE
-// ============================================================
-function navigate(id) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (id === 'view-home') renderHome();
-  if (id === 'view-map') { setTimeout(() => { initMap(); renderTripMap(); }, 100); }
-}
-
-function openVoyage(id) { state.activeVoyageId = id; navigate('view-trip'); renderTrip(); }
-function getActiveVoyage() { return state.voyages.find(v => v.id === state.activeVoyageId); }
-
-function renderTrip() {
-  const v = getActiveVoyage();
-  if (!v) return;
-  document.getElementById('voyage-name-input').value = v.name;
-  document.getElementById('voyage-color-dot').style.background = v.color;
-  
-  const list = document.getElementById('etapes-list');
-  list.innerHTML = '';
-  v.etapes.forEach((e, i) => {
-    const div = document.createElement('div');
-    div.className = 'etape-item';
-    div.innerHTML = `
-      <div class="etape-num">${i+1}</div>
-      <div class="etape-content">
-        <div class="etape-read" onclick="this.nextElementSibling.classList.toggle('open')">
-          <div class="etape-city">${e.city}</div>
-          <div class="etape-read-dates"><span class="date-badge">${e.dateArr || '...'}</span></div>
-          <div class="etape-weather" style="display:none"></div>
-        </div>
-        <div class="etape-edit">
-          <input type="date" value="${e.dateArr}" onchange="updateEtape(${i}, 'dateArr', this.value)">
-          <textarea placeholder="Notes..." onchange="updateEtape(${i}, 'notes', this.value)">${e.notes}</textarea>
-          <button onclick="removeEtape(${i})" style="color:red; margin-top:10px; border:none; background:none;">Supprimer</button>
-        </div>
-      </div>
-    `;
-    list.appendChild(div);
-    fetchWeather(e, i);
-  });
-}
-
-function updateEtape(i, field, val) { getActiveVoyage().etapes[i][field] = val; saveState(); }
-function removeEtape(i) { getActiveVoyage().etapes.splice(i, 1); saveState(); renderTrip(); }
-
-// ============================================================
-// CARTES (LEAFLET)
-// ============================================================
-function initMap() {
-  if (map) return;
-  map = L.map('map').setView([48, 2], 5);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
-}
-
-function renderTripMap() {
-  const v = getActiveVoyage();
-  if (layers[v.id]) map.removeLayer(layers[v.id]);
-  const lg = L.layerGroup().addTo(map);
-  layers[v.id] = lg;
-  
-  const pts = v.etapes.map(e => {
-    L.marker([e.lat, e.lon]).addTo(lg).bindPopup(e.city);
-    return [e.lat, e.lon];
-  });
-  if (pts.length > 1) L.polyline(pts, { color: v.color }).addTo(lg);
-  if (pts.length > 0) map.fitBounds(L.latLngBounds(pts));
 }
 
 // ============================================================
 // EXPORT / IMPORT
 // ============================================================
 function exportVoyages() {
-  const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'mes-voyages.json';
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = new Date().toISOString().slice(0, 10);
+  a.href     = url;
+  a.download = `voyages-${date}.json`;
   a.click();
+  URL.revokeObjectURL(url);
+  toast('📦 Voyages exportés');
 }
 
 function importVoyages(input) {
   const file = input.files[0];
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    state = JSON.parse(e.target.result);
-    saveState();
-    renderHome();
-    toast("Voyages importés !");
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed || !Array.isArray(parsed.voyages)) throw new Error('Format invalide');
+      // Fusionne les voyages importés avec les voyages existants (évite les doublons par id)
+      const existingIds = new Set(state.voyages.map(v => v.id));
+      const newVoyages  = parsed.voyages.filter(v => !existingIds.has(v.id));
+      state.voyages.push(...newVoyages);
+      saveState();
+      renderHome();
+      toast(`✅ ${newVoyages.length} voyage(s) importé(s)`);
+    } catch(err) {
+      toast('⚠️ Fichier non reconnu');
+    }
+    input.value = ''; // reset pour permettre un re-import du même fichier
   };
   reader.readAsText(file);
 }
 
 // ============================================================
-// MODAL & UI
+// VUE : VOYAGE
 // ============================================================
-function openNewVoyageModal() {
-  document.getElementById('modal-overlay').classList.add('open');
-  const sw = document.getElementById('color-swatches');
-  sw.innerHTML = '';
-  VOYAGE_COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'swatch';
-    d.style.background = c;
-    d.onclick = () => {
-      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-      d.classList.add('selected');
-      d.dataset.color = c;
-    };
-    sw.appendChild(d);
-  });
-  sw.firstChild.click();
+function getActiveVoyage() { 
+  return state.voyages.find(v => v.id === state.activeVoyageId); 
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function formatDate(d) {
+  if (!d) return null;
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function buildEtapeItem(e, i, voyage) {
+  const item = document.createElement('div');
+  item.className = 'etape-item';
+  item.dataset.index = i;
+  item.draggable = true;
+
+  // Dates display
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
+    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
+    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+
+  const notesHtml = e.notes 
+    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
+    : '';
+
+  // Color swatches for edit panel
+  const swatchesHtml = VOYAGE_COLORS.map(c => 
+    `<div class="etape-swatch${c === voyage.color ? ' selected' : ''}" style="background:${c}" data-color="${c}" onclick="selectVoyageColor(this,'${c}')"></div>`
+  ).join('');
+
+  item.innerHTML = `
+    <div class="etape-handle"><span></span><span></span><span></span></div>
+    <div class="etape-num">${i + 1}</div>
+    <div class="etape-content">
+
+      <div class="etape-read">
+        <div class="etape-read-top">
+          <div>
+            <div class="etape-city">${e.city}</div>
+            <div class="etape-country">${e.country}</div>
+          </div>
+          <button class="btn-edit-etape" onclick="toggleEditPanel(this)">Éditer</button>
+        </div>
+        ${datesHtml}
+        <div class="etape-weather" style="display:none;"></div>
+        ${notesHtml}
+      </div>
+
+      <div class="etape-edit">
+        <div class="edit-header">
+          <span class="edit-header-city">✏️ ${e.city}</span>
+          <button class="btn-close-edit" onclick="toggleEditPanel(this)">✕</button>
+        </div>
+
+        <span class="edit-label">Dates</span>
+        <div class="etape-dates-row">
+          <input class="etape-date-input" type="date" placeholder="Arrivée" value="${e.dateArr||''}" 
+            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
+          <span style="font-size:12px;color:var(--ink-soft)">→</span>
+          <input class="etape-date-input" type="date" placeholder="Départ" value="${e.dateDep||''}" 
+            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
+        </div>
+
+        <span class="edit-label">Notes</span>
+        <textarea class="etape-notes-input" placeholder="Expositions, soirées, matchs..." 
+          onchange="updateNote(${i},this.value); refreshEtapeReadView(${i})"
+          oninput="updateNote(${i},this.value)">${e.notes||''}</textarea>
+
+        <span class="edit-label">Couleur du voyage</span>
+        <div class="edit-color-row" data-voyage-colors>${swatchesHtml}</div>
+
+        <div class="edit-actions">
+          <button class="btn-del-etape" onclick="removeEtape(${i})">🗑 Supprimer</button>
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  // Drag & drop (mouse)
+  item.addEventListener('dragstart', onDragStart);
+  item.addEventListener('dragover',  onDragOver);
+  item.addEventListener('drop',      onDrop);
+  item.addEventListener('dragend',   onDragEnd);
+
+  // Touch drag (long-press → drag)
+  const handle = item.querySelector('.etape-handle');
+  setupTouchDrag(handle, item);
+
+  return item;
+}
+
+function toggleEditPanel(btn) {
+  const content = btn.closest('.etape-content');
+  const editPanel = content.querySelector('.etape-edit');
+  const isOpen = editPanel.classList.contains('open');
+  // Close all other open panels first
+  document.querySelectorAll('.etape-edit.open').forEach(p => p.classList.remove('open'));
+  if (!isOpen) editPanel.classList.add('open');
+}
+
+function refreshEtapeReadView(index) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  const e = voyage.etapes[index];
+  const items = document.querySelectorAll('.etape-item');
+  const item = [...items].find(it => parseInt(it.dataset.index) === index);
+  if (!item) return;
+
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
+    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
+    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+  const notesHtml = e.notes 
+    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
+    : '';
+
+  const readTop = item.querySelector('.etape-read-top');
+  // Remove old dates/notes (preserve weather badge)
+  item.querySelectorAll('.etape-read-dates, .etape-read-notes').forEach(el => el.remove());
+  const weatherBadge = item.querySelector('.etape-weather');
+  readTop.insertAdjacentHTML('afterend', datesHtml);
+  if (weatherBadge) weatherBadge.insertAdjacentHTML('afterend', notesHtml);
+  else readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
+}
+
+function selectVoyageColor(el, color) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.color = color;
+  saveState();
+  // Update all swatch groups
+  document.querySelectorAll('[data-voyage-colors] .etape-swatch').forEach(s => {
+    s.classList.toggle('selected', s.dataset.color === color);
+  });
+  document.getElementById('voyage-color-dot').style.background = color;
+  // Refresh map markers color
+  if (document.getElementById('view-map').classList.contains('active')) {
+    renderAllMaps();
+  }
+}
+
+function updateNote(index, value) {
+  const v = getActiveVoyage();
+  if (v && v.etapes[index] !== undefined) {
+    v.etapes[index].notes = value;
+    saveState();
+  }
+}
+
+function renderTrip() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return navigate('view-home');
+
+  document.getElementById('voyage-color-dot').style.background = voyage.color;
+  document.getElementById('voyage-name-input').value = voyage.name;
+  
+  const stepsLen = voyage.etapes ? voyage.etapes.length : 0;
+  document.getElementById('voyage-meta').textContent = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+
+  const list = document.getElementById('etapes-list');
+  list.innerHTML = '';
+
+  if (stepsLen === 0) {
+    list.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--ink-soft); line-height: 1.5;">Aucune étape.<br>Utilisez la recherche ci-dessus pour commencer.</div>';
+    return;
+  }
+
+  voyage.etapes.forEach((e, i) => {
+    list.appendChild(buildEtapeItem(e, i, voyage));
+  });
+
+  // Chargement météo après rendu du DOM
+  requestAnimationFrame(fetchWeatherForAllEtapes);
+}
+
+// ============================================================
+// DRAG & DROP — MOUSE
+// ============================================================
+let dragSrcIndex = null;
+
+function onDragStart(e) {
+  dragSrcIndex = parseInt(this.dataset.index);
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+  this.classList.add('drag-over');
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  const targetIndex = parseInt(this.dataset.index);
+  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+  const voyage = getActiveVoyage();
+  const moved = voyage.etapes.splice(dragSrcIndex, 1)[0];
+  voyage.etapes.splice(targetIndex, 0, moved);
+  saveState();
+  renderTrip();
+}
+
+function onDragEnd() {
+  document.querySelectorAll('.etape-item').forEach(it => {
+    it.classList.remove('dragging', 'drag-over');
+  });
+  dragSrcIndex = null;
+}
+
+// ============================================================
+// TOUCH DRAG — Long press on handle
+// ============================================================
+function setupTouchDrag(handle, item) {
+  let longPressTimer = null;
+  let isDragging = false;
+  let startY = 0;
+  let clone = null;
+  let offsetY = 0;
+
+  handle.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+    longPressTimer = setTimeout(() => {
+      isDragging = true;
+      item.classList.add('dragging');
+      // Create visual clone
+      clone = item.cloneNode(true);
+      clone.style.cssText = `
+        position:fixed; z-index:9999; width:${item.offsetWidth}px; left:${item.getBoundingClientRect().left}px;
+        top:${item.getBoundingClientRect().top}px; opacity:0.88; pointer-events:none;
+        box-shadow: 0 16px 48px rgba(44,36,24,.25); transform: scale(1.02);
+        transition: none;
+      `;
+      document.body.appendChild(clone);
+      offsetY = startY - item.getBoundingClientRect().top;
+      if (navigator.vibrate) navigator.vibrate(40);
+    }, 400);
+  }, { passive: true });
+
+  handle.addEventListener('touchmove', function(e) {
+    if (!isDragging) { clearTimeout(longPressTimer); return; }
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    clone.style.top = (y - offsetY) + 'px';
+
+    // Find element under touch
+    clone.style.display = 'none';
+    const el = document.elementFromPoint(e.touches[0].clientX, y);
+    clone.style.display = '';
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+    if (targetItem && targetItem !== item) targetItem.classList.add('drag-over');
+  }, { passive: false });
+
+  handle.addEventListener('touchend', function(e) {
+    clearTimeout(longPressTimer);
+    if (!isDragging) return;
+    isDragging = false;
+    item.classList.remove('dragging');
+    if (clone) { clone.remove(); clone = null; }
+
+    const y = e.changedTouches[0].clientY;
+    const el = document.elementFromPoint(e.changedTouches[0].clientX, y);
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+
+    if (targetItem && targetItem !== item) {
+      const srcIdx = parseInt(item.dataset.index);
+      const tgtIdx = parseInt(targetItem.dataset.index);
+      const voyage = getActiveVoyage();
+      const moved = voyage.etapes.splice(srcIdx, 1)[0];
+      voyage.etapes.splice(tgtIdx, 0, moved);
+      saveState();
+      renderTrip();
+    }
+  });
+}
+
+document.getElementById('voyage-name-input').addEventListener('input', function() {
+  const v = getActiveVoyage();
+  if (v) { v.name = this.value; saveState(); }
+});
+
+// ============================================================
+// CARTE & MODE MANUEL
+// ============================================================
+function initMap() {
+  if (map) return; 
+  map = L.map('map', { center: [48, 10], zoom: 4, zoomControl: false });
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
+  map.on('click', onMapClick);
+}
+
+function renderAllMaps() {
+  Object.keys(layers).forEach(id => { map.removeLayer(layers[id]); delete layers[id]; });
+  const active = getActiveVoyage();
+  if(!active || !active.etapes) return;
+
+  const layer = L.layerGroup().addTo(map);
+  layers[active.id] = layer;
+
+  if (active.etapes.length > 1) {
+    const coords = active.etapes.map(e => [e.lat, e.lon]);
+    L.polyline(coords, { color: active.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
+  }
+
+  active.etapes.forEach((e, i) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+      <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${active.color}"/>
+      <circle cx="16" cy="16" r="10" fill="white"/>
+      <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${active.color}">${i+1}</text>
+    </svg>`;
+    const icon = L.divIcon({ html: svg, className: '', iconSize: [32,40], iconAnchor: [16,40], popupAnchor: [0,-42] });
+    L.marker([e.lat, e.lon], { icon }).bindPopup(`<b style="font-size:14px">${e.city}</b><br><span style="color:#888">${e.country}</span>`).addTo(layer);
+  });
+}
+
+function fitMapToActiveVoyage() {
+  const v = getActiveVoyage();
+  if (!v || !v.etapes || !v.etapes.length) { map.setView([48, 10], 4); return; }
+  const coords = v.etapes.map(e => [e.lat, e.lon]);
+  if (coords.length === 1) map.setView(coords[0], 6);
+  else map.fitBounds(L.latLngBounds(coords), { padding: [40, 40] });
+}
+
+function activateManualMode() {
+  manualMode = true;
+  document.getElementById('manual-mode-bar').classList.add('active');
+  document.getElementById('map').classList.add('selecting');
+  navigate('view-map');
+}
+
+function cancelManualMode() {
+  manualMode = false;
+  document.getElementById('manual-mode-bar').classList.remove('active');
+  document.getElementById('map').classList.remove('selecting');
+}
+
+function onMapClick(e) {
+  if (!manualMode) return;
+  const cityName = prompt("Nom de cette destination ?");
+  if (cityName && cityName.trim()) {
+    addEtapeToActiveVoyage({ name: cityName.trim(), country: "Point manuel", lat: e.latlng.lat, lon: e.latlng.lng });
+    cancelManualMode();
+    navigate('view-trip');
+  }
+}
+
+// ============================================================
+// RECHERCHE
+// ============================================================
+const searchInput = document.getElementById('search-input');
+const acList = document.getElementById('autocomplete');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim();
+  if (q.length < 2) {
+    acList.classList.remove('open');
+    clearTimeout(photonDebounce);
+    if (photonController) photonController.abort();
+    return;
+  }
+  clearTimeout(photonDebounce);
+  photonDebounce = setTimeout(() => searchPhoton(q), 300);
+});
+
+document.addEventListener('click', e => { 
+  if (!document.getElementById('search-wrap').contains(e.target)) acList.classList.remove('open'); 
+});
+
+// ============================================================
+// ACTIONS DATA
+// ============================================================
+function addEtapeToActiveVoyage(city) {
+  const v = getActiveVoyage();
+  v.etapes.push({ city: city.name, country: city.country, lat: city.lat, lon: city.lon, dateArr: '', dateDep: '', notes: '' });
+  saveState(); 
+  renderTrip(); 
+  toast(`📍 ${city.name} ajouté`);
+}
+
+function removeEtape(index) {
+  getActiveVoyage().etapes.splice(index, 1);
+  saveState(); 
+  renderTrip();
+}
+
+function updateDate(index, field, value) {
+  getActiveVoyage().etapes[index][field] = value;
+  saveState();
+}
+
+function deleteVoyage(id, e) {
+  e.stopPropagation();
+  if(confirm("Supprimer ce voyage ?")) {
+    state.voyages = state.voyages.filter(v => v.id !== id);
+    saveState(); 
+    renderHome(); 
+    toast("Voyage supprimé");
+  }
+}
+
+// ============================================================
+// MODAL & TOAST
+// ============================================================
+let pendingColor = VOYAGE_COLORS[0];
+function openNewVoyageModal() {
+  pendingColor = VOYAGE_COLORS[state.voyages.length % VOYAGE_COLORS.length];
+  const swatches = document.getElementById('color-swatches');
+  swatches.innerHTML = '';
+  
+  VOYAGE_COLORS.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch' + (c === pendingColor ? ' selected' : '');
+    s.style.background = c;
+    s.onclick = () => { 
+      pendingColor = c; 
+      swatches.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected')); 
+      s.classList.add('selected'); 
+    };
+    swatches.appendChild(s);
+  });
+  
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
 
 function confirmNewVoyage() {
-  const name = document.getElementById('modal-name').value || 'Nouveau Voyage';
-  const color = document.querySelector('.swatch.selected').dataset.color;
+  const name = document.getElementById('modal-name').value.trim() || 'Nouveau voyage';
   const id = 'v' + Date.now();
-  state.voyages.push({ id, name, color, etapes: [] });
+  state.voyages.push({ id, name, color: pendingColor, etapes: [] });
+  state.activeVoyageId = id;
+  closeModal(); 
   saveState();
-  closeModal();
-  openVoyage(id);
+  navigate('view-trip');
+  toast("Voyage créé !");
 }
+
+let globalMap, globalLayers = {};
+
+// ============================================================
+// CARTE GLOBALE
+// ============================================================
+function navigateGlobalMap() {
+  // Determine where to come back from
+  const fromTrip = document.getElementById('view-trip').classList.contains('active');
+  document.getElementById('global-map-back-btn').onclick = () => {
+    navigate(fromTrip ? 'view-trip' : 'view-home');
+  };
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-global-map').classList.add('active');
+
+  // requestAnimationFrame garantit que le conteneur a une taille avant que Leaflet s'initialise
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!globalMap) {
+        globalMap = L.map('global-map', { center: [20, 10], zoom: 2, zoomControl: false });
+        L.control.zoom({ position: 'topright' }).addTo(globalMap);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(globalMap);
+      } else {
+        globalMap.invalidateSize();
+      }
+      renderGlobalMap();
+    });
+  });
+}
+
+function renderGlobalMap() {
+  // Clear existing layers
+  Object.keys(globalLayers).forEach(id => { globalMap.removeLayer(globalLayers[id]); delete globalLayers[id]; });
+
+  const legend = document.getElementById('global-map-legend');
+  legend.innerHTML = '';
+
+  const voyagesWithEtapes = state.voyages.filter(v => v.etapes && v.etapes.length > 0);
+
+  if (voyagesWithEtapes.length === 0) {
+    legend.style.display = 'block';
+    legend.innerHTML = '<span style="color:var(--ink-soft)">Aucune étape à afficher.</span>';
+    globalMap.setView([20, 10], 2);
+    return;
+  }
+
+  const allCoords = [];
+
+  voyagesWithEtapes.forEach(v => {
+    const layer = L.layerGroup().addTo(globalMap);
+    globalLayers[v.id] = layer;
+
+    const coords = v.etapes.map(e => [e.lat, e.lon]);
+    allCoords.push(...coords);
+
+    if (coords.length > 1) {
+      L.polyline(coords, { color: v.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
+    }
+
+    v.etapes.forEach((e, i) => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 32 40">
+        <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${v.color}"/>
+        <circle cx="16" cy="16" r="10" fill="white"/>
+        <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${v.color}">${i+1}</text>
+      </svg>`;
+      const icon = L.divIcon({ html: svg, className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38] });
+      L.marker([e.lat, e.lon], { icon })
+        .bindPopup(`<b style="font-size:13px">${e.city}</b><br><span style="color:#888;font-size:12px">${e.country}</span><br><span style="color:${v.color};font-size:11px;font-weight:600">${v.name}</span>`)
+        .addTo(layer);
+    });
+
+    // Legend entry
+    const entry = document.createElement('div');
+    entry.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;';
+    entry.innerHTML = `<span style="width:12px;height:12px;border-radius:50%;background:${v.color};flex-shrink:0;display:inline-block;"></span><span style="color:var(--ink);font-weight:600;">${v.name}</span>`;
+    entry.onclick = () => {
+      const bounds = L.latLngBounds(coords);
+      if (coords.length === 1) globalMap.setView(coords[0], 6);
+      else globalMap.fitBounds(bounds, { padding: [40, 40] });
+    };
+    legend.appendChild(entry);
+  });
+
+  legend.style.display = 'block';
+
+  if (allCoords.length === 1) {
+    globalMap.setView(allCoords[0], 5);
+  } else if (allCoords.length > 1) {
+    globalMap.fitBounds(L.latLngBounds(allCoords), { padding: [50, 50] });
+  }
+}
+
 
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('visible');
-  setTimeout(() => t.classList.remove('visible'), 2500);
+  const el = document.getElementById('toast');
+  el.textContent = msg; 
+  el.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('visible'), 2500);
 }
 
-window.onload = () => { loadState(); renderHome(); };
+// ============================================================
+// MÉTÉO — Open-Meteo (gratuit, sans clé)
+// ============================================================
+const weatherCache = {}; // clé: "lat,lon,dateArr,dateDep"
+
+// Attribue un score de severite (0 = grand beau, 10 = orages) a un code WMO
+function wxCodeToScore(code) {
+  if (code === 0)               return 0;
+  if (code <= 2)                return 1;
+  if (code === 3)               return 2;
+  if (code >= 45 && code <= 48) return 3;
+  if (code >= 51 && code <= 55) return 4;
+  if (code >= 71 && code <= 77) return 5;
+  if (code >= 85 && code <= 86) return 5;
+  if (code >= 61 && code <= 65) return 6;
+  if (code >= 80 && code <= 82) return 6;
+  if (code >= 66 && code <= 67) return 7;
+  if (code >= 95 && code <= 99) return 10;
+  return 3;
+}
+
+// Convertit un score moyen en libelle + icone + modificateur nuance
+function wxScoreToLabel(avgScore) {
+  if (avgScore < 0.5)  return { icon: '☀️',  label: 'Beau temps',     nuance: false };
+  if (avgScore < 1.5)  return { icon: '🌤️', label: 'Beau temps',      nuance: avgScore > 1.0 };
+  if (avgScore < 2.5)  return { icon: '⛅',  label: 'Quelques nuages', nuance: false };
+  if (avgScore < 3.5)  return { icon: '☁️',  label: 'Temps couvert',   nuance: avgScore < 3.0 };
+  if (avgScore < 5.0)  return { icon: '🌦️', label: 'Temps mitige',    nuance: avgScore < 4.2 };
+  if (avgScore < 6.5)  return { icon: '🌧️', label: 'Pluie',           nuance: avgScore < 5.8 };
+  if (avgScore < 8.5)  return { icon: '🌧️', label: 'Mauvais temps',   nuance: avgScore < 7.5 };
+  return                        { icon: '⛈️', label: 'Orages',          nuance: true  };
+}
+
+// Agrège les données journalières sur une plage de dates
+function aggregateDailyData(data, dateArr, dateDep) {
+  const times = data.daily.time;
+  const tmax  = data.daily.temperature_2m_max;
+  const tmin  = data.daily.temperature_2m_min;
+  const codes = data.daily.weathercode;
+
+  const from = dateArr || dateDep;
+  const to   = dateDep || dateArr;
+
+  const indices = [];
+  times.forEach((t, i) => { if (t >= from && t <= to) indices.push(i); });
+  if (!indices.length) return null;
+
+  const avgMax   = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
+  const avgMin   = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
+  // Score moyen pondéré sur tous les jours du séjour
+  const avgScore = indices.reduce((s, i) => s + wxCodeToScore(codes[i]), 0) / indices.length;
+
+  return { avgMax, avgMin, avgScore };
+}
+
+async function fetchWeather(etape, index) {
+  const { lat, lon, dateArr, dateDep } = etape;
+  if (!dateArr && !dateDep) return;
+
+  const cacheKey = `${lat},${lon},${dateArr||''},${dateDep||''}`;
+  if (weatherCache[cacheKey]) {
+    renderWeatherBadge(index, weatherCache[cacheKey]);
+    return;
+  }
+
+  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
+  if (badge) badge.innerHTML = '<span class="wx-loading">Chargement météo…</span>';
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today);
+  horizon.setDate(today.getDate() + 16);
+
+  const refDate = new Date(dateArr || dateDep);
+  const endDate = new Date(dateDep || dateArr);
+  const isHistorical = refDate > horizon;
+
+  try {
+    let result;
+    if (isHistorical) {
+      // Normales climatiques : on interroge les mêmes jours sur les 5 dernières années
+      const samples = [];
+      for (let y = 1; y <= 5; y++) {
+        const sArr = dateArr ? shiftYear(dateArr, -y) : null;
+        const sDep = dateDep ? shiftYear(dateDep, -y) : null;
+        const from = sArr || sDep;
+        const to   = sDep || sArr;
+        const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${from}&end_date=${to}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`;
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const agg = aggregateDailyData(data, from, to);
+        if (agg) samples.push(agg);
+      }
+      if (!samples.length) { renderWeatherBadge(index, null); return; }
+      const avgMax = Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length);
+      const avgMin = Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length);
+      // Score moyen sur tous les échantillons historiques
+      const avgScore = samples.reduce((s, x) => s + x.avgScore, 0) / samples.length;
+      result = { avgMax, avgMin, avgScore, isHistorical: true };
+    } else {
+      // Prévisions réelles
+      const from = dateArr || dateDep;
+      const to   = dateDep || dateArr;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${from}&end_date=${to}`;
+      const resp = await fetch(url);
+      if (!resp.ok) { renderWeatherBadge(index, null); return; }
+      const data = await resp.json();
+      const agg = aggregateDailyData(data, from, to);
+      if (!agg) { renderWeatherBadge(index, null); return; }
+      result = { ...agg, isHistorical: false };
+    }
+
+    weatherCache[cacheKey] = result;
+    renderWeatherBadge(index, result);
+  } catch(err) {
+    console.warn('Météo indisponible', err);
+    renderWeatherBadge(index, null);
+  }
+}
+
+function shiftYear(dateStr, delta) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${y + delta}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+
+function renderWeatherBadge(index, result) {
+  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
+  if (!badge) return;
+  if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
+
+  const { icon, label, nuance } = wxScoreToLabel(result.avgScore);
+  const histPrefix  = result.isHistorical ? '📊' : '';
+  const nuancePrefix = (!result.isHistorical && nuance) ? 'Plutôt ' : '';
+  const prefix = histPrefix || nuancePrefix;
+
+  badge.classList.toggle('wx-historical', result.isHistorical);
+  badge.style.display = 'flex';
+  badge.innerHTML = `
+    <span class="wx-icon">${icon}</span>
+    <span class="wx-label">${prefix}${label}</span>
+    <span class="wx-temps">${result.avgMin}° / ${result.avgMax}°</span>
+  `;
+}
+
+function fetchWeatherForAllEtapes() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.etapes.forEach((e, i) => {
+    if (e.dateArr || e.dateDep) fetchWeather(e, i);
+  });
+}
+
+// ============================================================
+// Lancement
+// ============================================================
+window.onload = function() {
+  loadState();
+  renderHome();
+};
+window.addEventListener('resize', () => {
+  if (state.voyages.length > 0) {
+    const track = document.getElementById('carousel-track');
+    const wrapper = document.getElementById('carousel-wrapper');
+    if (!track || !wrapper) return;
+    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 16;
+    const wrapperW = wrapper.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${offset}px)`;
+  }
+});
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Chrome a validé le Service Worker !', reg))
+      .catch(err => console.error('Échec de l\'enregistrement :', err));
+  });
+}
 </script>
 </body>
 </html>
