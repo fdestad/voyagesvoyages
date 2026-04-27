@@ -82,6 +82,7 @@ html, body {
   align-items: center;
   overflow-y: auto;
   padding: 40px 24px;
+  padding-bottom: 48px;
 }
 
 .home-header {
@@ -139,7 +140,6 @@ html, body {
 
 #home-trips-section {
   width: 100%;
-  max-width: 400px;
 }
 .section-title {
   font-size: 13px;
@@ -152,33 +152,189 @@ html, body {
   padding-bottom: 8px;
 }
 
+/* ── CAROUSEL ── */
 #home-trips-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position: relative;
+  width: 100vw;
+  margin-left: -24px;
+  padding: 0 24px 12px 24px;
+  overflow: hidden;
 }
 
+.carousel-track-wrapper {
+  overflow: hidden;
+  width: 100%;
+  cursor: grab;
+  user-select: none;
+}
+.carousel-track-wrapper:active { cursor: grabbing; }
+
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.carousel-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.carousel-dot.active {
+  background: var(--orange);
+  width: 20px;
+  border-radius: 3px;
+}
+
+/* ── TRIP CARD ── */
 .home-trip-card {
-  background: var(--white);
-  border: 1.5px solid var(--cream-dark);
-  border-radius: var(--radius);
-  padding: 16px;
+  position: relative;
+  flex-shrink: 0;
+  width: calc(100vw - 72px);
+  max-width: 340px;
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(28,53,87,.25), 0 2px 8px rgba(0,0,0,.15);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  transform: scale(0.97);
+}
+.home-trip-card.carousel-active-card {
+  transform: scale(1);
+  box-shadow: 0 16px 48px rgba(28,53,87,.35), 0 4px 16px rgba(0,0,0,.2);
+}
+.home-trip-card:active {
+  transform: scale(0.95) !important;
+}
+
+/* Photo background */
+.htc-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--navy);
+  transition: transform 0.6s ease;
+}
+.home-trip-card:hover .htc-bg {
+  transform: scale(1.04);
+}
+
+/* Gradient overlay */
+.htc-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(0,0,0,0.08) 0%,
+    rgba(0,0,0,0.1) 30%,
+    rgba(12,28,52,0.72) 70%,
+    rgba(12,28,52,0.92) 100%
+  );
+}
+
+/* Shimmer loader */
+.htc-bg.loading {
+  background: linear-gradient(110deg, #1C3557 0%, #264a73 40%, #1C3557 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Color accent bar */
+.htc-color-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 20px 20px 0 0;
+}
+
+/* Card content */
+.htc-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 18px 16px;
+}
+.htc-destination-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.htc-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+.htc-meta-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  justify-content: space-between;
 }
-.home-trip-card:active { background: var(--cream); transform: translateY(2px); }
-.htc-color {
-  width: 16px; height: 16px;
+.htc-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+}
+.htc-del {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 50%;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
 }
-.htc-info { flex: 1; }
-.htc-name { font-weight: 700; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
-.htc-meta { font-size: 13px; color: var(--ink-soft); }
+.htc-del:hover { background: rgba(224,123,57,0.6); }
+.htc-del:active { transform: scale(0.88); background: rgba(224,123,57,0.8); }
+
+/* Top-right open arrow */
+.htc-open-btn {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.htc-open-btn:hover { background: rgba(255,255,255,0.3); }
 .htc-del {
   padding: 8px;
   color: var(--ink-soft);
@@ -548,8 +704,13 @@ html, body {
     <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;"> Carte</button>
 
     <div id="home-trips-section" style="display:none;">
-      <div class="section-title">Mes voyages</div>
-      <div id="home-trips-list"></div>
+      <div class="section-title" style="padding-left:0; margin-bottom:14px;">Mes voyages</div>
+      <div id="home-trips-list">
+        <div class="carousel-track-wrapper" id="carousel-wrapper">
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div>
     </div>
 
     <div id="home-data-bar">
@@ -762,14 +923,52 @@ function navigate(viewId) {
 }
 
 // ============================================================
-// VUE : ACCUEIL
+// VUE : ACCUEIL — CAROUSEL
 // ============================================================
+const photoCache = {};
+
+async function fetchCityPhoto(cityName, countryName) {
+  const key = (cityName + ',' + countryName).toLowerCase();
+  if (photoCache[key]) return photoCache[key];
+
+  // Cherche la photo via Wikimedia (API gratuite, sans clé)
+  try {
+    const query = encodeURIComponent(cityName + ' ' + countryName);
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cityName)}`;
+    const resp = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.thumbnail && data.thumbnail.source) {
+        // Upscale the thumbnail
+        const src = data.thumbnail.source.replace(/\/\d+px-/, '/600px-');
+        photoCache[key] = src;
+        return src;
+      }
+    }
+  } catch(e) {}
+
+  // Fallback: Unsplash Source (sans clé API, gratuit)
+  const fallback = `https://source.unsplash.com/600x400/?${encodeURIComponent(cityName + ' city travel')}`;
+  photoCache[key] = fallback;
+  return fallback;
+}
+
+let carouselIndex = 0;
+let carouselDragging = false;
+let carouselDragStartX = 0;
+let carouselDragDelta = 0;
+let carouselCardWidth = 0;
+
 function renderHome() {
   const section = document.getElementById('home-trips-section');
-  const list = document.getElementById('home-trips-list');
+  const track = document.getElementById('carousel-track');
+  const dots = document.getElementById('carousel-dots');
   const globalMapBtn = document.getElementById('btn-global-map-home');
   const dataBar = document.getElementById('home-data-bar');
-  list.innerHTML = '';
+
+  if (!track) return;
+  track.innerHTML = '';
+  if (dots) dots.innerHTML = '';
 
   if (state.voyages.length === 0) {
     section.style.display = 'none';
@@ -781,24 +980,192 @@ function renderHome() {
   globalMapBtn.style.display = 'block';
   section.style.display = 'block';
   dataBar.style.display = 'flex';
-  state.voyages.forEach(v => {
+
+  carouselIndex = 0;
+
+  state.voyages.forEach((v, idx) => {
     const card = document.createElement('div');
-    card.className = 'home-trip-card';
-    card.onclick = () => { state.activeVoyageId = v.id; navigate('view-trip'); };
-    
+    card.className = 'home-trip-card' + (idx === 0 ? ' carousel-active-card' : '');
+    card.dataset.index = idx;
+
     const stepsLen = v.etapes ? v.etapes.length : 0;
     const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
-    
+    const firstCity = (v.etapes && v.etapes.length > 0) ? v.etapes[0].city : null;
+    const firstCountry = (v.etapes && v.etapes.length > 0) ? v.etapes[0].country : null;
+    const locationTag = firstCity ? firstCity : '&nbsp;';
+
     card.innerHTML = `
-      <div class="htc-color" style="background:${v.color}"></div>
-      <div class="htc-info">
+      <div class="htc-bg loading" id="htc-bg-${v.id}"></div>
+      <div class="htc-overlay"></div>
+      <div class="htc-color-bar" style="background:${v.color}"></div>
+      <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
+      <div class="htc-content">
+        <div class="htc-destination-tag">
+          <span style="width:7px;height:7px;border-radius:50%;background:${v.color};display:inline-block;flex-shrink:0;"></span>
+          ${locationTag}
+        </div>
         <div class="htc-name">${v.name}</div>
-        <div class="htc-meta">${stepsText}</div>
+        <div class="htc-meta-row">
+          <div class="htc-meta">${stepsText}</div>
+          <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
+        </div>
       </div>
-      <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
     `;
-    list.appendChild(card);
+
+    // Click to open (not on delete button)
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
+      if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
+      openVoyage(v.id, e);
+    });
+
+    track.appendChild(card);
+
+    // Dot
+    if (dots) {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+      dot.dataset.index = idx;
+      dot.addEventListener('click', () => goToSlide(idx));
+      dots.appendChild(dot);
+    }
+
+    // Load photo async
+    if (firstCity) {
+      fetchCityPhoto(firstCity, firstCountry || '').then(src => {
+        const bg = document.getElementById(`htc-bg-${v.id}`);
+        if (!bg) return;
+        const img = new Image();
+        img.onload = () => {
+          bg.style.backgroundImage = `url('${src}')`;
+          bg.classList.remove('loading');
+        };
+        img.onerror = () => {
+          // Try direct unsplash fallback
+          const fb = `https://source.unsplash.com/600x400/?${encodeURIComponent(firstCity + ' travel landscape')}`;
+          bg.style.backgroundImage = `url('${fb}')`;
+          bg.classList.remove('loading');
+        };
+        img.src = src;
+      });
+    } else {
+      // No city yet — use color gradient
+      const bg = document.getElementById(`htc-bg-${v.id}`);
+      if (bg) {
+        bg.style.background = `linear-gradient(135deg, ${v.color}cc, ${v.color}44)`;
+        bg.classList.remove('loading');
+      }
+    }
   });
+
+  initCarousel();
+}
+
+function openVoyage(id, e) {
+  state.activeVoyageId = id;
+  navigate('view-trip');
+}
+
+function initCarousel() {
+  const wrapper = document.getElementById('carousel-wrapper');
+  const track = document.getElementById('carousel-track');
+  if (!wrapper || !track) return;
+
+  // Remove old listeners by cloning
+  const newWrapper = wrapper.cloneNode(false);
+  while (wrapper.firstChild) newWrapper.appendChild(wrapper.firstChild);
+  wrapper.parentNode.replaceChild(newWrapper, wrapper);
+  const w = newWrapper;
+
+  carouselIndex = 0;
+  carouselDragging = false;
+  carouselDragDelta = 0;
+
+  function getCardWidth() {
+    const card = track.querySelector('.home-trip-card');
+    if (!card) return 0;
+    return card.offsetWidth + 16; // gap = 16px
+  }
+
+  function updateCarousel(instant) {
+    const cw = getCardWidth();
+    carouselCardWidth = cw;
+    // Center the active card
+    const wrapperW = w.offsetWidth;
+    const card = track.querySelector('.home-trip-card');
+    const cardW = card ? card.offsetWidth : 0;
+    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+    track.style.transform = `translateX(${offset}px)`;
+
+    // Update cards scale & dots
+    track.querySelectorAll('.home-trip-card').forEach((c, i) => {
+      c.classList.toggle('carousel-active-card', i === carouselIndex);
+    });
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === carouselIndex);
+    });
+  }
+
+  // Touch / Mouse drag
+  let startX = 0, startTranslate = 0, isDragging = false, moved = false;
+
+  function onPointerDown(e) {
+    isDragging = true;
+    moved = false;
+    carouselDragDelta = 0;
+    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+    track.style.transition = 'none';
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    const x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    carouselDragDelta = x - startX;
+    if (Math.abs(carouselDragDelta) > 5) moved = true;
+    const cw = getCardWidth();
+    const wrapperW = w.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const baseOffset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transform = `translateX(${baseOffset + carouselDragDelta}px)`;
+  }
+
+  function onPointerUp(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    carouselDragging = moved;
+    const total = state.voyages.length;
+    if (carouselDragDelta < -60 && carouselIndex < total - 1) carouselIndex++;
+    else if (carouselDragDelta > 60 && carouselIndex > 0) carouselIndex--;
+    updateCarousel(false);
+    setTimeout(() => { carouselDragging = false; }, 50);
+  }
+
+  w.addEventListener('mousedown', onPointerDown);
+  w.addEventListener('mousemove', onPointerMove);
+  w.addEventListener('mouseup', onPointerUp);
+  w.addEventListener('mouseleave', onPointerUp);
+  w.addEventListener('touchstart', onPointerDown, { passive: true });
+  w.addEventListener('touchmove', onPointerMove, { passive: true });
+  w.addEventListener('touchend', onPointerUp);
+
+  updateCarousel(true);
+  setTimeout(() => updateCarousel(true), 50);
+}
+
+function goToSlide(idx) {
+  carouselIndex = idx;
+  const track = document.getElementById('carousel-track');
+  const wrapper = document.getElementById('carousel-wrapper');
+  if (!track || !wrapper) return;
+  const cw = track.querySelector('.home-trip-card')?.offsetWidth + 16 || 0;
+  const wrapperW = wrapper.offsetWidth;
+  const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+  const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+  track.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+  track.style.transform = `translateX(${offset}px)`;
+  track.querySelectorAll('.home-trip-card').forEach((c, i) => c.classList.toggle('carousel-active-card', i === carouselIndex));
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
 }
 
 // ============================================================
@@ -1557,6 +1924,19 @@ window.onload = function() {
   loadState();
   renderHome();
 };
+window.addEventListener('resize', () => {
+  if (state.voyages.length > 0) {
+    const track = document.getElementById('carousel-track');
+    const wrapper = document.getElementById('carousel-wrapper');
+    if (!track || !wrapper) return;
+    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 16;
+    const wrapperW = wrapper.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${offset}px)`;
+  }
+});
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
