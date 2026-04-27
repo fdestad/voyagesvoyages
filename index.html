@@ -1008,33 +1008,6 @@ function renderHome() {
     const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
     const firstLat = firstEtape ? firstEtape.lat : null;
     const firstLon = firstEtape ? firstEtape.lon : null;
-    if (firstCity) {
-      fetchCityPhoto(firstCity, firstCountry || '', firstLat, firstLon).then(src => {
-        const bg = document.getElementById(`htc-bg-${v.id}`);
-        if (!bg) return;
-        const img = new Image();
-        img.onload = () => {
-          bg.style.backgroundImage = `url('${src}')`;
-          bg.classList.remove('loading');
-        };
-        img.onerror = () => {
-          // Picsum fallback deterministe
-          const seed = [...firstCity].reduce((a, c) => a + c.charCodeAt(0), 0);
-          const fb = `https://picsum.photos/seed/${seed + 1}/800/500`;
-          bg.style.backgroundImage = `url('${fb}')`;
-          bg.classList.remove('loading');
-        };
-        img.src = src;
-      });
-    } else {
-      // No city yet — use color gradient
-      const bg = document.getElementById(`htc-bg-${v.id}`);
-      if (bg) {
-        bg.style.background = `linear-gradient(135deg, ${v.color}cc, ${v.color}44)`;
-        bg.classList.remove('loading');
-      }
-    }
-  });
 
   initCarousel();
 }
