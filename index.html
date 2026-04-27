@@ -607,7 +607,6 @@ html, body {
 // ============================================================
 const VOYAGE_COLORS = ['#E07B39','#2A7F7F','#1C3557','#8B4513','#C44D8C','#4A7C59'];
 let state = { voyages: [], activeVoyageId: null };
-let cities = [];       
 let map, layers = {};  
 let manualMode = false;
 
@@ -634,25 +633,73 @@ function loadState() {
   state.voyages.forEach(v => { if (!v.etapes) v.etapes = []; });
 }
 
-// Ce chargement se fait de manière asynchrone SANS bloquer la page d'accueil !
-async function loadCities() {
+// ============================================================
+// RECHERCHE PHOTON (OpenStreetMap, gratuit, sans clé)
+// ============================================================
+let photonDebounce = null;
+let photonController = null; // pour annuler les requêtes en vol
+
+async function searchPhoton(q) {
+  // Annule la requête précédente si elle est encore en cours
+  if (photonController) photonController.abort();
+  photonController = new AbortController();
+
+  // Indicateur de chargement
+  acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Recherche…</div>';
+  acList.classList.add('open');
+
   try {
-    const resp = await fetch('./cities.json');
-    if (resp.ok) {
-      const data = await resp.json();
-      if (Array.isArray(data)) cities = data;
-    }
+    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=fr`;
+    const resp = await fetch(url, { signal: photonController.signal });
+    if (!resp.ok) throw new Error('Photon error');
+    const data = await resp.json();
+
+    // On accepte city, town, village, municipality
+    const VALID_TYPES = new Set(['city','town','village','municipality']);
+    const results = data.features
+      .filter(f => VALID_TYPES.has(f.properties.type))
+      .slice(0, 6)
+      .map(f => ({
+        name: f.properties.name,
+        // On ajoute l'état/région pour lever les ambiguïtés (ex: "Lyon, Auvergne-Rhône-Alpes")
+        region: f.properties.state || f.properties.county || '',
+        country: f.properties.country || '',
+        lat: f.geometry.coordinates[1],  // GeoJSON = [lon, lat] !
+        lon: f.geometry.coordinates[0]
+      }));
+
+    renderAutocomplete(results);
   } catch(e) {
-    console.log("Villes de secours chargées");
-    cities = [
-      {name:"Paris",country:"France",lat:48.8566,lon:2.3522},
-      {name:"Lyon",country:"France",lat:45.7640,lon:4.8357},
-      {name:"Marseille",country:"France",lat:43.2965,lon:5.3698},
-      {name:"Madrid",country:"Espagne",lat:40.4168,lon:-3.7038},
-      {name:"Barcelone",country:"Espagne",lat:41.3851,lon:2.1734},
-      {name:"Rome",country:"Italie",lat:41.9028,lon:12.4964}
-    ]; 
+    if (e.name === 'AbortError') return; // requête annulée volontairement, pas une erreur
+    console.warn('Photon indisponible', e);
+    acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Service indisponible</div>';
   }
+}
+
+function renderAutocomplete(results) {
+  acList.innerHTML = '';
+  if (!results.length) {
+    acList.classList.remove('open');
+    return;
+  }
+  results.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'ac-item';
+    const subtitle = [c.region, c.country].filter(Boolean).join(', ');
+    div.innerHTML = `
+      <span class="city-pin">📍</span>
+      <div>
+        <div class="city-name">${c.name}</div>
+        <div class="city-country">${subtitle}</div>
+      </div>`;
+    div.onclick = () => {
+      addEtapeToActiveVoyage(c);
+      searchInput.value = '';
+      acList.classList.remove('open');
+    };
+    acList.appendChild(div);
+  });
+  acList.classList.add('open');
 }
 
 // ============================================================
@@ -1084,25 +1131,15 @@ const searchInput = document.getElementById('search-input');
 const acList = document.getElementById('autocomplete');
 
 searchInput.addEventListener('input', function() {
-  const q = this.value.trim().toLowerCase();
-  if (q.length < 2 || !cities.length) { acList.classList.remove('open'); return; }
-  
-  let res = cities.filter(c => c.name.toLowerCase().startsWith(q)).slice(0, 5);
-  if (!res.length) res = cities.filter(c => c.name.toLowerCase().includes(q)).slice(0, 5);
-  
-  acList.innerHTML = '';
-  if(res.length) {
-    res.forEach(c => {
-      const div = document.createElement('div');
-      div.className = 'ac-item';
-      div.innerHTML = `<span class="city-pin">📍</span><div><div class="city-name">${c.name}</div><div class="city-country">${c.country||''}</div></div>`;
-      div.onclick = () => { addEtapeToActiveVoyage(c); searchInput.value = ''; acList.classList.remove('open'); };
-      acList.appendChild(div);
-    });
-    acList.classList.add('open');
-  } else {
+  const q = this.value.trim();
+  if (q.length < 2) {
     acList.classList.remove('open');
+    clearTimeout(photonDebounce);
+    if (photonController) photonController.abort();
+    return;
   }
+  clearTimeout(photonDebounce);
+  photonDebounce = setTimeout(() => searchPhoton(q), 300);
 });
 
 document.addEventListener('click', e => { 
@@ -1441,8 +1478,7 @@ function fetchWeatherForAllEtapes() {
 // ============================================================
 window.onload = function() {
   loadState();
-  renderHome(); // On affiche tout de suite, sans attendre
-  loadCities(); // Charge silencieusement en fond
+  renderHome();
 };
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
