@@ -1415,7 +1415,7 @@ function renderWeatherBadge(index, result) {
   if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
 
   const { icon, label, nuance } = wxScoreToLabel(result.avgScore);
-  const histPrefix  = result.isHistorical ? 'Généralement ' : '';
+  const histPrefix  = result.isHistorical ? 'En général: ' : '';
   const nuancePrefix = (!result.isHistorical && nuance) ? 'Plutôt ' : '';
   const prefix = histPrefix || nuancePrefix;
 
