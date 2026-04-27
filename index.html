@@ -355,6 +355,22 @@ html, body {
   line-height: 1.5; font-style: italic; padding-left: 2px;
   white-space: pre-wrap;
 }
+
+/* ── MÉTÉO ── */
+.etape-weather {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--cream); border-radius: 8px;
+  font-size: 12px; color: var(--ink-mid);
+  min-height: 28px;
+}
+.etape-weather .wx-icon { font-size: 15px; flex-shrink: 0; }
+.etape-weather .wx-label { font-weight: 500; color: var(--ink); }
+.etape-weather .wx-temps { color: var(--ink-soft); margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.etape-weather .wx-loading { color: var(--ink-soft); font-style: italic; }
+.etape-weather.wx-historical { background: #eef4f0; }
+.etape-weather.wx-historical .wx-label { color: var(--teal); }
 .btn-edit-etape {
   background: none; border: 1.5px solid var(--cream-dark);
   border-radius: 20px; padding: 4px 12px;
@@ -751,6 +767,7 @@ function buildEtapeItem(e, i, voyage) {
           <button class="btn-edit-etape" onclick="toggleEditPanel(this)">Éditer</button>
         </div>
         ${datesHtml}
+        <div class="etape-weather" style="display:none;"></div>
         ${notesHtml}
       </div>
 
@@ -763,10 +780,10 @@ function buildEtapeItem(e, i, voyage) {
         <span class="edit-label">Dates</span>
         <div class="etape-dates-row">
           <input class="etape-date-input" type="date" placeholder="Arrivée" value="${e.dateArr||''}" 
-            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i})"/>
+            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
           <span style="font-size:12px;color:var(--ink-soft)">→</span>
           <input class="etape-date-input" type="date" placeholder="Départ" value="${e.dateDep||''}" 
-            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i})"/>
+            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
         </div>
 
         <span class="edit-label">Notes</span>
@@ -827,9 +844,12 @@ function refreshEtapeReadView(index) {
     : '';
 
   const readTop = item.querySelector('.etape-read-top');
-  // Remove old dates/notes
+  // Remove old dates/notes (preserve weather badge)
   item.querySelectorAll('.etape-read-dates, .etape-read-notes').forEach(el => el.remove());
-  readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
+  const weatherBadge = item.querySelector('.etape-weather');
+  readTop.insertAdjacentHTML('afterend', datesHtml);
+  if (weatherBadge) weatherBadge.insertAdjacentHTML('afterend', notesHtml);
+  else readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
 }
 
 function selectVoyageColor(el, color) {
@@ -877,6 +897,9 @@ function renderTrip() {
   voyage.etapes.forEach((e, i) => {
     list.appendChild(buildEtapeItem(e, i, voyage));
   });
+
+  // Chargement météo après rendu du DOM
+  requestAnimationFrame(fetchWeatherForAllEtapes);
 }
 
 // ============================================================
@@ -1258,6 +1281,149 @@ function toast(msg) {
   el.classList.add('visible');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('visible'), 2500);
+}
+
+// ============================================================
+// MÉTÉO — Open-Meteo (gratuit, sans clé)
+// ============================================================
+const weatherCache = {}; // clé: "lat,lon,dateArr,dateDep"
+
+// Classifie les codes WMO en libellé simple + icône
+function wxCodeToLabel(code, isSnow) {
+  if (code === 0)               return { icon: '☀️', label: 'Beau temps' };
+  if (code <= 2)                return { icon: '🌤️', label: 'Quelques nuages' };
+  if (code === 3)               return { icon: '☁️', label: 'Couvert' };
+  if (code >= 45 && code <= 48) return { icon: '🌫️', label: 'Brouillard' };
+  if (code >= 51 && code <= 55) return { icon: '🌦️', label: 'Bruine' };
+  if (code >= 61 && code <= 65) return { icon: '🌧️', label: 'Pluie' };
+  if (code >= 66 && code <= 67) return { icon: '🌨️', label: 'Pluie verglaçante' };
+  if (code >= 71 && code <= 77) return { icon: '❄️', label: 'Neige' };
+  if (code >= 80 && code <= 82) return { icon: '🌦️', label: 'Averses' };
+  if (code >= 85 && code <= 86) return { icon: '🌨️', label: 'Averses de neige' };
+  if (code >= 95 && code <= 99) return { icon: '⛈️', label: 'Orages' };
+  return { icon: '🌡️', label: 'Temps variable' };
+}
+
+// Agrège les données journalières sur une plage de dates
+function aggregateDailyData(data, dateArr, dateDep) {
+  const times = data.daily.time;
+  const tmax = data.daily.temperature_2m_max;
+  const tmin = data.daily.temperature_2m_min;
+  const codes = data.daily.weathercode;
+
+  const from = dateArr || dateDep;
+  const to   = dateDep || dateArr;
+
+  const indices = [];
+  times.forEach((t, i) => { if (t >= from && t <= to) indices.push(i); });
+  if (!indices.length) return null;
+
+  const avgMax = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
+  const avgMin = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
+
+  // Code météo dominant : le plus fréquent parmi les jours couverts
+  const freq = {};
+  indices.forEach(i => { freq[codes[i]] = (freq[codes[i]] || 0) + 1; });
+  const dominantCode = parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
+
+  return { avgMax, avgMin, dominantCode };
+}
+
+async function fetchWeather(etape, index) {
+  const { lat, lon, dateArr, dateDep } = etape;
+  if (!dateArr && !dateDep) return;
+
+  const cacheKey = `${lat},${lon},${dateArr||''},${dateDep||''}`;
+  if (weatherCache[cacheKey]) {
+    renderWeatherBadge(index, weatherCache[cacheKey]);
+    return;
+  }
+
+  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
+  if (badge) badge.innerHTML = '<span class="wx-loading">Chargement météo…</span>';
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today);
+  horizon.setDate(today.getDate() + 16);
+
+  const refDate = new Date(dateArr || dateDep);
+  const endDate = new Date(dateDep || dateArr);
+  const isHistorical = refDate > horizon;
+
+  try {
+    let result;
+    if (isHistorical) {
+      // Normales climatiques : on interroge les mêmes jours sur les 5 dernières années
+      const samples = [];
+      for (let y = 1; y <= 5; y++) {
+        const sArr = dateArr ? shiftYear(dateArr, -y) : null;
+        const sDep = dateDep ? shiftYear(dateDep, -y) : null;
+        const from = sArr || sDep;
+        const to   = sDep || sArr;
+        const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${from}&end_date=${to}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`;
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const agg = aggregateDailyData(data, from, to);
+        if (agg) samples.push(agg);
+      }
+      if (!samples.length) { renderWeatherBadge(index, null); return; }
+      const avgMax = Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length);
+      const avgMin = Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length);
+      // Code dominant sur tous les échantillons
+      const freq = {};
+      samples.forEach(x => { freq[x.dominantCode] = (freq[x.dominantCode] || 0) + 1; });
+      const dominantCode = parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
+      result = { avgMax, avgMin, dominantCode, isHistorical: true };
+    } else {
+      // Prévisions réelles
+      const from = dateArr || dateDep;
+      const to   = dateDep || dateArr;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${from}&end_date=${to}`;
+      const resp = await fetch(url);
+      if (!resp.ok) { renderWeatherBadge(index, null); return; }
+      const data = await resp.json();
+      const agg = aggregateDailyData(data, from, to);
+      if (!agg) { renderWeatherBadge(index, null); return; }
+      result = { ...agg, isHistorical: false };
+    }
+
+    weatherCache[cacheKey] = result;
+    renderWeatherBadge(index, result);
+  } catch(err) {
+    console.warn('Météo indisponible', err);
+    renderWeatherBadge(index, null);
+  }
+}
+
+function shiftYear(dateStr, delta) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${y + delta}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+
+function renderWeatherBadge(index, result) {
+  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
+  if (!badge) return;
+  if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
+
+  const { icon, label } = wxCodeToLabel(result.dominantCode);
+  const prefix = result.isHistorical ? 'Généralement ' : '';
+  badge.classList.toggle('wx-historical', result.isHistorical);
+  badge.style.display = 'flex';
+  badge.innerHTML = `
+    <span class="wx-icon">${icon}</span>
+    <span class="wx-label">${prefix}${label}</span>
+    <span class="wx-temps">${result.avgMin}° / ${result.avgMax}°</span>
+  `;
+}
+
+function fetchWeatherForAllEtapes() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.etapes.forEach((e, i) => {
+    if (e.dateArr || e.dateDep) fetchWeather(e, i);
+  });
 }
 
 // ============================================================
