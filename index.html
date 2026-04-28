@@ -142,6 +142,41 @@ html, body {
 }
 .btn-large-secondary:active { transform: scale(0.96); }
 
+/* ── FAB ROW : deux boutons ronds côte à côte ── */
+.home-fab-row {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  margin-top: 8px;
+}
+.btn-fab-round {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  font-size: 26px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s;
+  flex-shrink: 0;
+}
+.btn-fab-round:active { transform: scale(0.88); box-shadow: var(--shadow-sm); }
+.btn-fab-primary {
+  background: var(--orange);
+  color: white;
+}
+.btn-fab-secondary {
+  background: var(--navy);
+  color: white;
+}
+
 #home-trips-section {
   width: 100%;
   margin-bottom: 28px;
@@ -225,16 +260,91 @@ html, body {
   transform: scale(0.92) !important;
 }
 
+/* ── PASSPORT CARD styles ── */
+.htc-passport {
+  background: #F7F1E3;
+}
+
+/* Passport: centered name zone */
+.htc-passport-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 14px;
+}
+.htc-passport-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: white;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: .01em;
+  text-shadow: 0 2px 12px rgba(0,0,0,.40);
+  max-width: 90%;
+  word-break: break-word;
+}
+
+/* Footer row (steps + delete) */
+.htc-passport-footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.45) 60%, transparent);
+}
+.htc-passport-footer .htc-meta {
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 600;
+}
+.htc-passport-footer .htc-del {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+}
+.htc-passport-footer .htc-del:hover { background: rgba(224,123,57,0.5); }
+
+/* Color accent bar */
+.htc-color-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 24px 24px 0 0;
+  z-index: 3;
+}
+
+/* Open arrow stays */
+.htc-open-btn {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 4;
+}
+.htc-open-btn:hover { background: rgba(255,255,255,0.28); }
+
 /* OSM map background (canvas ou img tiles) */
 .htc-bg {
   position: absolute;
   inset: 0;
-  background-color: #c8d5c0;
+  background-color: #F7F1E3;
   overflow: hidden;
 }
-
-/* Grille de tuiles OSM */
-.htc-osm-grid {
   position: absolute;
   inset: 0;
   display: grid;
@@ -726,8 +836,10 @@ html, body {
       </div>
     </div>
     
-    <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
-    <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;">🌍 Carte</button>
+    <div class="home-fab-row">
+      <button class="btn-fab-round btn-fab-primary" onclick="openNewVoyageModal()" title="Débuter un voyage">＋</button>
+      <button class="btn-fab-round btn-fab-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;" title="Carte des voyages">🌍</button>
+    </div>
 
     <div id="home-data-bar">
       <button class="btn-data" onclick="exportVoyages()">↓ Exporter</button>
@@ -1172,16 +1284,15 @@ function renderHome() {
     const locationLabel = firstCity ? firstCity.toUpperCase() : '';
 
     card.innerHTML = `
-      <div class="htc-bg loading" id="htc-bg-${v.id}"></div>
-      <div class="htc-overlay" id="htc-ov-${v.id}"></div>
+      <div class="htc-bg htc-passport" id="htc-bg-${v.id}"></div>
       <div class="htc-color-bar" style="background:${v.color}"></div>
       <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
-      <div class="htc-content">
-        <div class="htc-name">${v.name}</div>
-        <div class="htc-meta-row">
-          <div class="htc-meta">${stepsText}</div>
-          <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
-        </div>
+      <div class="htc-passport-content">
+        <div class="htc-passport-name">${v.name}</div>
+      </div>
+      <div class="htc-passport-footer">
+        <div class="htc-meta">${stepsText}</div>
+        <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
       </div>
     `;
 
@@ -1205,8 +1316,7 @@ function renderHome() {
 requestAnimationFrame(() => {
   const bgEl = document.getElementById(`htc-bg-${v.id}`);
   if (bgEl) {
-    // On génère l'Azulejo unique basé sur le nom et la couleur
-    bgEl.innerHTML = generateAzulejoSVG(v.name, v.color);
+    bgEl.innerHTML = generatePassportSVG(v.name, v.color, v.etapes || []);
     bgEl.classList.remove('loading');
   }
 });
@@ -2098,75 +2208,143 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('Échec de l\'enregistrement :', err));
   });
 }
-   function generateAzulejoSVG(name, color) {
-  const firstLetter = (name || "V").toUpperCase();
-  const seed = firstLetter.charCodeAt(0);
-  const baseColor = color || "#1C3557";
-  
-  // Utilitaire pour assombrir/éclaircir une couleur (pour le gradient intégré)
-  const adjustColor = (hex, amt) => {
-    let col = hex.startsWith('#') ? hex.slice(1) : hex;
-    let num = parseInt(col, 16);
-    let r = (num >> 16) + amt;
-    let g = ((num >> 8) & 0x00FF) + amt;
-    let b = (num & 0x0000FF) + amt;
-    return `rgb(${Math.min(255, Math.max(0, r))}, ${Math.min(255, Math.max(0, g))}, ${Math.min(255, Math.max(0, b))})`;
+  // Helpers couleur
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h, s, l = (max+min)/2;
+    if (max === min) { h = s = 0; }
+    else {
+      const d = max - min;
+      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+      switch(max) {
+        case r: h = ((g-b)/d + (g<b?6:0))/6; break;
+        case g: h = ((b-r)/d + 2)/6; break;
+        default: h = ((r-g)/d + 4)/6;
+      }
+    }
+    return [h*360, s, l];
+  }
+
+  function hslToRgb(h, s, l) {
+    h /= 360;
+    const hue2rgb = (p,q,t) => {
+      if(t<0)t+=1; if(t>1)t-=1;
+      if(t<1/6)return p+(q-p)*6*t;
+      if(t<1/2)return q;
+      if(t<2/3)return p+(q-p)*(2/3-t)*6;
+      return p;
+    };
+    if(s===0) { const v=Math.round(l*255); return [v,v,v]; }
+    const q = l<0.5 ? l*(1+s) : l+s-l*s;
+    const p = 2*l-q;
+    return [
+      Math.round(hue2rgb(p,q,h+1/3)*255),
+      Math.round(hue2rgb(p,q,h)*255),
+      Math.round(hue2rgb(p,q,h-1/3)*255),
+    ];
+  }
+
+  function generatePassportSVG(name, color, etapes) {
+  const {r, g, b} = hexToRgb(color || '#1C3557');
+
+  const letter = (name || 'V')[0].toUpperCase();
+  const code   = letter.charCodeAt(0);
+
+  const rng = (n) => {
+    let t = (code * 2654435761 + n * 2246822519) >>> 0;
+    t ^= t >>> 16; t = Math.imul(t, 0x45d9f3b); t ^= t >>> 16;
+    return (t >>> 0) / 4294967296;
   };
 
-  const c1 = adjustColor(baseColor, 40);  // Teinte claire
-  const c2 = baseColor;                   // Teinte moyenne
-  const c3 = adjustColor(baseColor, -40); // Teinte sombre
+  const curved  = 'BCDGJOQSU'.includes(letter);
+  const angular = 'AKMVWXYZ'.includes(letter);
 
-  // On détermine le "style" géométrique selon la forme de la lettre
-  // Si la lettre a des courbes (O, C, S...), on privilégie les cercles
-  const hasCurves = "BCDGOPQRSU".includes(firstLetter);
-  
-  let patternContent = "";
-  
-  // Génération d'un motif quart-de-carreau
-  if (hasCurves) {
-    patternContent += `<circle cx="50" cy="50" r="${(seed % 30) + 20}" fill="url(#grad1)" opacity="0.6"/>`;
-    patternContent += `<path d="M0 50 Q50 50 50 0" stroke="url(#grad2)" stroke-width="4" fill="none" />`;
+  const [h, s, l] = rgbToHsl(r, g, b);
+
+  // Fond basé sur la couleur du voyage, sombre et saturé
+  const bgD = hslToRgb(h, Math.min(1, s*1.1),  Math.max(0.12, l*0.55));
+  const bgL = hslToRgb(h, Math.min(1, s*0.95), Math.max(0.22, l*0.80));
+
+  // Blobs : teintes proches de la couleur principale, légèrement décalées
+  const c1 = hslToRgb(h,             Math.min(1, s*1.1),  Math.min(0.75, l*1.1));
+  const c2 = hslToRgb((h+25)%360,    Math.min(1, s*1.0),  Math.min(0.70, l*1.0));
+  const c3 = hslToRgb((h-20+360)%360,Math.min(1, s*0.9),  Math.min(0.65, l*0.9));
+  const c4 = hslToRgb((h+170)%360,   Math.min(1, s*0.5),  Math.min(0.60, l*1.2));
+
+  const W = 200, H = 350;
+  const uid = `vp${code}_${(rng(77)*65535)|0}`;
+
+  let defs = `
+    <linearGradient id="${uid}bg" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%"   stop-color="rgb(${bgL[0]},${bgL[1]},${bgL[2]})"/>
+      <stop offset="100%" stop-color="rgb(${bgD[0]},${bgD[1]},${bgD[2]})"/>
+    </linearGradient>
+    <filter id="${uid}f" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>`;
+
+  let blobs = '';
+
+  if (curved) {
+    const pts = [
+      { cx:0.15+rng(1)*0.55, cy:0.05+rng(2)*0.30, rx:0.60, ry:0.45, c:c1, o:0.90 },
+      { cx:0.10+rng(3)*0.60, cy:0.33+rng(4)*0.28, rx:0.55, ry:0.52, c:c2, o:0.80 },
+      { cx:0.18+rng(5)*0.50, cy:0.58+rng(6)*0.28, rx:0.58, ry:0.42, c:c3, o:0.70 },
+      { cx:0.28+rng(7)*0.38, cy:0.75+rng(8)*0.18, rx:0.42, ry:0.38, c:c4, o:0.55 },
+    ];
+    pts.forEach((p,i) => {
+      defs += `<radialGradient id="${uid}g${i}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="rgb(${p.c[0]},${p.c[1]},${p.c[2]})" stop-opacity="${p.o}"/>
+        <stop offset="100%" stop-color="rgb(${p.c[0]},${p.c[1]},${p.c[2]})" stop-opacity="0"/>
+      </radialGradient>`;
+      blobs += `<ellipse cx="${p.cx*W}" cy="${p.cy*H}" rx="${p.rx*W}" ry="${p.ry*H}" fill="url(#${uid}g${i})"/>`;
+    });
+
+  } else if (angular) {
+    const diags = [
+      { cx:0.22+rng(1)*0.3, cy:0.18+rng(2)*0.2, rx:0.80, ry:0.25, rot:-28+rng(3)*40, c:c1, o:0.88 },
+      { cx:0.28+rng(4)*0.3, cy:0.50+rng(5)*0.2, rx:0.75, ry:0.22, rot: 18+rng(6)*35, c:c2, o:0.75 },
+      { cx:0.18+rng(7)*0.4, cy:0.74+rng(8)*0.2, rx:0.70, ry:0.20, rot:-12+rng(9)*30, c:c3, o:0.62 },
+    ];
+    diags.forEach((d,i) => {
+      defs += `<radialGradient id="${uid}g${i}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="rgb(${d.c[0]},${d.c[1]},${d.c[2]})" stop-opacity="${d.o}"/>
+        <stop offset="100%" stop-color="rgb(${d.c[0]},${d.c[1]},${d.c[2]})" stop-opacity="0"/>
+      </radialGradient>`;
+      blobs += `<ellipse cx="${d.cx*W}" cy="${d.cy*H}" rx="${d.rx*W}" ry="${d.ry*H}"
+        transform="rotate(${d.rot} ${d.cx*W} ${d.cy*H})"
+        fill="url(#${uid}g${i})"/>`;
+    });
+    defs += `<radialGradient id="${uid}g3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="rgb(${c4[0]},${c4[1]},${c4[2]})" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="rgb(${c4[0]},${c4[1]},${c4[2]})" stop-opacity="0"/>
+    </radialGradient>`;
+    blobs += `<ellipse cx="${W*0.5}" cy="${H*0.5}" rx="${W*0.65}" ry="${H*0.50}" fill="url(#${uid}g3)"/>`;
+
   } else {
-    patternContent += `<path d="M0 0 L50 50 L100 0 Z" fill="url(#grad1)" opacity="0.5"/>`;
-    patternContent += `<rect x="20" y="20" width="60" height="60" transform="rotate(${seed % 90} 50 50)" fill="url(#grad2)" opacity="0.4"/>`;
+    const bands = [
+      { cy:0.10+rng(1)*0.12, ry:0.25+rng(2)*0.14, c:c1, o:0.88 },
+      { cy:0.36+rng(3)*0.12, ry:0.27+rng(4)*0.16, c:c2, o:0.76 },
+      { cy:0.62+rng(5)*0.10, ry:0.23+rng(6)*0.13, c:c3, o:0.64 },
+      { cy:0.82+rng(7)*0.10, ry:0.20+rng(8)*0.10, c:c4, o:0.50 },
+    ];
+    bands.forEach((b,i) => {
+      defs += `<radialGradient id="${uid}g${i}" cx="50%" cy="50%" r="50%" gradientTransform="scale(1, 0.4)">
+        <stop offset="0%"   stop-color="rgb(${b.c[0]},${b.c[1]},${b.c[2]})" stop-opacity="${b.o}"/>
+        <stop offset="100%" stop-color="rgb(${b.c[0]},${b.c[1]},${b.c[2]})" stop-opacity="0"/>
+      </radialGradient>`;
+      blobs += `<ellipse cx="${W*0.5}" cy="${b.cy*H}" rx="${W*0.92}" ry="${b.ry*H}" fill="url(#${uid}g${i})"/>`;
+    });
   }
-  
-  // Ajout de détails fins (lignes d'influence de la lettre)
-  patternContent += `<line x1="0" y1="0" x2="100" y2="100" stroke="white" stroke-width="0.5" opacity="0.2" />`;
 
-  return `
-    <svg viewBox="0 0 200 350" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${c1}" />
-          <stop offset="100%" stop-color="${c2}" />
-        </linearGradient>
-        <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${c2}" />
-          <stop offset="100%" stop-color="${c3}" />
-        </radialGradient>
-        
-        <symbol id="tile">
-          <rect width="100" height="100" fill="${c3}" />
-          ${patternContent}
-          <rect width="100" height="100" fill="none" stroke="white" stroke-width="0.5" opacity="0.1" />
-        </symbol>
-      </defs>
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"
+     xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+  <defs>${defs}</defs>
+  <rect width="${W}" height="${H}" fill="url(#${uid}bg)"/>
+  <g filter="url(#${uid}f)">${blobs}</g>
+</svg>`;
 
-      <g transform="scale(1)">
-        <use href="#tile" x="0" y="0" />
-        <use href="#tile" x="200" y="0" transform="scale(-1, 1) translate(-100, 0)" />
-        <use href="#tile" x="0" y="200" transform="scale(1, -1) translate(0, -100)" />
-        <use href="#tile" x="200" y="200" transform="scale(-1, -1) translate(-100, -100)" />
-        <use href="#tile" x="0" y="200" />
-        <use href="#tile" x="200" y="200" transform="scale(-1, 1) translate(-100, 0)" />
-        <use href="#tile" x="0" y="400" transform="scale(1, -1) translate(0, -100)" />
-      </g>
-      
-      <rect width="100%" height="100%" fill="white" opacity="0.05" style="mix-blend-mode: overlay;" />
-    </svg>
-  `;
 }
 </script>
 </body>
