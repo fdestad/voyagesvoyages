@@ -631,9 +631,10 @@ html, body {
 
 .etape-num {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--navy); color: white;
+  background: var(--voyage-color, var(--navy)); color: white;
   font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; z-index: 1;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--voyage-color, var(--navy)) 40%, transparent);
 }
 
 /* ── CARD ── */
@@ -642,6 +643,13 @@ html, body {
   border: 1.5px solid var(--cream-dark);
   overflow: hidden;
   transition: box-shadow 0.2s;
+}
+.etape-content::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: linear-gradient(to right, var(--voyage-color, var(--navy)), transparent);
+  opacity: 0.75;
 }
 .etape-item.dragging .etape-content {
   box-shadow: var(--shadow-lg); opacity: 0.85;
@@ -937,7 +945,9 @@ html, body {
       </div>
     </div>
   </div>
-</div> onclick="closeModal(event)">
+</div>
+
+<div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal">
     <div class="modal-title">Nouveau départ 🛩️</div>
     <div class="modal-field">
@@ -1644,6 +1654,8 @@ function selectVoyageColor(el, color) {
     s.classList.toggle('selected', s.dataset.color === color);
   });
   document.getElementById('voyage-color-dot').style.background = color;
+  // Update CSS variable for step bubbles and card headers
+  document.getElementById('etapes-list').style.setProperty('--voyage-color', color);
   // Refresh map markers color
   if (document.getElementById('view-map').classList.contains('active')) {
     renderAllMaps();
@@ -1674,6 +1686,7 @@ function renderTrip() {
 
   const list = document.getElementById('etapes-list');
   list.innerHTML = '';
+  list.style.setProperty('--voyage-color', voyage.color || 'var(--navy)');
 
   if (stepsLen === 0) {
     list.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--ink-soft); line-height: 1.5;">Aucune étape.<br>Utilisez la recherche ci-dessus pour commencer.</div>';
