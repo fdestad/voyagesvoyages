@@ -543,10 +543,17 @@ html, body {
 }
 #voyage-name-wrap {
   display: flex; align-items: center; gap: 10px;
+  position: relative;
 }
 #voyage-color-dot {
   width: 16px; height: 16px; border-radius: 50%;
   flex-shrink: 0; border: 2px solid rgba(0,0,0,.1);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+#voyage-color-dot:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.10);
 }
 #voyage-name-input {
   flex: 1; font-family: 'Playfair Display', serif;
@@ -856,7 +863,10 @@ html, body {
 
     <div id="voyage-header">
       <div id="voyage-name-wrap">
-        <div id="voyage-color-dot"></div>
+        <div id="voyage-color-dot" onclick="toggleColorPicker()" title="Changer la couleur" style="cursor:pointer;"></div>
+        <div id="color-picker-popup" style="display:none;position:absolute;top:52px;left:16px;z-index:200;background:var(--white);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-lg);border:1px solid var(--cream-dark);display:none;flex-wrap:wrap;gap:10px;width:fit-content;">
+          <div class="color-swatches" id="voyage-color-swatches" style="gap:10px;"></div>
+        </div>
         <input id="voyage-name-input" type="text" placeholder="Nom du voyage"/>
       </div>
       <div class="voyage-meta" id="voyage-meta"></div>
@@ -902,7 +912,32 @@ html, body {
 
 </div>
 
-<div id="modal-overlay" onclick="closeModal(event)">
+<!-- NOTES OVERLAY -->
+<div id="notes-overlay" style="display:none;position:fixed;inset:0;z-index:8000;flex-direction:column;">
+  <div id="notes-overlay-bg" style="position:absolute;inset:0;"></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:0;">
+    <!-- Header -->
+    <div id="notes-overlay-header" style="display:flex;align-items:center;gap:14px;padding:52px 24px 20px;flex-shrink:0;">
+      <button onclick="closeNotesOverlay()" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;backdrop-filter:blur(8px);">←</button>
+      <div style="flex:1;">
+        <div id="notes-overlay-city" style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:white;text-shadow:0 2px 16px rgba(0,0,0,0.3);line-height:1.2;"></div>
+        <div id="notes-overlay-country" style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:3px;font-weight:500;letter-spacing:.04em;"></div>
+      </div>
+    </div>
+    <!-- Notes area -->
+    <div style="flex:1;padding:0 20px 32px;display:flex;flex-direction:column;min-height:0;">
+      <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.22);border-radius:18px;flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <div style="padding:16px 18px 8px;border-bottom:1px solid rgba(255,255,255,0.12);">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.55);">Notes</span>
+        </div>
+        <textarea id="notes-overlay-textarea" 
+          placeholder="Expositions, soirées, adresses, idées…"
+          style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;font-size:16px;font-family:'DM Sans',sans-serif;color:white;line-height:1.7;resize:none;min-height:0;caret-color:white;"
+          oninput="saveOverlayNote()"></textarea>
+      </div>
+    </div>
+  </div>
+</div> onclick="closeModal(event)">
   <div id="modal">
     <div class="modal-title">Nouveau départ 🛩️</div>
     <div class="modal-field">
@@ -1513,13 +1548,13 @@ function buildEtapeItem(e, i, voyage) {
     <div class="etape-num">${i + 1}</div>
     <div class="etape-content">
 
-      <div class="etape-read">
+      <div class="etape-read" onclick="openNotesOverlay(${i})" style="cursor:pointer;">
         <div class="etape-read-top">
           <div>
             <div class="etape-city">${e.city}</div>
             <div class="etape-country">${e.country}</div>
           </div>
-          <button class="btn-edit-etape" onclick="toggleEditPanel(this)">Éditer</button>
+          <button class="btn-edit-etape" onclick="event.stopPropagation();toggleEditPanel(this)">📅</button>
         </div>
         ${datesHtml}
         <div class="etape-weather" style="display:none;"></div>
@@ -1540,14 +1575,6 @@ function buildEtapeItem(e, i, voyage) {
           <input class="etape-date-input" type="date" placeholder="Départ" value="${e.dateDep||''}" 
             onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
         </div>
-
-        <span class="edit-label">Notes</span>
-        <textarea class="etape-notes-input" placeholder="Expositions, soirées, matchs..." 
-          onchange="updateNote(${i},this.value); refreshEtapeReadView(${i})"
-          oninput="updateNote(${i},this.value)">${e.notes||''}</textarea>
-
-        <span class="edit-label">Couleur du voyage</span>
-        <div class="edit-color-row" data-voyage-colors>${swatchesHtml}</div>
 
         <div class="edit-actions">
           <button class="btn-del-etape" onclick="removeEtape(${i})">🗑 Supprimer</button>
@@ -1634,6 +1661,10 @@ function updateNote(index, value) {
 function renderTrip() {
   const voyage = getActiveVoyage();
   if (!voyage) return navigate('view-home');
+
+  colorPickerOpen = false;
+  const popup = document.getElementById('color-picker-popup');
+  if (popup) popup.style.display = 'none';
 
   document.getElementById('voyage-color-dot').style.background = voyage.color;
   document.getElementById('voyage-name-input').value = voyage.name;
@@ -2179,6 +2210,115 @@ function fetchWeatherForAllEtapes() {
   voyage.etapes.forEach((e, i) => {
     if (e.dateArr || e.dateDep) fetchWeather(e, i);
   });
+}
+
+// ============================================================
+// COLOR PICKER (dot in trip header)
+// ============================================================
+let colorPickerOpen = false;
+
+function toggleColorPicker() {
+  const popup = document.getElementById('color-picker-popup');
+  colorPickerOpen = !colorPickerOpen;
+  popup.style.display = colorPickerOpen ? 'flex' : 'none';
+  if (colorPickerOpen) {
+    const voyage = getActiveVoyage();
+    if (!voyage) return;
+    const container = document.getElementById('voyage-color-swatches');
+    container.innerHTML = VOYAGE_COLORS.map(c =>
+      `<div class="swatch${c === voyage.color ? ' selected' : ''}" style="background:${c};width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform 0.15s,border-color 0.15s;" 
+        data-color="${c}" onclick="pickVoyageColor('${c}')"></div>`
+    ).join('');
+  }
+}
+
+function pickVoyageColor(color) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.color = color;
+  saveState();
+  document.getElementById('voyage-color-dot').style.background = color;
+  // Update swatch selection
+  document.querySelectorAll('#voyage-color-swatches .swatch').forEach(s => {
+    s.classList.toggle('selected', s.dataset.color === color);
+    s.style.borderColor = s.dataset.color === color ? 'var(--ink)' : 'transparent';
+    s.style.transform = s.dataset.color === color ? 'scale(1.15)' : 'scale(1)';
+  });
+  // Close picker after short delay
+  setTimeout(() => {
+    colorPickerOpen = false;
+    document.getElementById('color-picker-popup').style.display = 'none';
+  }, 300);
+}
+
+// Close color picker when clicking outside
+document.addEventListener('click', function(e) {
+  if (!colorPickerOpen) return;
+  const dot = document.getElementById('voyage-color-dot');
+  const popup = document.getElementById('color-picker-popup');
+  if (!dot.contains(e.target) && !popup.contains(e.target)) {
+    colorPickerOpen = false;
+    popup.style.display = 'none';
+  }
+});
+
+// ============================================================
+// NOTES OVERLAY
+// ============================================================
+let notesOverlayIndex = null;
+
+function hexToRgbArr(hex) {
+  const {r, g, b} = hexToRgb(hex);
+  return [r, g, b];
+}
+
+function openNotesOverlay(index) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  const etape = voyage.etapes[index];
+  if (!etape) return;
+  notesOverlayIndex = index;
+
+  const overlay = document.getElementById('notes-overlay');
+  const bg = document.getElementById('notes-overlay-bg');
+  const cityEl = document.getElementById('notes-overlay-city');
+  const countryEl = document.getElementById('notes-overlay-country');
+  const textarea = document.getElementById('notes-overlay-textarea');
+
+  cityEl.textContent = etape.city;
+  countryEl.textContent = etape.country ? etape.country.toUpperCase() : '';
+  textarea.value = etape.notes || '';
+
+  // Build premium gradient background from voyage color
+  const color = voyage.color || '#1C3557';
+  const {r, g, b} = hexToRgb(color);
+  const darken = (v, a) => Math.max(0, Math.round(v * a));
+  bg.style.background = `
+    linear-gradient(160deg,
+      rgb(${darken(r,1.1)>255?255:Math.round(r*1.05)},${darken(g,1.05)>255?255:Math.round(g*1.05)},${darken(b,1.0)>255?255:Math.round(b*1.0)}) 0%,
+      rgb(${darken(r,0.65)},${darken(g,0.65)},${darken(b,0.65)}) 45%,
+      rgb(${darken(r,0.38)},${darken(g,0.38)},${darken(b,0.38)}) 100%
+    )
+  `;
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    overlay.style.opacity = '1';
+    textarea.focus();
+  });
+}
+
+function closeNotesOverlay() {
+  const overlay = document.getElementById('notes-overlay');
+  overlay.style.display = 'none';
+  notesOverlayIndex = null;
+}
+
+function saveOverlayNote() {
+  if (notesOverlayIndex === null) return;
+  const value = document.getElementById('notes-overlay-textarea').value;
+  updateNote(notesOverlayIndex, value);
+  refreshEtapeReadView(notesOverlayIndex);
 }
 
 // ============================================================
