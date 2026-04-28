@@ -81,13 +81,17 @@ html, body {
 #view-home {
   align-items: center;
   overflow-y: auto;
-  padding: 40px 24px;
-  padding-bottom: 48px;
+  padding: 0 24px 48px;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-header {
   text-align: center;
-  margin-bottom: 40px;
+  padding-top: 40px;
+  margin-bottom: 28px;
+  width: 100%;
+  flex-shrink: 0;
 }
 .home-header h1 {
   font-family: 'Playfair Display', serif;
@@ -115,7 +119,7 @@ html, body {
   cursor: pointer;
   box-shadow: var(--shadow-md);
   transition: var(--transition);
-  margin-bottom: 40px;
+  margin-bottom: 12px;
 }
 .btn-large-primary:active { transform: scale(0.96); }
 
@@ -133,13 +137,14 @@ html, body {
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  margin-bottom: 40px;
-  margin-top: -28px;
+  margin-bottom: 32px;
+  margin-top: 0;
 }
 .btn-large-secondary:active { transform: scale(0.96); }
 
 #home-trips-section {
   width: 100%;
+  margin-bottom: 28px;
 }
 .section-title {
   font-size: 13px;
@@ -152,7 +157,7 @@ html, body {
   padding-bottom: 8px;
 }
 
-/* ── CAROUSEL ── */
+/* ── CAROUSEL portrait ── */
 #home-trips-list {
   position: relative;
   width: 100vw;
@@ -171,9 +176,11 @@ html, body {
 
 .carousel-track {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
+  align-items: flex-end; /* cartes alignées par le bas */
+  padding: 16px 0 8px;
 }
 
 .carousel-dots {
@@ -195,61 +202,57 @@ html, body {
   border-radius: 3px;
 }
 
-/* ── TRIP CARD ── */
+/* ── TRIP CARD — format portrait ── */
 .home-trip-card {
   position: relative;
   flex-shrink: 0;
-  width: calc(100vw - 72px);
-  max-width: 340px;
-  height: 220px;
-  border-radius: 20px;
+  width: calc((100vw - 72px) * 0.62);
+  max-width: 200px;
+  min-width: 150px;
+  aspect-ratio: 9 / 16;
+  border-radius: 24px;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(28,53,87,.25), 0 2px 8px rgba(0,0,0,.15);
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
-  transform: scale(0.97);
+  box-shadow: none;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  transform: scale(0.94) translateY(6px);
 }
 .home-trip-card.carousel-active-card {
-  transform: scale(1);
-  box-shadow: 0 16px 48px rgba(28,53,87,.35), 0 4px 16px rgba(0,0,0,.2);
+  transform: scale(1) translateY(0px);
+  box-shadow: none;
 }
 .home-trip-card:active {
-  transform: scale(0.95) !important;
+  transform: scale(0.92) !important;
 }
 
-/* Photo background */
+/* OSM map background (canvas ou img tiles) */
 .htc-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-color: var(--navy);
-  transition: transform 0.6s ease;
-}
-.home-trip-card:hover .htc-bg {
-  transform: scale(1.04);
+  background-color: #c8d5c0;
+  overflow: hidden;
 }
 
-/* Gradient overlay */
+/* Grille de tuiles OSM */
+.htc-osm-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  image-rendering: pixelated;
+}
+.htc-osm-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.7) brightness(0.85);
+}
+
+/* Gradient génératif par-dessus la carte OSM */
 .htc-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    160deg,
-    rgba(224,123,57,0.55) 0%,
-    rgba(192,90,20,0.60) 40%,
-    rgba(28,30,20,0.82) 75%,
-    rgba(12,18,10,0.93) 100%
-  );
-}
-
-/* Filtre crème/orangé unifié par-dessus la photo */
-.htc-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(245,200,140,0.18);
-  mix-blend-mode: multiply;
+  /* généré dynamiquement via JS avec la couleur du voyage */
 }
 
 /* Shimmer loader */
@@ -267,53 +270,53 @@ html, body {
 .htc-color-bar {
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 20px 20px 0 0;
+  height: 4px;
+  border-radius: 24px 24px 0 0;
+  z-index: 3;
 }
 
-/* Card content */
+/* Card content — portrait centré */
 .htc-content {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px 18px 16px;
+  justify-content: flex-end;
+  padding: 0 14px 20px;
+  z-index: 2;
 }
 .htc-name {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 20px;
   color: white;
   line-height: 1.2;
   text-align: center;
-  text-shadow: 0 2px 16px rgba(0,0,0,.5);
+  text-shadow: 0 2px 12px rgba(0,0,0,.65);
   letter-spacing: .01em;
+  margin-bottom: 8px;
 }
 .htc-meta-row {
-  position: absolute;
-  bottom: 14px;
-  left: 16px;
-  right: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 .htc-meta {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
   font-weight: 500;
 }
 .htc-del {
-  width: 30px; height: 30px;
+  width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(255,255,255,0.18);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.25);
   border-radius: 50%;
   color: rgba(255,255,255,0.85);
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
@@ -325,23 +328,35 @@ html, body {
 .htc-open-btn {
   position: absolute;
   top: 14px; right: 14px;
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(255,255,255,0.18);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 50%;
   color: white;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.2s;
+  z-index: 3;
 }
 .htc-open-btn:hover { background: rgba(255,255,255,0.3); }
-.htc-del {
-  padding: 8px;
-  color: var(--ink-soft);
-  font-size: 18px;
-  background: none; border: none;
+
+/* Indicateur de ville centré en haut */
+.htc-location-badge {
+  position: absolute;
+  top: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 3;
+  letter-spacing: .04em;
 }
 
 /* Barre export/import */
@@ -701,12 +716,8 @@ html, body {
       <h1>Voyages Voyages</h1>
       <p>plus loin que la nuit et le jour</p>
     </div>
-    
-    <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
-    <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;"> Carte</button>
 
     <div id="home-trips-section" style="display:none;">
-      <div class="section-title" style="padding-left:0; margin-bottom:14px;">Mes voyages</div>
       <div id="home-trips-list">
         <div class="carousel-track-wrapper" id="carousel-wrapper">
           <div class="carousel-track" id="carousel-track"></div>
@@ -714,6 +725,9 @@ html, body {
         <div class="carousel-dots" id="carousel-dots"></div>
       </div>
     </div>
+    
+    <button class="btn-large-primary" onclick="openNewVoyageModal()">＋ Débuter un voyage</button>
+    <button class="btn-large-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;">🌍 Carte</button>
 
     <div id="home-data-bar">
       <button class="btn-data" onclick="exportVoyages()">↓ Exporter</button>
@@ -925,102 +939,129 @@ function navigate(viewId) {
 }
 
 // ============================================================
-// VUE : ACCUEIL — CAROUSEL
+// VUE : ACCUEIL — CARTE OSM STATIQUE
+// Génère un fond de carte OpenStreetMap sans clé API
 // ============================================================
-const photoCache = {};
 
-async function fetchCityPhoto(cityName, countryName, lat, lon) {
-  const key = (cityName + ',' + (countryName||'')).toLowerCase();
-  if (photoCache[key]) return photoCache[key];
+/**
+ * Convertit lat/lon/zoom en coordonnées de tuile OSM (X, Y)
+ */
+function latLonToTile(lat, lon, zoom) {
+  const n = Math.pow(2, zoom);
+  const x = Math.floor((lon + 180) / 360 * n);
+  const latRad = lat * Math.PI / 180;
+  const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n);
+  return { x, y };
+}
 
-  // 1) Wikimedia geosearch : trouve les monuments/lieux touristiques
-  //    proches des coordonnées GPS et retourne leurs photos.
-  //    C'est l'API la plus fiable pour des images touristiques de qualité.
-  if (lat && lon) {
-    try {
-      const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord=${lat}|${lon}&gslimit=10&format=json&origin=*`;
-      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      if (resp.ok) {
-        const data = await resp.json();
-        const hits = data.query && data.query.geosearch;
-        if (hits && hits.length > 0) {
-          // Cherche une photo parmi les premiers résultats
-          for (const hit of hits.slice(0, 5)) {
-            const imgUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(hit.title)}&prop=pageimages&format=json&pithumbsize=900&pilimit=1&origin=*`;
-            const ir = await fetch(imgUrl, { signal: AbortSignal.timeout(4000) });
-            if (!ir.ok) continue;
-            const id = await ir.json();
-            const pages = id.query && id.query.pages;
-            if (pages) {
-              const page = Object.values(pages)[0];
-              if (page && page.thumbnail && page.thumbnail.source) {
-                // Filtre les photos peu visuelles (drapeaux, blasons, cartes)
-                const src = page.thumbnail.source;
-                if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
-                  photoCache[key] = src;
-                  return src;
-                }
-              }
-            }
-          }
-        }
-      }
-    } catch(e) {}
+/**
+ * Construit l'URL d'une tuile OSM (tile.openstreetmap.org)
+ * avec sous-domaine a/b/c pour répartir les requêtes
+ */
+function osmTileUrl(x, y, zoom) {
+  const sub = ['a','b','c'][Math.abs(x + y) % 3];
+  return `https://${sub}.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
+}
+
+/**
+ * Hexadécimal → {r, g, b}
+ */
+function hexToRgb(hex) {
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return {r,g,b};
+}
+
+/**
+ * Génère un gradient multi-couches génératif à partir de la couleur du voyage.
+ * Résultat : CSS background valable pour un overlay.
+ */
+function generateGradientOverlay(color) {
+  const {r,g,b} = hexToRgb(color);
+  // Teinte complémentaire légèrement décalée
+  const r2 = Math.min(255, Math.round(r * 0.55 + 20));
+  const g2 = Math.min(255, Math.round(g * 0.45 + 10));
+  const b2 = Math.min(255, Math.round(b * 0.65 + 30));
+
+  return `
+    linear-gradient(
+      175deg,
+      rgba(${r},${g},${b},0.18) 0%,
+      rgba(${r2},${g2},${b2},0.10) 35%,
+      rgba(${r},${g},${b},0.0) 55%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.0) 30%,
+      rgba(${r2},${g2},${b2},0.45) 62%,
+      rgba(${r},${g},${b},0.82) 82%,
+      rgba(${Math.max(0,r-30)},${Math.max(0,g-30)},${Math.max(0,b-20)},0.96) 100%
+    )
+  `;
+}
+
+/**
+ * Remplit le conteneur .htc-bg avec une grille de tuiles OSM
+ * centrée sur lat/lon au zoom donné (défaut 10).
+ */
+function renderOsmMapBackground(bgEl, overlayEl, lat, lon, color, zoom = 10) {
+  bgEl.classList.remove('loading');
+  bgEl.innerHTML = '';
+
+  // Dimensions réelles du conteneur
+  const W = bgEl.offsetWidth  || 180;
+  const H = bgEl.offsetHeight || 320;
+
+  const TILE = 256;
+  // Nombre de tuiles à couvrir (on en charge 1 de plus de chaque côté)
+  const cols = Math.ceil(W / TILE) + 2;
+  const rows = Math.ceil(H / TILE) + 2;
+
+  const center = latLonToTile(lat, lon, zoom);
+
+  // Décalage pixel exact pour centrer la tuile centrale
+  const fracX = ((lon + 180) / 360 * Math.pow(2, zoom)) % 1;
+  const latRad = lat * Math.PI / 180;
+  const fracY = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * Math.pow(2, zoom)) % 1;
+
+  const offsetX = -(Math.floor(cols / 2) - 1 + fracX) * TILE + (W - TILE) / 2;
+  const offsetY = -(Math.floor(rows / 2) - 1 + fracY) * TILE + (H - TILE) / 2;
+
+  const grid = document.createElement('div');
+  grid.style.cssText = `
+    position:absolute; inset:0; overflow:hidden;
+    display:grid;
+    grid-template-columns: repeat(${cols}, ${TILE}px);
+    grid-template-rows: repeat(${rows}, ${TILE}px);
+    transform: translate(${offsetX}px, ${offsetY}px);
+    filter: saturate(0.65) brightness(0.80) contrast(1.05);
+    pointer-events:none;
+  `;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const tx = center.x - Math.floor(cols / 2) + col;
+      const ty = center.y - Math.floor(rows / 2) + row;
+      const img = document.createElement('img');
+      img.src = osmTileUrl(tx, ty, zoom);
+      img.width = TILE;
+      img.height = TILE;
+      img.style.cssText = 'display:block; width:256px; height:256px;';
+      img.setAttribute('crossorigin','anonymous');
+      grid.appendChild(img);
+    }
   }
 
-  // 2) Wikipedia pageimages sur le nom de la ville
-  try {
-    // Cherche d'abord "<Ville> cityscape" ou "<Ville> skyline" pour des vues panoramiques
-    for (const suffix of [' skyline', ' cityscape', '']) {
-      const title = encodeURIComponent(cityName + suffix);
-      const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=pageimages&format=json&pithumbsize=900&origin=*`;
-      const resp = await fetch(url, { signal: AbortSignal.timeout(4000) });
-      if (!resp.ok) continue;
-      const data = await resp.json();
-      const pages = data.query && data.query.pages;
-      if (pages) {
-        const page = Object.values(pages)[0];
-        if (page && page.thumbnail && page.thumbnail.source) {
-          const src = page.thumbnail.source;
-          if (!/flag|coat|arms|logo|shield|seal|crest/i.test(src)) {
-            photoCache[key] = src;
-            return src;
-          }
-        }
-      }
-    }
-  } catch(e) {}
+  bgEl.appendChild(grid);
 
-  // 3) Wikimedia Commons : cherche "<ville> landmark" ou "<ville> panorama"
-  try {
-    for (const suffix of [' landmark', ' panorama', ' tourist']) {
-      const q = encodeURIComponent(cityName + suffix);
-      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${q}&gsrnamespace=6&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*&gsrlimit=5`;
-      const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      if (!resp.ok) continue;
-      const data = await resp.json();
-      const pages = data.query && data.query.pages;
-      if (pages) {
-        for (const p of Object.values(pages)) {
-          const info = p.imageinfo && p.imageinfo[0];
-          if (info && info.thumburl && /\.(jpg|jpeg|png|webp)/i.test(info.thumburl)) {
-            const src = info.thumburl;
-            if (!/flag|coat|arms|map|logo|shield|seal|crest/i.test(src)) {
-              photoCache[key] = src;
-              return src;
-            }
-          }
-        }
-      }
-    }
-  } catch(e) {}
-
-  // 4) Picsum fallback esthétique (seed déterministe = même image à chaque fois)
-  const seed = [...(cityName + countryName)].reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const fallback = `https://picsum.photos/seed/${seed}/900/600`;
-  photoCache[key] = fallback;
-  return fallback;
+  // Overlay gradient génératif
+  if (overlayEl) {
+    overlayEl.style.background = generateGradientOverlay(color);
+  }
 }
+
 
 let carouselIndex = 0;
 let carouselDragging = false;
@@ -1059,13 +1100,13 @@ function renderHome() {
 
     const stepsLen = v.etapes ? v.etapes.length : 0;
     const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
-    const firstCity = (v.etapes && v.etapes.length > 0) ? v.etapes[0].city : null;
-    const firstCountry = (v.etapes && v.etapes.length > 0) ? v.etapes[0].country : null;
-    const locationTag = firstCity ? firstCity : '&nbsp;';
+    const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
+    const firstCity = firstEtape ? firstEtape.city : null;
+    const locationLabel = firstCity ? firstCity.toUpperCase() : '';
 
     card.innerHTML = `
       <div class="htc-bg loading" id="htc-bg-${v.id}"></div>
-      <div class="htc-overlay"></div>
+      <div class="htc-overlay" id="htc-ov-${v.id}"></div>
       <div class="htc-color-bar" style="background:${v.color}"></div>
       <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
       <div class="htc-content">
@@ -1077,7 +1118,6 @@ function renderHome() {
       </div>
     `;
 
-    // Click to open (not on delete button)
     card.addEventListener('click', function(e) {
       if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
       if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
@@ -1095,36 +1135,24 @@ function renderHome() {
       dots.appendChild(dot);
     }
 
-    // Load photo async — passe les coords GPS de la 1ère étape
-    const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
-    const firstLat = firstEtape ? firstEtape.lat : null;
-    const firstLon = firstEtape ? firstEtape.lon : null;
-    if (firstCity) {
-      fetchCityPhoto(firstCity, firstCountry || '', firstLat, firstLon).then(src => {
-        const bg = document.getElementById(`htc-bg-${v.id}`);
-        if (!bg) return;
-        const img = new Image();
-        img.onload = () => {
-          bg.style.backgroundImage = `url('${src}')`;
-          bg.classList.remove('loading');
-        };
-        img.onerror = () => {
-          // Picsum fallback deterministe
-          const seed = [...firstCity].reduce((a, c) => a + c.charCodeAt(0), 0);
-          const fb = `https://picsum.photos/seed/${seed + 1}/800/500`;
-          bg.style.backgroundImage = `url('${fb}')`;
-          bg.classList.remove('loading');
-        };
-        img.src = src;
-      });
-    } else {
-      // No city yet — use color gradient
-      const bg = document.getElementById(`htc-bg-${v.id}`);
-      if (bg) {
-        bg.style.background = `linear-gradient(135deg, ${v.color}cc, ${v.color}44)`;
-        bg.classList.remove('loading');
+    // Render OSM map après insertion dans le DOM
+    requestAnimationFrame(() => {
+      const bgEl = document.getElementById(`htc-bg-${v.id}`);
+      const ovEl = document.getElementById(`htc-ov-${v.id}`);
+      if (!bgEl) return;
+
+      if (firstEtape && firstEtape.lat && firstEtape.lon) {
+        // Zoom adapté : 9 pour vue région, 11 pour ville
+        const zoom = 10;
+        renderOsmMapBackground(bgEl, ovEl, firstEtape.lat, firstEtape.lon, v.color, zoom);
+      } else {
+        // Pas de coordonnées : gradient pur basé sur la couleur
+        bgEl.classList.remove('loading');
+        const {r,g,b} = hexToRgb(v.color);
+        bgEl.style.background = `linear-gradient(145deg, rgba(${r},${g},${b},0.9), rgba(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)},1))`;
+        if (ovEl) ovEl.style.background = generateGradientOverlay(v.color);
       }
-    }
+    });
   });
 
   initCarousel();
@@ -1153,7 +1181,7 @@ function initCarousel() {
   function getCardWidth() {
     const card = track.querySelector('.home-trip-card');
     if (!card) return 0;
-    return card.offsetWidth + 16; // gap = 16px
+    return card.offsetWidth + 14; // gap = 14px
   }
 
   function updateCarousel(instant) {
@@ -1998,7 +2026,7 @@ window.addEventListener('resize', () => {
     const track = document.getElementById('carousel-track');
     const wrapper = document.getElementById('carousel-wrapper');
     if (!track || !wrapper) return;
-    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 16;
+    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 14;
     const wrapperW = wrapper.offsetWidth;
     const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
     const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
