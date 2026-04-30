@@ -2168,7 +2168,7 @@ async function fetchTimezone(lat, lon) {
     const sign = raw[0] === '-' ? -1 : 1;
     const [h, m] = raw.slice(1).split(':').map(Number);
     const offsetH = sign * (h + m / 60);
-    const result = { offsetH, raw };
+    const result = { offsetH, raw, timezone: data.timezone || null };
     tzCache[key] = result;
     return result;
   } catch {
@@ -2242,14 +2242,24 @@ async function fetchSunTimes(lat, lon, date) {
   const key = `${lat},${lon},${date}`;
   if (sunCache[key] !== undefined) return sunCache[key];
   try {
-    const url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${date}&formatted=0`;
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error();
-    const data = await resp.json();
+    // Récupération parallèle : heures solaires (UTC) + timezone IANA du lieu
+    const [sunResp, tzData] = await Promise.all([
+      fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${date}&formatted=0`),
+      fetchTimezone(lat, lon)
+    ]);
+    if (!sunResp.ok) throw new Error();
+    const data = await sunResp.json();
     if (data.status !== 'OK') throw new Error();
+
+    // Résolution du fuseau IANA : WorldTimeAPI fournit "timezone" (ex: "Europe/Sarajevo")
+    // On le récupère depuis le cache tzCache qui est déjà peuplé par fetchTimezone
+    const tzKey = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
+    const tzEntry = tzCache[tzKey];
+    const ianaZone = tzEntry && tzEntry.timezone ? tzEntry.timezone : 'UTC';
+
     const fmt = iso => {
       const d = new Date(iso);
-      return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+      return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: ianaZone });
     };
     const result = { rise: fmt(data.results.sunrise), set: fmt(data.results.sunset) };
     sunCache[key] = result;
