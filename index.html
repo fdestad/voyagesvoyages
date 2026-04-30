@@ -304,6 +304,13 @@ html, body {
   color: rgba(255,255,255,0.75);
   font-weight: 600;
 }
+.htc-dates {
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  margin-top: 2px;
+  letter-spacing: .01em;
+}
 .htc-passport-footer .htc-del {
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.25);
@@ -697,6 +704,48 @@ html, body {
 .etape-weather .wx-loading { color: var(--ink-soft); font-style: italic; }
 .etape-weather.wx-historical { background: #eef4f0; }
 .etape-weather.wx-historical .wx-label { color: var(--teal); }
+
+.etape-sun {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.etape-sun .sun-rise,
+.etape-sun .sun-set {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.etape-tz {
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.tz-badge {
+  background: var(--cream-dark);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  font-size: 11px;
+}
+.tz-badge.tz-warn {
+  background: var(--orange-pale);
+  color: var(--orange-deep);
+}
+.tz-diff {
+  color: var(--ink-soft);
+  font-size: 11px;
+}
 .btn-edit-etape {
   background: none; border: 1.5px solid var(--cream-dark);
   border-radius: 20px; padding: 4px 12px;
@@ -876,6 +925,7 @@ html, body {
           <div class="color-swatches" id="voyage-color-swatches" style="gap:10px;"></div>
         </div>
         <input id="voyage-name-input" type="text" placeholder="Nom du voyage"/>
+        <div id="voyage-flags" style="margin-left:auto;font-size:20px;letter-spacing:2px;flex-shrink:0;line-height:1;"></div>
       </div>
       <div class="voyage-meta" id="voyage-meta"></div>
     </div>
@@ -1328,6 +1378,19 @@ function renderHome() {
     const firstCity = firstEtape ? firstEtape.city : null;
     const locationLabel = firstCity ? firstCity.toUpperCase() : '';
 
+    // Calcul de la plage de dates globale du voyage
+    const dateRangeHtml = (function() {
+      if (!v.etapes || !v.etapes.length) return '';
+      const allDates = v.etapes.flatMap(e => [e.dateArr, e.dateDep]).filter(Boolean).sort();
+      if (!allDates.length) return '';
+      const fmt = d => { const [y,m,day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; };
+      const first = fmt(allDates[0]);
+      const last  = fmt(allDates[allDates.length - 1]);
+      return first === last
+        ? `<div class="htc-dates">${first}</div>`
+        : `<div class="htc-dates">${first} → ${last}</div>`;
+    })();
+
     card.innerHTML = `
       <div class="htc-bg htc-passport" id="htc-bg-${v.id}"></div>
       <div class="htc-color-bar" style="background:${v.color}"></div>
@@ -1336,7 +1399,10 @@ function renderHome() {
         <div class="htc-passport-name">${v.name}</div>
       </div>
       <div class="htc-passport-footer">
-        <div class="htc-meta">${stepsText}</div>
+        <div>
+          <div class="htc-meta">${stepsText}</div>
+          ${dateRangeHtml}
+        </div>
         <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
       </div>
     `;
@@ -1568,6 +1634,7 @@ function buildEtapeItem(e, i, voyage) {
         </div>
         ${datesHtml}
         <div class="etape-weather" style="display:none;"></div>
+        <div class="etape-tz" style="display:none;"></div>
         ${notesHtml}
       </div>
 
@@ -1684,6 +1751,9 @@ function renderTrip() {
   const stepsLen = voyage.etapes ? voyage.etapes.length : 0;
   document.getElementById('voyage-meta').textContent = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
 
+  // Drapeaux pays
+  fetchVoyageFlags(voyage);
+
   const list = document.getElementById('etapes-list');
   list.innerHTML = '';
   list.style.setProperty('--voyage-color', voyage.color || 'var(--navy)');
@@ -1699,6 +1769,13 @@ function renderTrip() {
 
   // Chargement météo après rendu du DOM
   requestAnimationFrame(fetchWeatherForAllEtapes);
+
+  // Chargement fuseaux horaires
+  requestAnimationFrame(() => {
+    voyage.etapes.forEach((e, i) => {
+      injectTimezoneBadge(e, i, i > 0 ? voyage.etapes[i - 1] : null);
+    });
+  });
 }
 
 // ============================================================
@@ -2073,8 +2150,156 @@ function toast(msg) {
 }
 
 // ============================================================
-// MÉTÉO — Open-Meteo (gratuit, sans clé)
+// FUSEAU HORAIRE — WorldTimeAPI (gratuit, sans clé)
 // ============================================================
+const tzCache = {}; // clé: "lat,lon" → { utcOffset, timezone }
+const PARIS_OFFSET = 1; // UTC+1 hiver, mais on utilise l'offset réel via l'API
+
+async function fetchTimezone(lat, lon) {
+  const key = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
+  if (tzCache[key] !== undefined) return tzCache[key];
+  try {
+    const url = `https://worldtimeapi.org/api/coordinates/${lat},${lon}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+    // utc_offset ex: "+09:00" ou "-05:30"
+    const raw = data.utc_offset || '+00:00';
+    const sign = raw[0] === '-' ? -1 : 1;
+    const [h, m] = raw.slice(1).split(':').map(Number);
+    const offsetH = sign * (h + m / 60);
+    const result = { offsetH, raw };
+    tzCache[key] = result;
+    return result;
+  } catch {
+    tzCache[key] = null;
+    return null;
+  }
+}
+
+async function fetchParisOffset() {
+  const key = 'paris';
+  if (tzCache[key] !== undefined) return tzCache[key];
+  try {
+    const resp = await fetch('https://worldtimeapi.org/api/timezone/Europe/Paris');
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+    const raw = data.utc_offset || '+01:00';
+    const sign = raw[0] === '-' ? -1 : 1;
+    const [h, m] = raw.slice(1).split(':').map(Number);
+    const offsetH = sign * (h + m / 60);
+    tzCache[key] = { offsetH };
+    return { offsetH };
+  } catch {
+    tzCache[key] = { offsetH: 1 };
+    return { offsetH: 1 };
+  }
+}
+
+async function injectTimezoneBadge(etape, index, prevEtape) {
+  const tzEl = document.querySelector(`.etape-item[data-index="${index}"] .etape-tz`);
+  if (!tzEl) return;
+
+  const [tz, parisRef, prevTz] = await Promise.all([
+    fetchTimezone(etape.lat, etape.lon),
+    prevEtape ? null : fetchParisOffset(),
+    prevEtape ? fetchTimezone(prevEtape.lat, prevEtape.lon) : null
+  ]);
+
+  if (!tz) return;
+
+  // Référence : étape précédente ou Paris
+  const refOffset = prevEtape
+    ? (prevTz ? prevTz.offsetH : null)
+    : (parisRef ? parisRef.offsetH : 1);
+
+  if (refOffset === null) return;
+
+  const diff = tz.offsetH - refOffset;
+  if (Math.abs(diff) < 0.5) return; // pas de décalage significatif → rien
+
+  // Vérification que l'élément est toujours valide
+  const currentEl = document.querySelector(`.etape-item[data-index="${index}"] .etape-tz`);
+  if (!currentEl || currentEl !== tzEl) return;
+
+  const sign = diff >= 0 ? '+' : '';
+  const diffLabel = Number.isInteger(diff) ? `${sign}${diff}h` : `${sign}${diff.toFixed(1)}h`;
+  const utcLabel = `UTC${tz.raw}`;
+  const refLabel = prevEtape ? `vs étape préc.` : `vs Paris`;
+  const warn = Math.abs(diff) >= 3;
+
+  currentEl.innerHTML = `
+    <span class="tz-badge${warn ? ' tz-warn' : ''}">🕐 ${utcLabel}</span>
+    <span class="tz-diff">${diffLabel} ${refLabel}</span>
+  `;
+  currentEl.style.display = 'flex';
+}
+
+
+const sunCache = {}; // clé: "lat,lon,date"
+
+async function fetchSunTimes(lat, lon, date) {
+  const key = `${lat},${lon},${date}`;
+  if (sunCache[key] !== undefined) return sunCache[key];
+  try {
+    const url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${date}&formatted=0`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+    if (data.status !== 'OK') throw new Error();
+    const fmt = iso => {
+      const d = new Date(iso);
+      return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+    };
+    const result = { rise: fmt(data.results.sunrise), set: fmt(data.results.sunset) };
+    sunCache[key] = result;
+    return result;
+  } catch {
+    sunCache[key] = null;
+    return null;
+  }
+}
+
+
+const countryFlagCache = {}; // nom pays → emoji
+
+async function fetchVoyageFlags(voyage) {
+  const flagEl = document.getElementById('voyage-flags');
+  if (!flagEl) return;
+
+  if (!voyage.etapes || !voyage.etapes.length) { flagEl.textContent = ''; return; }
+
+  // Pays distincts, dans l'ordre d'apparition, sans doublons
+  const uniqueCountries = [...new Set(
+    voyage.etapes.map(e => e.country).filter(c => c && c !== 'Point manuel')
+  )];
+
+  if (!uniqueCountries.length) { flagEl.textContent = ''; return; }
+
+  // Résolution parallèle, avec cache
+  const emojis = await Promise.all(uniqueCountries.map(async (country) => {
+    if (countryFlagCache[country] !== undefined) return countryFlagCache[country];
+    try {
+      const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fields=flag&fullText=false`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error();
+      const data = await resp.json();
+      const emoji = data[0]?.flag || '';
+      countryFlagCache[country] = emoji;
+      return emoji;
+    } catch {
+      countryFlagCache[country] = '';
+      return '';
+    }
+  }));
+
+  // N'afficher que si l'élément est toujours dans le DOM (navigation rapide)
+  if (document.getElementById('voyage-flags') === flagEl) {
+    flagEl.textContent = emojis.filter(Boolean).join(' ');
+  }
+}
+
+
 const weatherCache = {}; // clé: "lat,lon,dateArr,dateDep"
 
 // Attribue un score de severite (0 = grand beau, 10 = orages) a un code WMO
@@ -2133,7 +2358,7 @@ async function fetchWeather(etape, index) {
 
   const cacheKey = `${lat},${lon},${dateArr||''},${dateDep||''}`;
   if (weatherCache[cacheKey]) {
-    renderWeatherBadge(index, weatherCache[cacheKey]);
+    renderWeatherBadge(index, weatherCache[cacheKey], etape);
     return;
   }
 
@@ -2166,7 +2391,7 @@ async function fetchWeather(etape, index) {
         const agg = aggregateDailyData(data, from, to);
         if (agg) samples.push(agg);
       }
-      if (!samples.length) { renderWeatherBadge(index, null); return; }
+      if (!samples.length) { renderWeatherBadge(index, null, etape); return; }
       const avgMax = Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length);
       const avgMin = Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length);
       // Score moyen sur tous les échantillons historiques
@@ -2178,18 +2403,18 @@ async function fetchWeather(etape, index) {
       const to   = dateDep || dateArr;
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${from}&end_date=${to}`;
       const resp = await fetch(url);
-      if (!resp.ok) { renderWeatherBadge(index, null); return; }
+      if (!resp.ok) { renderWeatherBadge(index, null, etape); return; }
       const data = await resp.json();
       const agg = aggregateDailyData(data, from, to);
-      if (!agg) { renderWeatherBadge(index, null); return; }
+      if (!agg) { renderWeatherBadge(index, null, etape); return; }
       result = { ...agg, isHistorical: false };
     }
 
     weatherCache[cacheKey] = result;
-    renderWeatherBadge(index, result);
+    renderWeatherBadge(index, result, etape);
   } catch(err) {
     console.warn('Météo indisponible', err);
-    renderWeatherBadge(index, null);
+    renderWeatherBadge(index, null, etape);
   }
 }
 
@@ -2198,7 +2423,7 @@ function shiftYear(dateStr, delta) {
   return `${y + delta}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 }
 
-function renderWeatherBadge(index, result) {
+function renderWeatherBadge(index, result, etape) {
   const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
   if (!badge) return;
   if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
@@ -2215,6 +2440,24 @@ function renderWeatherBadge(index, result) {
     <span class="wx-label">${prefix}${label}</span>
     <span class="wx-temps">${result.avgMin}° / ${result.avgMax}°</span>
   `;
+
+  // Point 6 : lever/coucher du soleil (seulement si date disponible)
+  if (etape && (etape.dateArr || etape.dateDep)) {
+    const sunDate = etape.dateArr || etape.dateDep;
+    fetchSunTimes(etape.lat, etape.lon, sunDate).then(sun => {
+      if (!sun) return;
+      // Vérifie que le badge est toujours dans le DOM et appartient au bon index
+      const currentBadge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
+      if (!currentBadge || currentBadge !== badge) return;
+      // Supprime un éventuel badge soleil précédent
+      const prev = currentBadge.nextElementSibling;
+      if (prev && prev.classList.contains('etape-sun')) prev.remove();
+      const sunEl = document.createElement('div');
+      sunEl.className = 'etape-sun';
+      sunEl.innerHTML = `<span class="sun-rise">🌅 ${sun.rise}</span><span class="sun-set">🌇 ${sun.set}</span>`;
+      currentBadge.insertAdjacentElement('afterend', sunEl);
+    });
+  }
 }
 
 function fetchWeatherForAllEtapes() {
