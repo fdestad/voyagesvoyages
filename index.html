@@ -1281,9 +1281,11 @@ let carouselCardWidth = 0;
  * Génère un visuel abstrait SVG basé sur le nom et la couleur du voyage.
  * Remplace avantageusement les cartes OSM pour l'accueil.
  */
-function renderGenerativeVisual(container, name, color) {
+function renderGenerativeVisual(container, name, color, id) {
   const firstLetter = (name || "?")[0].toUpperCase();
-  const seed = firstLetter.charCodeAt(0);
+  // Seed basé sur le nom complet + id pour éviter les collisions entre voyages
+  const seedStr = (name || '') + (id || '');
+  const seed = Array.from(seedStr).reduce((acc, c, i) => acc ^ (c.charCodeAt(0) * (i + 1) * 2654435761), 0) >>> 0;
   const {r, g, b} = hexToRgb(color);
   
   // Petit générateur de nombres pseudo-aléatoires basé sur la lettre
@@ -1427,7 +1429,7 @@ function renderHome() {
 requestAnimationFrame(() => {
   const bgEl = document.getElementById(`htc-bg-${v.id}`);
   if (bgEl) {
-    bgEl.innerHTML = generatePassportSVG(v.name, v.color, v.etapes || []);
+    bgEl.innerHTML = generatePassportSVG(v.name, v.color, v.etapes || [], v.id);
     bgEl.classList.remove('loading');
   }
 });
@@ -2651,11 +2653,16 @@ if ('serviceWorker' in navigator) {
     ];
   }
 
-  function generatePassportSVG(name, color, etapes) {
+  function generatePassportSVG(name, color, etapes, id) {
   const {r, g, b} = hexToRgb(color || '#1C3557');
 
   const letter = (name || 'V')[0].toUpperCase();
-  const code   = letter.charCodeAt(0);
+
+  // Seed basé sur le nom complet + id pour différencier les voyages de même initiale
+  const seedStr = (name || '') + (id || '');
+  const code = Array.from(seedStr).reduce(
+    (acc, c, i) => (acc ^ (c.charCodeAt(0) * (i + 1) * 2654435761)) >>> 0, 0
+  );
 
   const rng = (n) => {
     let t = (code * 2654435761 + n * 2246822519) >>> 0;
@@ -2663,8 +2670,9 @@ if ('serviceWorker' in navigator) {
     return (t >>> 0) / 4294967296;
   };
 
-  const curved  = 'BCDGJOQSU'.includes(letter);
-  const angular = 'AKMVWXYZ'.includes(letter);
+  // Le style de blob dépend du code distribué, plus de la seule lettre
+  const curved  = code % 3 === 0;
+  const angular = code % 3 === 1;
 
   const [h, s, l] = rgbToHsl(r, g, b);
 
