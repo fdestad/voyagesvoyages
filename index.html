@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><link rel="manifest" href="manifest.json">
+<head>
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1C3557">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8"/>
@@ -70,10 +71,7 @@ html, body {
   background: var(--cream);
   overflow: hidden;
 }
-/* La classe active gère l'affichage. Par défaut, l'accueil l'a. */
-.view.active {
-  display: flex;
-}
+.view.active { display: flex; }
 
 /* =============================================
    VUE : ACCUEIL
@@ -105,44 +103,7 @@ html, body {
   line-height: 1.5;
 }
 
-.btn-large-primary {
-  width: 100%;
-  max-width: 320px;
-  padding: 16px;
-  border-radius: 30px;
-  background: var(--orange);
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition);
-  margin-bottom: 12px;
-}
-.btn-large-primary:active { transform: scale(0.96); }
-
-.btn-large-secondary {
-  width: 100%;
-  max-width: 320px;
-  padding: 14px;
-  border-radius: 30px;
-  background: var(--navy);
-  color: white;
-  border: none;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  margin-bottom: 32px;
-  margin-top: 0;
-}
-.btn-large-secondary:active { transform: scale(0.96); }
-
-/* ── FAB ROW : deux boutons ronds côte à côte ── */
+/* ── FAB ROW ── */
 .home-fab-row {
   display: flex;
   gap: 18px;
@@ -168,31 +129,17 @@ html, body {
   flex-shrink: 0;
 }
 .btn-fab-round:active { transform: scale(0.88); box-shadow: var(--shadow-sm); }
-.btn-fab-primary {
-  background: var(--orange);
-  color: white;
-}
-.btn-fab-secondary {
-  background: var(--navy);
-  color: white;
-}
+.btn-fab-primary  { background: var(--orange); color: white; }
+.btn-fab-secondary { background: var(--navy); color: white; }
 
-#home-trips-section {
-  width: 100%;
-  margin-bottom: 28px;
-}
+#home-trips-section { width: 100%; margin-bottom: 28px; }
 .section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-mid);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--cream-dark);
-  padding-bottom: 8px;
+  font-size: 13px; font-weight: 700; color: var(--ink-mid);
+  text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 16px; border-bottom: 1px solid var(--cream-dark); padding-bottom: 8px;
 }
 
-/* ── CAROUSEL portrait ── */
+/* ── CAROUSEL ── */
 #home-trips-list {
   position: relative;
   width: 100vw;
@@ -200,309 +147,124 @@ html, body {
   padding: 0 24px 12px 24px;
   overflow: hidden;
 }
-
 .carousel-track-wrapper {
-  overflow: hidden;
-  width: 100%;
-  cursor: grab;
-  user-select: none;
+  overflow: hidden; width: 100%;
+  cursor: grab; user-select: none;
 }
 .carousel-track-wrapper:active { cursor: grabbing; }
-
 .carousel-track {
-  display: flex;
-  gap: 14px;
+  display: flex; gap: 14px;
   transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
-  align-items: flex-end; /* cartes alignées par le bas */
+  align-items: flex-end;
   padding: 16px 0 8px;
 }
-
 .carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 16px;
+  display: flex; justify-content: center; gap: 6px; margin-top: 16px;
 }
 .carousel-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--cream-dark);
-  transition: all 0.3s ease;
-  cursor: pointer;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cream-dark); transition: all 0.3s ease; cursor: pointer;
 }
-.carousel-dot.active {
-  background: var(--orange);
-  width: 20px;
-  border-radius: 3px;
-}
+.carousel-dot.active { background: var(--orange); width: 20px; border-radius: 3px; }
 
-/* ── TRIP CARD — format portrait ── */
+/* ── TRIP CARD ── */
 .home-trip-card {
-  position: relative;
-  flex-shrink: 0;
+  position: relative; flex-shrink: 0;
   width: calc((100vw - 72px) * 0.62);
-  max-width: 200px;
-  min-width: 150px;
+  max-width: 200px; min-width: 150px;
   aspect-ratio: 9 / 16;
-  border-radius: 24px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: none;
+  border-radius: 24px; overflow: hidden;
+  cursor: pointer; box-shadow: none;
   transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
   transform: scale(0.94) translateY(6px);
 }
-.home-trip-card.carousel-active-card {
-  transform: scale(1) translateY(0px);
-  box-shadow: none;
-}
-.home-trip-card:active {
-  transform: scale(0.92) !important;
-}
+.home-trip-card.carousel-active-card { transform: scale(1) translateY(0px); }
+.home-trip-card:active { transform: scale(0.92) !important; }
 
-/* ── PASSPORT CARD styles ── */
-.htc-passport {
-  background: #F7F1E3;
-}
-
-/* Passport: centered name zone */
+/* ── PASSPORT CARD ── */
+.htc-passport { background: #F7F1E3; }
 .htc-passport-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  padding: 14px;
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2; padding: 14px;
 }
 .htc-passport-name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 22px;
-  color: white;
-  line-height: 1.25;
-  text-align: center;
-  letter-spacing: .01em;
-  text-shadow: 0 2px 12px rgba(0,0,0,.40);
-  max-width: 90%;
-  word-break: break-word;
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px;
+  color: white; line-height: 1.25; text-align: center; letter-spacing: .01em;
+  text-shadow: 0 2px 12px rgba(0,0,0,.40); max-width: 90%; word-break: break-word;
 }
-
-/* Footer row (steps + delete) */
 .htc-passport-footer {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 10px 14px 14px;
   background: linear-gradient(to top, rgba(0,0,0,0.45) 60%, transparent);
 }
-.htc-passport-footer .htc-meta {
-  font-size: 11px;
-  color: rgba(255,255,255,0.75);
-  font-weight: 600;
-}
-.htc-dates {
-  font-size: 10px;
-  color: rgba(255,255,255,0.55);
-  font-weight: 500;
-  margin-top: 2px;
-  letter-spacing: .01em;
-}
+.htc-passport-footer .htc-meta { font-size: 11px; color: rgba(255,255,255,0.75); font-weight: 600; }
+.htc-dates { font-size: 10px; color: rgba(255,255,255,0.55); font-weight: 500; margin-top: 2px; letter-spacing: .01em; }
 .htc-passport-footer .htc-del {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
   color: rgba(255,255,255,0.85);
 }
 .htc-passport-footer .htc-del:hover { background: rgba(224,123,57,0.5); }
 
-/* Color accent bar */
+/* Color accent bar — defined once */
 .htc-color-bar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: 24px 24px 0 0;
-  z-index: 3;
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px; border-radius: 24px 24px 0 0; z-index: 3;
 }
 
-/* Open arrow stays */
+/* Open arrow — defined once */
 .htc-open-btn {
-  position: absolute;
-  top: 14px; right: 14px;
+  position: absolute; top: 14px; right: 14px;
   width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-  z-index: 4;
+  background: rgba(255,255,255,0.15); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 50%;
+  color: white; font-size: 14px; cursor: pointer;
+  transition: background 0.2s; z-index: 4;
 }
 .htc-open-btn:hover { background: rgba(255,255,255,0.28); }
 
-/* OSM map background (canvas ou img tiles) */
 .htc-bg {
-  position: absolute;
-  inset: 0;
-  background-color: #F7F1E3;
-  overflow: hidden;
+  position: absolute; inset: 0;
+  background-color: #F7F1E3; overflow: hidden;
 }
-  position: absolute;
-  inset: 0;
-  display: grid;
-  image-rendering: pixelated;
-}
-.htc-osm-grid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: saturate(0.7) brightness(0.85);
-}
-
-/* Gradient génératif par-dessus la carte OSM */
-.htc-overlay {
-  position: absolute;
-  inset: 0;
-  /* généré dynamiquement via JS avec la couleur du voyage */
-}
-
-/* Shimmer loader */
 .htc-bg.loading {
   background: linear-gradient(110deg, #1C3557 0%, #264a73 40%, #1C3557 60%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite linear;
 }
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
+  0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
-/* Color accent bar */
-.htc-color-bar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: 24px 24px 0 0;
-  z-index: 3;
-}
-
-/* Card content — portrait centré */
-.htc-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 14px 20px;
-  z-index: 2;
-}
-.htc-name {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: 20px;
-  color: white;
-  line-height: 1.2;
-  text-align: center;
-  text-shadow: 0 2px 12px rgba(0,0,0,.65);
-  letter-spacing: .01em;
-  margin-bottom: 8px;
-}
-.htc-meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-.htc-meta {
-  font-size: 11px;
-  color: rgba(255,255,255,0.75);
-  font-weight: 500;
-}
+/* Delete button (shared) */
 .htc-del {
   width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  color: rgba(255,255,255,0.85);
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  flex-shrink: 0;
+  background: rgba(255,255,255,0.18); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 50%;
+  color: rgba(255,255,255,0.85); font-size: 12px; cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease; flex-shrink: 0;
 }
-.htc-del:hover { background: rgba(224,123,57,0.6); }
+.htc-del:hover  { background: rgba(224,123,57,0.6); }
 .htc-del:active { transform: scale(0.88); background: rgba(224,123,57,0.8); }
-
-/* Top-right open arrow */
-.htc-open-btn {
-  position: absolute;
-  top: 14px; right: 14px;
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-  z-index: 3;
-}
-.htc-open-btn:hover { background: rgba(255,255,255,0.3); }
-
-/* Indicateur de ville centré en haut */
-.htc-location-badge {
-  position: absolute;
-  top: 20px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,0.28);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: 10px;
-  color: rgba(255,255,255,0.9);
-  font-weight: 600;
-  white-space: nowrap;
-  z-index: 3;
-  letter-spacing: .04em;
-}
 
 /* Barre export/import */
 #home-data-bar {
-  display: none;
-  width: 100%;
-  max-width: 400px;
-  margin-top: 28px;
-  padding-top: 16px;
+  display: none; width: 100%; max-width: 400px;
+  margin-top: 28px; padding-top: 16px;
   border-top: 1px solid var(--cream-dark);
-  justify-content: center;
-  gap: 24px;
+  justify-content: center; gap: 24px;
 }
 .btn-data {
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-soft);
-  cursor: pointer;
-  padding: 4px 0;
-  transition: color var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  background: none; border: none; font-family: inherit; font-size: 13px;
+  font-weight: 500; color: var(--ink-soft); cursor: pointer; padding: 4px 0;
+  transition: color var(--transition); display: flex; align-items: center; gap: 5px;
 }
 .btn-data:hover { color: var(--ink-mid); }
-.btn-data:active { color: var(--ink); }
 
 /* =============================================
    VUE : VOYAGE DETAIL
@@ -510,62 +272,34 @@ html, body {
 #view-trip { background: var(--white); }
 
 .view-header {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  background: var(--navy);
-  color: var(--white);
-  gap: 16px;
-  box-shadow: var(--shadow-sm);
-  z-index: 10;
+  display: flex; align-items: center; padding: 16px;
+  background: var(--navy); color: var(--white);
+  gap: 16px; box-shadow: var(--shadow-sm); z-index: 10;
 }
 .btn-back-home {
-  background: rgba(255,255,255,0.15);
-  border: none;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 20px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  padding: 8px 12px; border-radius: 20px; font-family: inherit;
+  font-size: 14px; font-weight: 500; cursor: pointer;
 }
 .btn-nav-map {
-  background: rgba(255,255,255,0.15);
-  border: none;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 20px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: auto;
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  padding: 8px 12px; border-radius: 20px; font-family: inherit;
+  font-size: 14px; font-weight: 500; cursor: pointer; margin-left: auto;
 }
 
 #voyage-header {
-  padding: 16px;
-  border-bottom: 1px solid var(--cream-dark);
-  background: var(--cream);
+  padding: 16px; border-bottom: 1px solid var(--cream-dark); background: var(--cream);
 }
-#voyage-name-wrap {
-  display: flex; align-items: center; gap: 10px;
-  position: relative;
-}
+#voyage-name-wrap { display: flex; align-items: center; gap: 10px; position: relative; }
 #voyage-color-dot {
-  width: 16px; height: 16px; border-radius: 50%;
-  flex-shrink: 0; border: 2px solid rgba(0,0,0,.1);
-  cursor: pointer;
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,.1); cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-#voyage-color-dot:hover {
-  transform: scale(1.3);
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.10);
-}
+#voyage-color-dot:hover { transform: scale(1.3); box-shadow: 0 0 0 3px rgba(0,0,0,0.10); }
 #voyage-name-input {
-  flex: 1; font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 700; color: var(--ink);
-  border: none; background: transparent; outline: none;
+  flex: 1; font-family: 'Playfair Display', serif; font-size: 22px;
+  font-weight: 700; color: var(--ink); border: none; background: transparent; outline: none;
 }
 .voyage-meta { font-size: 13px; color: var(--ink-soft); margin-top: 6px; margin-left: 26px; }
 
@@ -597,7 +331,7 @@ html, body {
   display: flex; align-items: center; gap: 12px;
   border-bottom: 1px solid var(--cream-dark);
 }
-.ac-item .city-pin { font-size: 16px; }
+.ac-item .city-pin  { font-size: 16px; }
 .ac-item .city-name { font-size: 15px; font-weight: 500; color: var(--ink); }
 .ac-item .city-country { font-size: 12px; color: var(--ink-soft); }
 
@@ -613,7 +347,7 @@ html, body {
   flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 100px;
 }
 
-/* ── ROW : handle + num + card ── */
+/* ── ROW ── */
 .etape-item {
   display: flex; align-items: flex-start; gap: 10px;
   margin-bottom: 12px; position: relative;
@@ -622,19 +356,14 @@ html, body {
   content: ''; position: absolute; left: 38px; top: 32px; width: 2px; bottom: -8px;
   background: var(--cream-dark); z-index: 0;
 }
-
-/* drag handle */
 .etape-handle {
   width: 20px; display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 4px; padding-top: 8px; cursor: grab; flex-shrink: 0;
-  opacity: 0.35; transition: opacity 0.15s;
-  touch-action: none;
+  opacity: 0.35; transition: opacity 0.15s; touch-action: none;
 }
 .etape-handle:active { cursor: grabbing; }
 .etape-item:hover .etape-handle { opacity: 0.7; }
-.etape-handle span {
-  display: block; width: 14px; height: 2px; background: var(--ink-mid); border-radius: 2px;
-}
+.etape-handle span { display: block; width: 14px; height: 2px; background: var(--ink-mid); border-radius: 2px; }
 
 .etape-num {
   width: 32px; height: 32px; border-radius: 50%;
@@ -647,37 +376,24 @@ html, body {
 /* ── CARD ── */
 .etape-content {
   flex: 1; background: var(--white); border-radius: var(--radius-sm);
-  border: 1.5px solid var(--cream-dark);
-  overflow: hidden;
-  transition: box-shadow 0.2s;
+  border: 1.5px solid var(--cream-dark); overflow: hidden; transition: box-shadow 0.2s;
 }
 .etape-content::before {
-  content: '';
-  display: block;
-  height: 4px;
+  content: ''; display: block; height: 4px;
   background: linear-gradient(to right, var(--voyage-color, var(--navy)), transparent);
   opacity: 0.75;
 }
-.etape-item.dragging .etape-content {
-  box-shadow: var(--shadow-lg); opacity: 0.85;
-}
-.etape-item.drag-over .etape-content {
-  border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-pale);
-}
+.etape-item.dragging .etape-content  { box-shadow: var(--shadow-lg); opacity: 0.85; }
+.etape-item.drag-over .etape-content { border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-pale); }
 
 /* READ VIEW */
-.etape-read {
-  padding: 12px 14px;
-}
-.etape-read-top {
-  display: flex; justify-content: space-between; align-items: center;
-}
-.etape-city { font-size: 16px; font-weight: 700; color: var(--ink); }
+.etape-read { padding: 12px 14px; }
+.etape-read-top { display: flex; justify-content: space-between; align-items: center; }
+.etape-city    { font-size: 16px; font-weight: 700; color: var(--ink); }
 .etape-country { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
 .etape-read-dates {
   display: flex; align-items: center; gap: 6px;
-  margin-top: 8px; font-size: 12px; color: var(--ink-mid);
-  font-weight: 500;
+  margin-top: 8px; font-size: 12px; color: var(--ink-mid); font-weight: 500;
 }
 .etape-read-dates .date-badge {
   background: var(--cream); border-radius: 6px; padding: 3px 8px;
@@ -685,71 +401,43 @@ html, body {
 }
 .etape-read-notes {
   margin-top: 7px; font-size: 12px; color: var(--ink-mid);
-  line-height: 1.5; font-style: italic; padding-left: 2px;
-  white-space: pre-wrap;
+  line-height: 1.5; font-style: italic; padding-left: 2px; white-space: pre-wrap;
 }
 
 /* ── MÉTÉO ── */
 .etape-weather {
-  display: flex; align-items: center; gap: 8px;
-  margin-top: 8px;
-  padding: 6px 10px;
-  background: var(--cream); border-radius: 8px;
-  font-size: 12px; color: var(--ink-mid);
-  min-height: 28px;
+  display: flex; align-items: center; gap: 8px; margin-top: 8px;
+  padding: 6px 10px; background: var(--cream); border-radius: 8px;
+  font-size: 12px; color: var(--ink-mid); min-height: 28px;
 }
-.etape-weather .wx-icon { font-size: 15px; flex-shrink: 0; }
-.etape-weather .wx-label { font-weight: 500; color: var(--ink); }
-.etape-weather .wx-temps { color: var(--ink-soft); margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.etape-weather .wx-icon    { font-size: 15px; flex-shrink: 0; }
+.etape-weather .wx-label   { font-weight: 500; color: var(--ink); }
+.etape-weather .wx-temps   { color: var(--ink-soft); margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .etape-weather .wx-loading { color: var(--ink-soft); font-style: italic; }
 .etape-weather.wx-historical { background: #eef4f0; }
 .etape-weather.wx-historical .wx-label { color: var(--teal); }
 
 .etape-sun {
-  display: flex;
-  gap: 12px;
-  margin-top: 4px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: var(--ink-soft);
-  font-weight: 500;
+  display: flex; gap: 12px; margin-top: 4px; padding: 4px 10px;
+  font-size: 11px; color: var(--ink-soft); font-weight: 500;
 }
 .etape-sun .sun-rise,
-.etape-sun .sun-set {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
+.etape-sun .sun-set { display: flex; align-items: center; gap: 3px; }
 
 .etape-tz {
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: var(--ink-soft);
-  font-weight: 500;
+  align-items: center; gap: 8px; margin-top: 4px; padding: 4px 10px;
+  font-size: 11px; color: var(--ink-soft); font-weight: 500;
 }
 .tz-badge {
-  background: var(--cream-dark);
-  border-radius: 6px;
-  padding: 2px 7px;
-  font-weight: 600;
-  color: var(--ink-mid);
-  font-size: 11px;
+  background: var(--cream-dark); border-radius: 6px; padding: 2px 7px;
+  font-weight: 600; color: var(--ink-mid); font-size: 11px;
 }
-.tz-badge.tz-warn {
-  background: var(--orange-pale);
-  color: var(--orange-deep);
-}
-.tz-diff {
-  color: var(--ink-soft);
-  font-size: 11px;
-}
+.tz-badge.tz-warn { background: var(--orange-pale); color: var(--orange-deep); }
+.tz-diff          { color: var(--ink-soft); font-size: 11px; }
+
 .btn-edit-etape {
-  background: none; border: 1.5px solid var(--cream-dark);
-  border-radius: 20px; padding: 4px 12px;
-  font-size: 12px; font-weight: 600; color: var(--ink-mid);
+  background: none; border: 1.5px solid var(--cream-dark); border-radius: 20px;
+  padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--ink-mid);
   font-family: inherit; cursor: pointer; flex-shrink: 0;
   transition: border-color 0.15s, color 0.15s;
 }
@@ -758,13 +446,10 @@ html, body {
 /* EDIT VIEW */
 .etape-edit {
   padding: 12px 14px; background: #fffcf7;
-  border-top: 2px solid var(--orange);
-  display: none;
+  border-top: 2px solid var(--orange); display: none;
 }
 .etape-edit.open { display: block; }
-.edit-header {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-}
+.edit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .edit-header-city { font-size: 14px; font-weight: 700; color: var(--ink); }
 .btn-close-edit {
   background: none; border: none; font-size: 18px; color: var(--ink-soft);
@@ -772,41 +457,21 @@ html, body {
 }
 .edit-label {
   font-size: 11px; font-weight: 700; color: var(--ink-soft);
-  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; margin-top: 10px;
-  display: block;
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 5px; margin-top: 10px; display: block;
 }
 .etape-dates-row { display: flex; gap: 8px; align-items: center; }
 .etape-date-input {
   flex: 1; font-size: 12px; font-family: inherit;
   border: 1.5px solid var(--cream-dark); border-radius: 6px;
-  padding: 6px 8px; background: var(--white); outline: none;
-  color: var(--ink);
+  padding: 6px 8px; background: var(--white); outline: none; color: var(--ink);
 }
 .etape-date-input:focus { border-color: var(--orange); }
-.etape-notes-input {
-  width: 100%; font-size: 12px; font-family: inherit;
-  border: 1.5px solid var(--cream-dark); border-radius: 6px;
-  padding: 8px; background: var(--white); outline: none;
-  color: var(--ink); resize: vertical; min-height: 56px; line-height: 1.5;
-}
-.etape-notes-input:focus { border-color: var(--orange); }
 
-/* Color swatches in edit */
-.edit-color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
-.etape-swatch {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: 2.5px solid transparent; cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
-}
-.etape-swatch.selected { border-color: var(--ink); transform: scale(1.2); }
-
-.edit-actions {
-  display: flex; justify-content: flex-end; margin-top: 14px;
-}
+.edit-actions { display: flex; justify-content: flex-end; margin-top: 14px; }
 .btn-del-etape {
-  background: none; border: 1.5px solid #e57373;
-  color: #c62828; border-radius: 20px;
-  padding: 5px 14px; font-size: 12px; font-weight: 700;
+  background: none; border: 1.5px solid #e57373; color: #c62828;
+  border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 700;
   font-family: inherit; cursor: pointer;
 }
 .btn-del-etape:active { background: #fdecea; }
@@ -827,7 +492,7 @@ html, body {
 .manual-mode-bar.active { display: block; }
 
 /* =============================================
-   FAB (Floating Action Button)
+   FAB
    ============================================= */
 .fab {
   position: absolute; bottom: 24px; right: 24px;
@@ -854,14 +519,28 @@ html, body {
 .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 20px; color: var(--ink); }
 .modal-field { margin-bottom: 16px; }
 .modal-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px; text-transform: uppercase; }
-.modal-field input[type="text"] { width: 100%; padding: 12px; border: 2px solid var(--cream-dark); border-radius: var(--radius-sm); font-size: 16px; font-family: inherit; }
+.modal-field input[type="text"] {
+  width: 100%; padding: 12px; border: 2px solid var(--cream-dark);
+  border-radius: var(--radius-sm); font-size: 16px; font-family: inherit;
+}
 .color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
 .swatch { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; transition: var(--transition); }
 .swatch.selected { border-color: var(--ink); transform: scale(1.15); }
 .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 .modal-actions button { padding: 12px 20px; border-radius: 24px; font-size: 15px; font-weight: 700; font-family: inherit; border: none; cursor: pointer; }
-.btn-cancel { background: var(--cream); color: var(--ink-mid); }
+.btn-cancel  { background: var(--cream); color: var(--ink-mid); }
 .btn-confirm { background: var(--orange); color: white; }
+
+/* ── Modal placement manuel (remplace window.prompt) ── */
+#manual-name-overlay {
+  position: fixed; inset: 0; background: rgba(28,53,87,.7); backdrop-filter: blur(4px);
+  z-index: 9500; display: none; align-items: center; justify-content: center;
+}
+#manual-name-overlay.open { display: flex; }
+#manual-name-modal {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; width: 90%; max-width: 360px; box-shadow: var(--shadow-lg);
+}
 
 #toast {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -870,6 +549,7 @@ html, body {
   opacity: 0; transition: all 0.3s ease; z-index: 9999; white-space: nowrap; pointer-events: none;
 }
 #toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+#toast.toast-warn { background: #b45309; }
 
 /* LEAFLET OVERRIDES */
 .leaflet-popup-content-wrapper { border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; }
@@ -885,6 +565,7 @@ html, body {
 
 <div id="app">
 
+  <!-- ── HOME ── -->
   <div id="view-home" class="view azulejo-bg active">
     <div class="home-header">
       <h1>Voyages Voyages</h1>
@@ -899,64 +580,65 @@ html, body {
         <div class="carousel-dots" id="carousel-dots"></div>
       </div>
     </div>
-    
+
     <div class="home-fab-row">
-      <button class="btn-fab-round btn-fab-primary" onclick="openNewVoyageModal()" title="Débuter un voyage">＋</button>
-      <button class="btn-fab-round btn-fab-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;" title="Carte des voyages">🌍</button>
+      <button class="btn-fab-round btn-fab-primary" onclick="openNewVoyageModal()" title="Débuter un voyage" aria-label="Créer un nouveau voyage">＋</button>
+      <button class="btn-fab-round btn-fab-secondary" id="btn-global-map-home" onclick="navigateGlobalMap()" style="display:none;" title="Carte des voyages" aria-label="Voir la carte de tous les voyages">🌍</button>
     </div>
 
     <div id="home-data-bar">
-      <button class="btn-data" onclick="exportVoyages()">↓ Exporter</button>
-      <button class="btn-data" onclick="document.getElementById('import-input').click()">↑ Importer</button>
+      <button class="btn-data" onclick="exportVoyages()" aria-label="Exporter les voyages en JSON">↓ Exporter</button>
+      <button class="btn-data" onclick="document.getElementById('import-input').click()" aria-label="Importer des voyages depuis un fichier JSON">↑ Importer</button>
       <input type="file" id="import-input" accept=".json" style="display:none" onchange="importVoyages(this)"/>
     </div>
   </div>
 
+  <!-- ── TRIP DETAIL ── -->
   <div id="view-trip" class="view">
     <header class="view-header">
-      <button class="btn-back-home" onclick="navigate('view-home')">🛖 Accueil</button>
-      <button class="btn-nav-map" onclick="navigateGlobalMap()">🌍 Carte des voyages</button>
+      <button class="btn-back-home" onclick="navigate('view-home')" aria-label="Retour à l'accueil">🛖 Accueil</button>
+      <button class="btn-nav-map" onclick="navigateGlobalMap()" aria-label="Voir la carte mondiale">🌍 Carte des voyages</button>
     </header>
 
     <div id="voyage-header">
       <div id="voyage-name-wrap">
-        <div id="voyage-color-dot" onclick="toggleColorPicker()" title="Changer la couleur" style="cursor:pointer;"></div>
-        <div id="color-picker-popup" style="display:none;position:absolute;top:52px;left:16px;z-index:200;background:var(--white);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-lg);border:1px solid var(--cream-dark);display:none;flex-wrap:wrap;gap:10px;width:fit-content;">
+        <div id="voyage-color-dot" onclick="toggleColorPicker()" title="Changer la couleur" aria-label="Changer la couleur du voyage" role="button" tabindex="0"></div>
+        <div id="color-picker-popup" style="display:none;position:absolute;top:52px;left:16px;z-index:200;background:var(--white);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-lg);border:1px solid var(--cream-dark);flex-wrap:wrap;gap:10px;width:fit-content;" role="dialog" aria-label="Sélecteur de couleur">
           <div class="color-swatches" id="voyage-color-swatches" style="gap:10px;"></div>
         </div>
-        <input id="voyage-name-input" type="text" placeholder="Nom du voyage"/>
-        <div id="voyage-flags" style="margin-left:auto;font-size:20px;letter-spacing:2px;flex-shrink:0;line-height:1;"></div>
+        <input id="voyage-name-input" type="text" placeholder="Nom du voyage" aria-label="Nom du voyage"/>
+        <div id="voyage-flags" style="margin-left:auto;font-size:20px;letter-spacing:2px;flex-shrink:0;line-height:1;" aria-label="Drapeaux des pays visités"></div>
       </div>
       <div class="voyage-meta" id="voyage-meta"></div>
     </div>
 
     <div id="search-zone">
       <div id="search-wrap">
-        <span id="search-icon">🔍</span>
-        <input id="search-input" type="text" placeholder="Rechercher une ville…" autocomplete="off"/>
-        <div id="autocomplete"></div>
+        <span id="search-icon" aria-hidden="true">🔍</span>
+        <input id="search-input" type="text" placeholder="Rechercher une ville…" autocomplete="off" aria-label="Rechercher une ville à ajouter" aria-autocomplete="list" aria-controls="autocomplete"/>
+        <div id="autocomplete" role="listbox" aria-label="Suggestions de villes"></div>
       </div>
-      <button id="btn-manual-add" onclick="activateManualMode()">📍 Placer une destination manuellement</button>
+      <button id="btn-manual-add" onclick="activateManualMode()" aria-label="Placer une destination manuellement sur la carte">📍 Placer une destination manuellement</button>
     </div>
 
-    <div id="etapes-list"></div>
+    <div id="etapes-list" role="list" aria-label="Liste des étapes du voyage"></div>
 
-    <button class="fab" onclick="navigate('view-map')">🗺️</button>
+    <button class="fab" onclick="navigate('view-map')" aria-label="Voir la carte du voyage">🗺️</button>
   </div>
 
+  <!-- ── MAP ── -->
   <div id="view-map" class="view">
-    <div class="manual-mode-bar" id="manual-mode-bar">
+    <div class="manual-mode-bar" id="manual-mode-bar" role="status">
       Cliquez sur la carte pour ajouter une étape
     </div>
-    
-    <div id="map"></div>
-    
-    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')">🏛️</button>
+    <div id="map" aria-label="Carte du voyage"></div>
+    <button class="fab" onclick="cancelManualMode(); navigate('view-trip')" aria-label="Retour aux étapes">🏛️</button>
   </div>
 
+  <!-- ── GLOBAL MAP ── -->
   <div id="view-global-map" class="view">
     <div class="view-header" style="z-index:10; position:relative;">
-      <button class="btn-back-home" id="global-map-back-btn">← Retour</button>
+      <button class="btn-back-home" id="global-map-back-btn" aria-label="Retour">← Retour</button>
       <span style="font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:white; margin-left:12px; flex:1;">Tous les voyages</span>
     </div>
     <div id="global-map-legend" style="
@@ -964,76 +646,141 @@ html, body {
       background:rgba(255,253,247,0.93); border-radius:10px;
       padding:10px 14px; box-shadow:var(--shadow-md);
       font-size:13px; max-width:200px; display:none;
-    "></div>
-    <div id="global-map" style="flex:1; width:100%; min-height:0;"></div>
+    " aria-label="Légende des voyages"></div>
+    <div id="global-map" style="flex:1; width:100%; min-height:0;" aria-label="Carte mondiale des voyages"></div>
   </div>
 
 </div>
 
-<!-- NOTES OVERLAY -->
-<div id="notes-overlay" style="display:none;position:fixed;inset:0;z-index:8000;flex-direction:column;">
+<!-- ── NOTES OVERLAY ── -->
+<div id="notes-overlay" style="display:none;position:fixed;inset:0;z-index:8000;flex-direction:column;" role="dialog" aria-modal="true" aria-label="Notes de l'étape">
   <div id="notes-overlay-bg" style="position:absolute;inset:0;"></div>
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:0;">
-    <!-- Header -->
     <div id="notes-overlay-header" style="display:flex;align-items:center;gap:14px;padding:52px 24px 20px;flex-shrink:0;">
-      <button onclick="closeNotesOverlay()" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;backdrop-filter:blur(8px);">←</button>
+      <button onclick="closeNotesOverlay()" aria-label="Fermer les notes" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;backdrop-filter:blur(8px);">←</button>
       <div style="flex:1;">
         <div id="notes-overlay-city" style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:white;text-shadow:0 2px 16px rgba(0,0,0,0.3);line-height:1.2;"></div>
         <div id="notes-overlay-country" style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:3px;font-weight:500;letter-spacing:.04em;"></div>
       </div>
     </div>
-    <!-- Notes area -->
     <div style="flex:1;padding:0 20px 32px;display:flex;flex-direction:column;min-height:0;">
       <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.22);border-radius:18px;flex:1;display:flex;flex-direction:column;overflow:hidden;">
         <div style="padding:16px 18px 8px;border-bottom:1px solid rgba(255,255,255,0.12);">
           <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.55);">Notes</span>
         </div>
-        <textarea id="notes-overlay-textarea" 
+        <textarea id="notes-overlay-textarea"
           placeholder="Expositions, restaurants, soirées, matchs…"
-          style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;font-size:16px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,0.55);line-height:1.7;resize:none;min-height:0;caret-color:white;"
+          aria-label="Notes pour cette étape"
+          style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;font-size:16px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,0.90);line-height:1.7;resize:none;min-height:0;caret-color:white;"
           oninput="saveOverlayNote()"></textarea>
       </div>
     </div>
   </div>
 </div>
 
-<div id="modal-overlay" onclick="closeModal(event)">
+<!-- ── MODAL NOUVEAU VOYAGE ── -->
+<div id="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-label="Créer un nouveau voyage">
   <div id="modal">
     <div class="modal-title">Nouveau départ 🛩️</div>
     <div class="modal-field">
-      <label>Nom du voyage</label>
+      <label for="modal-name">Nom du voyage</label>
       <input type="text" id="modal-name" placeholder="ex : Alicante 2026" onkeydown="if(event.key==='Enter')confirmNewVoyage()"/>
     </div>
     <div class="modal-field">
       <label>Couleur</label>
-      <div class="color-swatches" id="color-swatches"></div>
+      <div class="color-swatches" id="color-swatches" role="radiogroup" aria-label="Choisir une couleur"></div>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
-      <button class="btn-confirm" onclick="confirmNewVoyage()">Créer</button>
+      <button class="btn-cancel" onclick="closeModal()" aria-label="Annuler la création">Annuler</button>
+      <button class="btn-confirm" onclick="confirmNewVoyage()" aria-label="Créer le voyage">Créer</button>
     </div>
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- ── MODAL NOM DESTINATION MANUELLE (remplace window.prompt) ── -->
+<div id="manual-name-overlay" role="dialog" aria-modal="true" aria-label="Nommer la destination">
+  <div id="manual-name-modal">
+    <div class="modal-title" style="font-size:18px;">📍 Nommer cette destination</div>
+    <div class="modal-field">
+      <label for="manual-name-input">Nom</label>
+      <input type="text" id="manual-name-input" placeholder="ex : Col du Galibier"
+        onkeydown="if(event.key==='Enter')confirmManualName(); if(event.key==='Escape')cancelManualName();"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="cancelManualName()" aria-label="Annuler">Annuler</button>
+      <button class="btn-confirm" onclick="confirmManualName()" aria-label="Ajouter la destination">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 // ============================================================
-// CONFIGURATION & ETAT
+// SÉCURITÉ — Échappement HTML centralisé (fix XSS)
+// Toute valeur utilisateur injectée dans le DOM passe par ici.
+// ============================================================
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ============================================================
+// LRU CACHE — Remplace les objets literals non bornés
+// Limite chaque cache à MAX_ENTRIES entrées (FIFO léger).
+// ============================================================
+class LRUCache {
+  constructor(maxSize = 200) {
+    this._max = maxSize;
+    this._map = new Map(); // Map préserve l'ordre d'insertion
+  }
+  has(key)  { return this._map.has(key); }
+  get(key)  { return this._map.get(key); }
+  set(key, value) {
+    if (this._map.has(key)) this._map.delete(key);
+    if (this._map.size >= this._max) {
+      // Supprime l'entrée la plus ancienne
+      this._map.delete(this._map.keys().next().value);
+    }
+    this._map.set(key, value);
+  }
+}
+
+const weatherCache = new LRUCache(200);
+const sunCache     = new LRUCache(200);
+const tzCache      = new LRUCache(200);
+
+// ============================================================
+// CONFIGURATION & ÉTAT
 // ============================================================
 const VOYAGE_COLORS = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51','#CF5C78'];
 let state = { voyages: [], activeVoyageId: null };
-let map, layers = {};  
+let map, layers = {};
 let manualMode = false;
+let manualPendingLatLng = null; // stocke les coordonnées en attente de nommage
 let toastTimer;
 
 // ============================================================
 // PERSISTANCE & INITIALISATION
 // ============================================================
-function saveState() { 
-  localStorage.setItem('voyages_app_mobi_v3', JSON.stringify(state)); 
+function saveState() {
+  try {
+    localStorage.setItem('voyages_app_mobi_v3', JSON.stringify(state));
+  } catch(e) {
+    // QuotaExceededError ou autre erreur de stockage
+    if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+      toast('⚠️ Stockage plein — supprimez des voyages ou exportez vos données', 'warn');
+    } else {
+      console.error('Erreur de sauvegarde :', e);
+    }
+  }
 }
 
 function loadState() {
@@ -1041,29 +788,36 @@ function loadState() {
     const raw = localStorage.getItem('voyages_app_mobi_v3');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (parsed && Array.isArray(parsed.voyages)) {
-        state = parsed;
-      }
+      if (parsed && Array.isArray(parsed.voyages)) state = parsed;
     }
-  } catch(e) { console.error("Erreur State", e); }
-  
-  // Sécuriser les données corrompues
+  } catch(e) { console.error('Erreur State', e); }
   if (!state.voyages) state.voyages = [];
-  state.voyages.forEach(v => { if (!v.etapes) v.etapes = []; });
+  // Garantit un id stable (UUID) sur chaque étape — migration données existantes
+  state.voyages.forEach(v => {
+    if (!v.etapes) v.etapes = [];
+    v.etapes.forEach(e => { if (!e.id) e.id = generateId(); });
+  });
 }
 
 // ============================================================
-// RECHERCHE PHOTON (OpenStreetMap, gratuit, sans clé)
+// GÉNÉRATION D'ID STABLE
+// Chaque étape reçoit un UUID aléatoire à la création.
+// Les fonctions async l'utilisent comme clé de cohérence.
+// ============================================================
+function generateId() {
+  return 'e' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+
+// ============================================================
+// RECHERCHE PHOTON
 // ============================================================
 let photonDebounce = null;
-let photonController = null; // pour annuler les requêtes en vol
+let photonController = null;
 
 async function searchPhoton(q) {
-  // Annule la requête précédente si elle est encore en cours
   if (photonController) photonController.abort();
   photonController = new AbortController();
 
-  // Indicateur de chargement
   acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Recherche…</div>';
   acList.classList.add('open');
 
@@ -1073,43 +827,41 @@ async function searchPhoton(q) {
     if (!resp.ok) throw new Error('Photon error');
     const data = await resp.json();
 
-    // On accepte city, town, village, municipality
     const VALID_TYPES = new Set(['city','town','village','municipality']);
     const results = data.features
       .filter(f => VALID_TYPES.has(f.properties.type))
       .slice(0, 6)
       .map(f => ({
-        name: f.properties.name,
-        // On ajoute l'état/région pour lever les ambiguïtés (ex: "Lyon, Auvergne-Rhône-Alpes")
-        region: f.properties.state || f.properties.county || '',
+        name:    f.properties.name,
+        region:  f.properties.state || f.properties.county || '',
         country: f.properties.country || '',
-        lat: f.geometry.coordinates[1],  // GeoJSON = [lon, lat] !
-        lon: f.geometry.coordinates[0]
+        lat:     f.geometry.coordinates[1],
+        lon:     f.geometry.coordinates[0]
       }));
 
     renderAutocomplete(results);
   } catch(e) {
-    if (e.name === 'AbortError') return; // requête annulée volontairement, pas une erreur
+    if (e.name === 'AbortError') return;
     console.warn('Photon indisponible', e);
     acList.innerHTML = '<div class="ac-item" style="color:var(--ink-soft);font-style:italic;">Service indisponible</div>';
+    toast('⚠️ Recherche indisponible — vérifiez votre connexion', 'warn');
   }
 }
 
 function renderAutocomplete(results) {
   acList.innerHTML = '';
-  if (!results.length) {
-    acList.classList.remove('open');
-    return;
-  }
+  if (!results.length) { acList.classList.remove('open'); return; }
   results.forEach(c => {
     const div = document.createElement('div');
     div.className = 'ac-item';
+    div.setAttribute('role', 'option');
     const subtitle = [c.region, c.country].filter(Boolean).join(', ');
+    // escapeHtml sur les valeurs reçues de l'API externe
     div.innerHTML = `
-      <span class="city-pin">📍</span>
+      <span class="city-pin" aria-hidden="true">📍</span>
       <div>
-        <div class="city-name">${c.name}</div>
-        <div class="city-country">${subtitle}</div>
+        <div class="city-name">${escapeHtml(c.name)}</div>
+        <div class="city-country">${escapeHtml(subtitle)}</div>
       </div>`;
     div.onclick = () => {
       addEtapeToActiveVoyage(c);
@@ -1122,1573 +874,110 @@ function renderAutocomplete(results) {
 }
 
 // ============================================================
-// NAVIGATION ENTRE VUES
+// NAVIGATION
 // ============================================================
 function navigate(viewId) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(viewId).classList.add('active');
-  
+
   if (viewId === 'view-home') {
     state.activeVoyageId = null;
     renderHome();
-  } 
-  else if (viewId === 'view-trip') {
+  } else if (viewId === 'view-trip') {
     renderTrip();
-  } 
-  else if (viewId === 'view-map') {
+  } else if (viewId === 'view-map') {
     initMap();
-    setTimeout(() => {
-      map.invalidateSize(); 
+    // ResizeObserver garantit l'invalidation dès que le conteneur est visible
+    // (robuste vs double-RAF qui était fragile)
+    const mapEl = document.getElementById('map');
+    if (!map._roAttached) {
+      map._roAttached = true;
+      new ResizeObserver(() => {
+        map.invalidateSize();
+        renderAllMaps();
+        fitMapToActiveVoyage();
+      }).observe(mapEl);
+    } else {
+      map.invalidateSize();
       renderAllMaps();
       fitMapToActiveVoyage();
-    }, 100);
+    }
   }
 }
 
 // ============================================================
-// VUE : ACCUEIL — CARTE OSM STATIQUE
-// Génère un fond de carte OpenStreetMap sans clé API
+// HELPERS COULEUR
 // ============================================================
-
-/**
- * Convertit lat/lon/zoom en coordonnées de tuile OSM (X, Y)
- */
-function latLonToTile(lat, lon, zoom) {
-  const n = Math.pow(2, zoom);
-  const x = Math.floor((lon + 180) / 360 * n);
-  const latRad = lat * Math.PI / 180;
-  const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n);
-  return { x, y };
-}
-
-/**
- * Construit l'URL d'une tuile OSM (tile.openstreetmap.org)
- * avec sous-domaine a/b/c pour répartir les requêtes
- */
-function osmTileUrl(x, y, zoom) {
-  const sub = ['a','b','c'][Math.abs(x + y) % 3];
-  return `https://${sub}.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
-}
-
-/**
- * Hexadécimal → {r, g, b}
- */
 function hexToRgb(hex) {
   const h = hex.replace('#','');
-  const r = parseInt(h.substring(0,2),16);
-  const g = parseInt(h.substring(2,4),16);
-  const b = parseInt(h.substring(4,6),16);
-  return {r,g,b};
-}
-
-/**
- * Génère un gradient multi-couches génératif à partir de la couleur du voyage.
- * Résultat : CSS background valable pour un overlay.
- */
-function generateGradientOverlay(color) {
-  const {r,g,b} = hexToRgb(color);
-  // Teinte complémentaire légèrement décalée
-  const r2 = Math.min(255, Math.round(r * 0.55 + 20));
-  const g2 = Math.min(255, Math.round(g * 0.45 + 10));
-  const b2 = Math.min(255, Math.round(b * 0.65 + 30));
-
-  return `
-    linear-gradient(
-      175deg,
-      rgba(${r},${g},${b},0.18) 0%,
-      rgba(${r2},${g2},${b2},0.10) 35%,
-      rgba(${r},${g},${b},0.0) 55%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.0) 30%,
-      rgba(${r2},${g2},${b2},0.45) 62%,
-      rgba(${r},${g},${b},0.82) 82%,
-      rgba(${Math.max(0,r-30)},${Math.max(0,g-30)},${Math.max(0,b-20)},0.96) 100%
-    )
-  `;
-}
-
-/**
- * Remplit le conteneur .htc-bg avec une grille de tuiles OSM
- * centrée sur lat/lon au zoom donné (défaut 10).
- */
-function renderOsmMapBackground(bgEl, overlayEl, lat, lon, color, zoom = 10) {
-  bgEl.classList.remove('loading');
-  bgEl.innerHTML = '';
-
-  const W = bgEl.offsetWidth  || 180;
-  const H = bgEl.offsetHeight || 320;
-  const {r, g, b} = hexToRgb(color);
-
-  // Graine pseudo-aléatoire basée sur lat/lon pour reproductibilité
-  const seed = (lat * 1000 | 0) ^ (lon * 1000 | 0);
-  const rng = (n) => ((Math.sin(seed * 9301 + n * 49297) * 0.5 + 0.5));
-
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-  svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
-
-  const uid = 'tc' + (seed & 0xffff);
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="${uid}bg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgb(${Math.max(0,r-60)},${Math.max(0,g-60)},${Math.max(0,b-40)})"/>
-        <stop offset="100%" stop-color="rgb(${Math.max(0,r-100)},${Math.max(0,g-100)},${Math.max(0,b-80)})"/>
-      </linearGradient>
-      <radialGradient id="${uid}glow" cx="50%" cy="45%" r="50%">
-        <stop offset="0%" stop-color="rgb(${r},${g},${b})" stop-opacity=".45"/>
-        <stop offset="100%" stop-color="transparent"/>
-      </radialGradient>
-      <linearGradient id="${uid}ov" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="transparent"/>
-        <stop offset="55%" stop-color="transparent"/>
-        <stop offset="100%" stop-color="rgb(${Math.max(0,r-80)},${Math.max(0,g-80)},${Math.max(0,b-60)})" stop-opacity=".95"/>
-      </linearGradient>
-    </defs>
-    <rect width="${W}" height="${H}" fill="url(#${uid}bg)"/>
-    ${Array.from({length: 9}, (_, i) => {
-      const yBase = H * (0.25 + i * 0.08 + rng(i) * 0.04);
-      const cp1x = W * (0.1 + rng(i+10) * 0.2);
-      const cp1y = yBase - H * (0.05 + rng(i+20) * 0.08);
-      const cp2x = W * (0.6 + rng(i+30) * 0.25);
-      const cp2y = yBase - H * (0.03 + rng(i+40) * 0.06);
-      const alpha = 0.18 + (i < 5 ? 0 : 0.08);
-      return `<path d="M-10,${yBase} C${cp1x},${cp1y} ${cp2x},${cp2y} ${W+10},${yBase - H*rng(i+50)*0.05}"
-        fill="none" stroke="rgb(${Math.min(255,r+40)},${Math.min(255,g+40)},${Math.min(255,b+60)})"
-        stroke-width="${0.8 + rng(i+5)*0.4}" opacity="${alpha}"/>`;
-    }).join('')}
-    <rect width="${W}" height="${H}" fill="url(#${uid}glow)"/>
-    <circle cx="${W/2}" cy="${H*0.42}" r="${W*0.12}" fill="rgb(${r},${g},${b})" opacity=".18"/>
-    <circle cx="${W/2}" cy="${H*0.42}" r="${W*0.045}" fill="rgb(${r},${g},${b})" opacity=".85"/>
-    <circle cx="${W/2}" cy="${H*0.42}" r="${W*0.075}" fill="none"
-      stroke="rgb(${r},${g},${b})" stroke-width=".8" opacity=".4"/>
-    <rect width="${W}" height="${H}" fill="url(#${uid}ov)"/>
-  `;
-
-  bgEl.appendChild(svg);
-  if (overlayEl) overlayEl.style.background = 'none'; // le SVG gère déjà tout
-}
-
-
-let carouselIndex = 0;
-let carouselDragging = false;
-let carouselDragStartX = 0;
-let carouselDragDelta = 0;
-let carouselCardWidth = 0;
-/**
- * Génère un visuel abstrait SVG basé sur le nom et la couleur du voyage.
- * Remplace avantageusement les cartes OSM pour l'accueil.
- */
-function renderGenerativeVisual(container, name, color, id) {
-  const firstLetter = (name || "?")[0].toUpperCase();
-  // Seed basé sur le nom complet + id pour éviter les collisions entre voyages
-  const seedStr = (name || '') + (id || '');
-  const seed = Array.from(seedStr).reduce((acc, c, i) => acc ^ (c.charCodeAt(0) * (i + 1) * 2654435761), 0) >>> 0;
-  const {r, g, b} = hexToRgb(color);
-  
-  // Petit générateur de nombres pseudo-aléatoires basé sur la lettre
-  const rng = (s) => {
-    let t = s + 0x6D2B79F5;
-    t = Math.imul(t ^ t >>> 15, t | 1);
-    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  return {
+    r: parseInt(h.substring(0,2),16),
+    g: parseInt(h.substring(2,4),16),
+    b: parseInt(h.substring(4,6),16)
   };
+}
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "0 0 200 350");
-  svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
-  svg.style.width = "100%";
-  svg.style.height = "100%";
-
-  const uid = `gen-${seed}-${Math.floor(rng(seed)*1000)}`;
-  
-  // Construction du SVG
-  let html = `
-    <defs>
-      <linearGradient id="${uid}bg" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="rgb(${r},${g},${b})" />
-        <stop offset="100%" stop-color="rgb(${Math.max(0,r-80)},${Math.max(0,g-80)},${Math.max(0,b-80)})" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#${uid}bg)" />
-  `;
-
-  // Génération de 6 formes abstraites dont le type dépend de la lettre
-  for(let i=0; i<6; i++) {
-    const x = rng(seed + i) * 200;
-    const y = rng(seed + i + 10) * 350;
-    const size = 40 + rng(seed + i + 20) * 120;
-    const opacity = 0.05 + rng(seed + i + 30) * 0.15;
-    
-    if (seed % 3 === 0) { // Formes circulaires (ex: P, O, C, S)
-       html += `<circle cx="${x}" cy="${y}" r="${size/2}" fill="white" fill-opacity="${opacity}" />`;
-    } else if (seed % 3 === 1) { // Formes angulaires (ex: A, M, V, X)
-       html += `<polygon points="${x},${y} ${x+size},${y+size/2} ${x-size/2},${y+size}" fill="white" fill-opacity="${opacity}" />`;
-    } else { // Lignes et rectangles (ex: K, L, T, E)
-       html += `<rect x="${x}" y="${y}" width="${size}" height="${size/8}" transform="rotate(${rng(seed+i)*360} ${x} ${y})" fill="white" fill-opacity="${opacity}" />`;
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h, s, l = (max+min)/2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max) {
+      case r: h = ((g-b)/d + (g<b?6:0))/6; break;
+      case g: h = ((b-r)/d + 2)/6; break;
+      default: h = ((r-g)/d + 4)/6;
     }
   }
-
-  // Lettre stylisée en arrière-plan très subtil
-  html += `
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" 
-          font-family="'Playfair Display', serif" font-size="240" font-weight="700" 
-          fill="white" fill-opacity="0.07" style="pointer-events:none">
-      ${firstLetter}
-    </text>
-  `;
-
-  svg.innerHTML = html;
-  container.innerHTML = "";
-  container.appendChild(svg);
-  container.classList.remove('loading');
-}
-function renderHome() {
-  const section = document.getElementById('home-trips-section');
-  const track = document.getElementById('carousel-track');
-  const dots = document.getElementById('carousel-dots');
-  const globalMapBtn = document.getElementById('btn-global-map-home');
-  const dataBar = document.getElementById('home-data-bar');
-
-  if (!track) return;
-  track.innerHTML = '';
-  if (dots) dots.innerHTML = '';
-
-  if (state.voyages.length === 0) {
-    section.style.display = 'none';
-    globalMapBtn.style.display = 'none';
-    dataBar.style.display = 'none';
-    return;
-  }
-
-  globalMapBtn.style.display = 'block';
-  section.style.display = 'block';
-  dataBar.style.display = 'flex';
-
-  carouselIndex = 0;
-
-  state.voyages.forEach((v, idx) => {
-    const card = document.createElement('div');
-    card.className = 'home-trip-card' + (idx === 0 ? ' carousel-active-card' : '');
-    card.dataset.index = idx;
-
-    const stepsLen = v.etapes ? v.etapes.length : 0;
-    const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
-    const firstEtape = v.etapes && v.etapes.length > 0 ? v.etapes[0] : null;
-    const firstCity = firstEtape ? firstEtape.city : null;
-    const locationLabel = firstCity ? firstCity.toUpperCase() : '';
-
-    // Calcul de la plage de dates globale du voyage
-    const dateRangeHtml = (function() {
-      if (!v.etapes || !v.etapes.length) return '';
-      const allDates = v.etapes.flatMap(e => [e.dateArr, e.dateDep]).filter(Boolean).sort();
-      if (!allDates.length) return '';
-      const fmt = d => { const [y,m,day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; };
-      const first = fmt(allDates[0]);
-      const last  = fmt(allDates[allDates.length - 1]);
-      return first === last
-        ? `<div class="htc-dates">${first}</div>`
-        : `<div class="htc-dates">${first} → ${last}</div>`;
-    })();
-
-    card.innerHTML = `
-      <div class="htc-bg htc-passport" id="htc-bg-${v.id}"></div>
-      <div class="htc-color-bar" style="background:${v.color}"></div>
-      <div class="htc-open-btn" onclick="openVoyage('${v.id}', event)">→</div>
-      <div class="htc-passport-content">
-        <div class="htc-passport-name">${v.name}</div>
-      </div>
-      <div class="htc-passport-footer">
-        <div>
-          <div class="htc-meta">${stepsText}</div>
-          ${dateRangeHtml}
-        </div>
-        <button class="htc-del" onclick="deleteVoyage('${v.id}', event)">✕</button>
-      </div>
-    `;
-
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
-      if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
-      openVoyage(v.id, e);
-    });
-
-    track.appendChild(card);
-
-    // Dot
-    if (dots) {
-      const dot = document.createElement('div');
-      dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
-      dot.dataset.index = idx;
-      dot.addEventListener('click', () => goToSlide(idx));
-      dots.appendChild(dot);
-    }
-
-requestAnimationFrame(() => {
-  const bgEl = document.getElementById(`htc-bg-${v.id}`);
-  if (bgEl) {
-    bgEl.innerHTML = generatePassportSVG(v.name, v.color, v.etapes || [], v.id);
-    bgEl.classList.remove('loading');
-  }
-});
-  });
-
-  initCarousel();
+  return [h*360, s, l];
 }
 
-function openVoyage(id, e) {
-  state.activeVoyageId = id;
-  navigate('view-trip');
-}
-
-function initCarousel() {
-  const wrapper = document.getElementById('carousel-wrapper');
-  const track = document.getElementById('carousel-track');
-  if (!wrapper || !track) return;
-
-  // Remove old listeners by cloning
-  const newWrapper = wrapper.cloneNode(false);
-  while (wrapper.firstChild) newWrapper.appendChild(wrapper.firstChild);
-  wrapper.parentNode.replaceChild(newWrapper, wrapper);
-  const w = newWrapper;
-
-  carouselIndex = 0;
-  carouselDragging = false;
-  carouselDragDelta = 0;
-
-  function getCardWidth() {
-    const card = track.querySelector('.home-trip-card');
-    if (!card) return 0;
-    return card.offsetWidth + 14; // gap = 14px
-  }
-
-  function updateCarousel(instant) {
-    const cw = getCardWidth();
-    carouselCardWidth = cw;
-    // Center the active card
-    const wrapperW = w.offsetWidth;
-    const card = track.querySelector('.home-trip-card');
-    const cardW = card ? card.offsetWidth : 0;
-    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
-    track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
-    track.style.transform = `translateX(${offset}px)`;
-
-    // Update cards scale & dots
-    track.querySelectorAll('.home-trip-card').forEach((c, i) => {
-      c.classList.toggle('carousel-active-card', i === carouselIndex);
-    });
-    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === carouselIndex);
-    });
-  }
-
-  // Touch / Mouse drag
-  let startX = 0, startTranslate = 0, isDragging = false, moved = false;
-
-  function onPointerDown(e) {
-    isDragging = true;
-    moved = false;
-    carouselDragDelta = 0;
-    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-    track.style.transition = 'none';
-  }
-
-  function onPointerMove(e) {
-    if (!isDragging) return;
-    const x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-    carouselDragDelta = x - startX;
-    if (Math.abs(carouselDragDelta) > 5) moved = true;
-    const cw = getCardWidth();
-    const wrapperW = w.offsetWidth;
-    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
-    const baseOffset = (wrapperW - cardW) / 2 - carouselIndex * cw;
-    track.style.transform = `translateX(${baseOffset + carouselDragDelta}px)`;
-  }
-
-  function onPointerUp(e) {
-    if (!isDragging) return;
-    isDragging = false;
-    carouselDragging = moved;
-    const total = state.voyages.length;
-    if (carouselDragDelta < -60 && carouselIndex < total - 1) carouselIndex++;
-    else if (carouselDragDelta > 60 && carouselIndex > 0) carouselIndex--;
-    updateCarousel(false);
-    setTimeout(() => { carouselDragging = false; }, 50);
-  }
-
-  w.addEventListener('mousedown', onPointerDown);
-  w.addEventListener('mousemove', onPointerMove);
-  w.addEventListener('mouseup', onPointerUp);
-  w.addEventListener('mouseleave', onPointerUp);
-  w.addEventListener('touchstart', onPointerDown, { passive: true });
-  w.addEventListener('touchmove', onPointerMove, { passive: true });
-  w.addEventListener('touchend', onPointerUp);
-
-  updateCarousel(true);
-  setTimeout(() => updateCarousel(true), 50);
-}
-
-function goToSlide(idx) {
-  carouselIndex = idx;
-  const track = document.getElementById('carousel-track');
-  const wrapper = document.getElementById('carousel-wrapper');
-  if (!track || !wrapper) return;
-  const cw = track.querySelector('.home-trip-card')?.offsetWidth + 16 || 0;
-  const wrapperW = wrapper.offsetWidth;
-  const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
-  const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
-  track.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
-  track.style.transform = `translateX(${offset}px)`;
-  track.querySelectorAll('.home-trip-card').forEach((c, i) => c.classList.toggle('carousel-active-card', i === carouselIndex));
-  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
-}
-
-// ============================================================
-// EXPORT / IMPORT
-// ============================================================
-function exportVoyages() {
-  const json = JSON.stringify(state, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const date = new Date().toISOString().slice(0, 10);
-  a.href     = url;
-  a.download = `voyages-${date}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('📦 Voyages exportés');
-}
-
-function importVoyages(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      if (!parsed || !Array.isArray(parsed.voyages)) throw new Error('Format invalide');
-      // Fusionne les voyages importés avec les voyages existants (évite les doublons par id)
-      const existingIds = new Set(state.voyages.map(v => v.id));
-      const newVoyages  = parsed.voyages.filter(v => !existingIds.has(v.id));
-      state.voyages.push(...newVoyages);
-      saveState();
-      renderHome();
-      toast(`✅ ${newVoyages.length} voyage(s) importé(s)`);
-    } catch(err) {
-      toast('⚠️ Fichier non reconnu');
-    }
-    input.value = ''; // reset pour permettre un re-import du même fichier
+function hslToRgb(h, s, l) {
+  h /= 360;
+  const hue2rgb = (p,q,t) => {
+    if(t<0)t+=1; if(t>1)t-=1;
+    if(t<1/6)return p+(q-p)*6*t;
+    if(t<1/2)return q;
+    if(t<2/3)return p+(q-p)*(2/3-t)*6;
+    return p;
   };
-  reader.readAsText(file);
+  if(s===0){ const v=Math.round(l*255); return [v,v,v]; }
+  const q = l<0.5 ? l*(1+s) : l+s-l*s;
+  const p = 2*l-q;
+  return [
+    Math.round(hue2rgb(p,q,h+1/3)*255),
+    Math.round(hue2rgb(p,q,h)*255),
+    Math.round(hue2rgb(p,q,h-1/3)*255)
+  ];
 }
 
 // ============================================================
-// VUE : VOYAGE
+// GÉNÉRATION SVG PASSEPORT (identique à l'original, inchangé)
 // ============================================================
-function getActiveVoyage() { 
-  return state.voyages.find(v => v.id === state.activeVoyageId); 
-}
-
-function formatDate(d) {
-  if (!d) return null;
-  const [y,m,day] = d.split('-');
-  return `${day}/${m}/${y}`;
-}
-
-function buildEtapeItem(e, i, voyage) {
-  const item = document.createElement('div');
-  item.className = 'etape-item';
-  item.dataset.index = i;
-  item.draggable = true;
-
-  // Dates display
-  let datesHtml = '';
-  if (e.dateArr || e.dateDep) {
-    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
-    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
-    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
-    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
-  }
-
-  const notesHtml = e.notes 
-    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
-    : '';
-
-  // Color swatches for edit panel
-  const swatchesHtml = VOYAGE_COLORS.map(c => 
-    `<div class="etape-swatch${c === voyage.color ? ' selected' : ''}" style="background:${c}" data-color="${c}" onclick="selectVoyageColor(this,'${c}')"></div>`
-  ).join('');
-
-  item.innerHTML = `
-    <div class="etape-handle"><span></span><span></span><span></span></div>
-    <div class="etape-num">${i + 1}</div>
-    <div class="etape-content">
-
-      <div class="etape-read" onclick="openNotesOverlay(${i})" style="cursor:pointer;">
-        <div class="etape-read-top">
-          <div>
-            <div class="etape-city">${e.city}</div>
-            <div class="etape-country">${e.country}</div>
-          </div>
-          <button class="btn-edit-etape" onclick="event.stopPropagation();toggleEditPanel(this)">✒️</button>
-        </div>
-        ${datesHtml}
-        <div class="etape-weather" style="display:none;"></div>
-        <div class="etape-tz" style="display:none;"></div>
-        ${notesHtml}
-      </div>
-
-      <div class="etape-edit">
-        <div class="edit-header">
-          <span class="edit-header-city">✏️ ${e.city}</span>
-          <button class="btn-close-edit" onclick="toggleEditPanel(this)">✕</button>
-        </div>
-
-        <span class="edit-label">Dates</span>
-        <div class="etape-dates-row">
-          <input class="etape-date-input" type="date" placeholder="Arrivée" value="${e.dateArr||''}" 
-            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
-          <span style="font-size:12px;color:var(--ink-soft)">→</span>
-          <input class="etape-date-input" type="date" placeholder="Départ" value="${e.dateDep||''}" 
-            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i})"/>
-        </div>
-
-        <div class="edit-actions">
-          <button class="btn-del-etape" onclick="removeEtape(${i})">🗑 Supprimer</button>
-        </div>
-      </div>
-
-    </div>
-  `;
-
-  // Drag & drop (mouse)
-  item.addEventListener('dragstart', onDragStart);
-  item.addEventListener('dragover',  onDragOver);
-  item.addEventListener('drop',      onDrop);
-  item.addEventListener('dragend',   onDragEnd);
-
-  // Touch drag (long-press → drag)
-  const handle = item.querySelector('.etape-handle');
-  setupTouchDrag(handle, item);
-
-  return item;
-}
-
-function toggleEditPanel(btn) {
-  const content = btn.closest('.etape-content');
-  const editPanel = content.querySelector('.etape-edit');
-  const isOpen = editPanel.classList.contains('open');
-  // Close all other open panels first
-  document.querySelectorAll('.etape-edit.open').forEach(p => p.classList.remove('open'));
-  if (!isOpen) editPanel.classList.add('open');
-}
-
-function refreshEtapeReadView(index) {
-  const voyage = getActiveVoyage();
-  if (!voyage) return;
-  const e = voyage.etapes[index];
-  const items = document.querySelectorAll('.etape-item');
-  const item = [...items].find(it => parseInt(it.dataset.index) === index);
-  if (!item) return;
-
-  let datesHtml = '';
-  if (e.dateArr || e.dateDep) {
-    const arr = e.dateArr ? `<span class="date-badge">${formatDate(e.dateArr)}</span>` : '';
-    const dep = e.dateDep ? `<span class="date-badge">${formatDate(e.dateDep)}</span>` : '';
-    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)">→</span>` : '';
-    datesHtml = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
-  }
-  const notesHtml = e.notes 
-    ? `<div class="etape-read-notes">${e.notes.replace(/</g,'&lt;')}</div>` 
-    : '';
-
-  const readTop = item.querySelector('.etape-read-top');
-  // Remove old dates/notes (preserve weather badge)
-  item.querySelectorAll('.etape-read-dates, .etape-read-notes').forEach(el => el.remove());
-  const weatherBadge = item.querySelector('.etape-weather');
-  readTop.insertAdjacentHTML('afterend', datesHtml);
-  if (weatherBadge) weatherBadge.insertAdjacentHTML('afterend', notesHtml);
-  else readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
-}
-
-function selectVoyageColor(el, color) {
-  const voyage = getActiveVoyage();
-  if (!voyage) return;
-  voyage.color = color;
-  saveState();
-  // Update all swatch groups
-  document.querySelectorAll('[data-voyage-colors] .etape-swatch').forEach(s => {
-    s.classList.toggle('selected', s.dataset.color === color);
-  });
-  document.getElementById('voyage-color-dot').style.background = color;
-  // Update CSS variable for step bubbles and card headers
-  document.getElementById('etapes-list').style.setProperty('--voyage-color', color);
-  // Refresh map markers color
-  if (document.getElementById('view-map').classList.contains('active')) {
-    renderAllMaps();
-  }
-}
-
-function updateNote(index, value) {
-  const v = getActiveVoyage();
-  if (v && v.etapes[index] !== undefined) {
-    v.etapes[index].notes = value;
-    saveState();
-  }
-}
-
-function renderTrip() {
-  const voyage = getActiveVoyage();
-  if (!voyage) return navigate('view-home');
-
-  colorPickerOpen = false;
-  const popup = document.getElementById('color-picker-popup');
-  if (popup) popup.style.display = 'none';
-
-  document.getElementById('voyage-color-dot').style.background = voyage.color;
-  document.getElementById('voyage-name-input').value = voyage.name;
-  
-  const stepsLen = voyage.etapes ? voyage.etapes.length : 0;
-  document.getElementById('voyage-meta').textContent = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
-
-  // Drapeaux pays
-  fetchVoyageFlags(voyage);
-
-  const list = document.getElementById('etapes-list');
-  list.innerHTML = '';
-  list.style.setProperty('--voyage-color', voyage.color || 'var(--navy)');
-
-  if (stepsLen === 0) {
-    list.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--ink-soft); line-height: 1.5;">Aucune étape.<br>Utilisez la recherche ci-dessus pour commencer.</div>';
-    return;
-  }
-
-  voyage.etapes.forEach((e, i) => {
-    list.appendChild(buildEtapeItem(e, i, voyage));
-  });
-
-  // Chargement météo après rendu du DOM
-  requestAnimationFrame(fetchWeatherForAllEtapes);
-
-  // Chargement fuseaux horaires
-  requestAnimationFrame(() => {
-    voyage.etapes.forEach((e, i) => {
-      injectTimezoneBadge(e, i, i > 0 ? voyage.etapes[i - 1] : null);
-    });
-  });
-}
-
-// ============================================================
-// DRAG & DROP — MOUSE
-// ============================================================
-let dragSrcIndex = null;
-
-function onDragStart(e) {
-  dragSrcIndex = parseInt(this.dataset.index);
-  this.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-}
-
-function onDragOver(e) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
-  this.classList.add('drag-over');
-}
-
-function onDrop(e) {
-  e.preventDefault();
-  const targetIndex = parseInt(this.dataset.index);
-  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
-  const voyage = getActiveVoyage();
-  const moved = voyage.etapes.splice(dragSrcIndex, 1)[0];
-  voyage.etapes.splice(targetIndex, 0, moved);
-  saveState();
-  renderTrip();
-}
-
-function onDragEnd() {
-  document.querySelectorAll('.etape-item').forEach(it => {
-    it.classList.remove('dragging', 'drag-over');
-  });
-  dragSrcIndex = null;
-}
-
-// ============================================================
-// TOUCH DRAG — Long press on handle
-// ============================================================
-function setupTouchDrag(handle, item) {
-  let longPressTimer = null;
-  let isDragging = false;
-  let startY = 0;
-  let clone = null;
-  let offsetY = 0;
-
-  handle.addEventListener('touchstart', function(e) {
-    startY = e.touches[0].clientY;
-    longPressTimer = setTimeout(() => {
-      isDragging = true;
-      item.classList.add('dragging');
-      // Create visual clone
-      clone = item.cloneNode(true);
-      clone.style.cssText = `
-        position:fixed; z-index:9999; width:${item.offsetWidth}px; left:${item.getBoundingClientRect().left}px;
-        top:${item.getBoundingClientRect().top}px; opacity:0.88; pointer-events:none;
-        box-shadow: 0 16px 48px rgba(44,36,24,.25); transform: scale(1.02);
-        transition: none;
-      `;
-      document.body.appendChild(clone);
-      offsetY = startY - item.getBoundingClientRect().top;
-      if (navigator.vibrate) navigator.vibrate(40);
-    }, 400);
-  }, { passive: true });
-
-  handle.addEventListener('touchmove', function(e) {
-    if (!isDragging) { clearTimeout(longPressTimer); return; }
-    e.preventDefault();
-    const y = e.touches[0].clientY;
-    clone.style.top = (y - offsetY) + 'px';
-
-    // Find element under touch
-    clone.style.display = 'none';
-    const el = document.elementFromPoint(e.touches[0].clientX, y);
-    clone.style.display = '';
-    const targetItem = el ? el.closest('.etape-item') : null;
-    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
-    if (targetItem && targetItem !== item) targetItem.classList.add('drag-over');
-  }, { passive: false });
-
-  handle.addEventListener('touchend', function(e) {
-    clearTimeout(longPressTimer);
-    if (!isDragging) return;
-    isDragging = false;
-    item.classList.remove('dragging');
-    if (clone) { clone.remove(); clone = null; }
-
-    const y = e.changedTouches[0].clientY;
-    const el = document.elementFromPoint(e.changedTouches[0].clientX, y);
-    const targetItem = el ? el.closest('.etape-item') : null;
-    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
-
-    if (targetItem && targetItem !== item) {
-      const srcIdx = parseInt(item.dataset.index);
-      const tgtIdx = parseInt(targetItem.dataset.index);
-      const voyage = getActiveVoyage();
-      const moved = voyage.etapes.splice(srcIdx, 1)[0];
-      voyage.etapes.splice(tgtIdx, 0, moved);
-      saveState();
-      renderTrip();
-    }
-  });
-}
-
-document.getElementById('voyage-name-input').addEventListener('input', function() {
-  const v = getActiveVoyage();
-  if (v) { v.name = this.value; saveState(); }
-});
-
-// ============================================================
-// CARTE & MODE MANUEL
-// ============================================================
-function initMap() {
-  if (map) return; 
-  map = L.map('map', { center: [48, 10], zoom: 4, zoomControl: false });
-  L.control.zoom({ position: 'topright' }).addTo(map);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
-  map.on('click', onMapClick);
-}
-
-function renderAllMaps() {
-  Object.keys(layers).forEach(id => { map.removeLayer(layers[id]); delete layers[id]; });
-  const active = getActiveVoyage();
-  if(!active || !active.etapes) return;
-
-  const layer = L.layerGroup().addTo(map);
-  layers[active.id] = layer;
-
-  if (active.etapes.length > 1) {
-    const coords = active.etapes.map(e => [e.lat, e.lon]);
-    L.polyline(coords, { color: active.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
-  }
-
-  active.etapes.forEach((e, i) => {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
-      <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${active.color}"/>
-      <circle cx="16" cy="16" r="10" fill="white"/>
-      <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${active.color}">${i+1}</text>
-    </svg>`;
-    const icon = L.divIcon({ html: svg, className: '', iconSize: [32,40], iconAnchor: [16,40], popupAnchor: [0,-42] });
-    L.marker([e.lat, e.lon], { icon }).bindPopup(`<b style="font-size:14px">${e.city}</b><br><span style="color:#888">${e.country}</span>`).addTo(layer);
-  });
-}
-
-function fitMapToActiveVoyage() {
-  const v = getActiveVoyage();
-  if (!v || !v.etapes || !v.etapes.length) { map.setView([48, 10], 4); return; }
-  const coords = v.etapes.map(e => [e.lat, e.lon]);
-  if (coords.length === 1) map.setView(coords[0], 6);
-  else map.fitBounds(L.latLngBounds(coords), { padding: [40, 40] });
-}
-
-function activateManualMode() {
-  manualMode = true;
-  document.getElementById('manual-mode-bar').classList.add('active');
-  document.getElementById('map').classList.add('selecting');
-  navigate('view-map');
-}
-
-function cancelManualMode() {
-  manualMode = false;
-  document.getElementById('manual-mode-bar').classList.remove('active');
-  document.getElementById('map').classList.remove('selecting');
-}
-
-function onMapClick(e) {
-  if (!manualMode) return;
-  const cityName = prompt("Nom de cette destination ?");
-  if (cityName && cityName.trim()) {
-    addEtapeToActiveVoyage({ name: cityName.trim(), country: "Point manuel", lat: e.latlng.lat, lon: e.latlng.lng });
-    cancelManualMode();
-    navigate('view-trip');
-  }
-}
-
-// ============================================================
-// RECHERCHE
-// ============================================================
-const searchInput = document.getElementById('search-input');
-const acList = document.getElementById('autocomplete');
-
-searchInput.addEventListener('input', function() {
-  const q = this.value.trim();
-  if (q.length < 2) {
-    acList.classList.remove('open');
-    clearTimeout(photonDebounce);
-    if (photonController) photonController.abort();
-    return;
-  }
-  clearTimeout(photonDebounce);
-  photonDebounce = setTimeout(() => searchPhoton(q), 300);
-});
-
-document.addEventListener('click', e => { 
-  if (!document.getElementById('search-wrap').contains(e.target)) acList.classList.remove('open'); 
-});
-
-// ============================================================
-// ACTIONS DATA
-// ============================================================
-function addEtapeToActiveVoyage(city) {
-  const v = getActiveVoyage();
-  v.etapes.push({ city: city.name, country: city.country, lat: city.lat, lon: city.lon, dateArr: '', dateDep: '', notes: '' });
-  saveState(); 
-  renderTrip(); 
-  toast(`📍 ${city.name} ajouté`);
-}
-
-function removeEtape(index) {
-  getActiveVoyage().etapes.splice(index, 1);
-  saveState(); 
-  renderTrip();
-}
-
-function updateDate(index, field, value) {
-  getActiveVoyage().etapes[index][field] = value;
-  saveState();
-}
-
-function deleteVoyage(id, e) {
-  e.stopPropagation();
-  if(confirm("Supprimer ce voyage ?")) {
-    state.voyages = state.voyages.filter(v => v.id !== id);
-    saveState(); 
-    renderHome(); 
-    toast("Voyage supprimé");
-  }
-}
-
-// ============================================================
-// MODAL & TOAST
-// ============================================================
-let pendingColor = VOYAGE_COLORS[0];
-function openNewVoyageModal() {
-  pendingColor = VOYAGE_COLORS[state.voyages.length % VOYAGE_COLORS.length];
-  const swatches = document.getElementById('color-swatches');
-  swatches.innerHTML = '';
-  
-  VOYAGE_COLORS.forEach(c => {
-    const s = document.createElement('div');
-    s.className = 'swatch' + (c === pendingColor ? ' selected' : '');
-    s.style.background = c;
-    s.onclick = () => { 
-      pendingColor = c; 
-      swatches.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected')); 
-      s.classList.add('selected'); 
-    };
-    swatches.appendChild(s);
-  });
-  
-  document.getElementById('modal-name').value = '';
-  document.getElementById('modal-overlay').classList.add('open');
-}
-
-function closeModal(e) {
-  if (e && e.target !== document.getElementById('modal-overlay')) return;
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-function confirmNewVoyage() {
-  const name = document.getElementById('modal-name').value.trim() || 'Nouveau voyage';
-  const id = 'v' + Date.now();
-  state.voyages.push({ id, name, color: pendingColor, etapes: [] });
-  state.activeVoyageId = id;
-  closeModal(); 
-  saveState();
-  navigate('view-trip');
-  toast("Voyage créé !");
-}
-
-let globalMap, globalLayers = {};
-
-// ============================================================
-// CARTE GLOBALE
-// ============================================================
-function navigateGlobalMap() {
-  // Determine where to come back from
-  const fromTrip = document.getElementById('view-trip').classList.contains('active');
-  document.getElementById('global-map-back-btn').onclick = () => {
-    navigate(fromTrip ? 'view-trip' : 'view-home');
-  };
-
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-global-map').classList.add('active');
-
-  // requestAnimationFrame garantit que le conteneur a une taille avant que Leaflet s'initialise
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      if (!globalMap) {
-        globalMap = L.map('global-map', { center: [20, 10], zoom: 2, zoomControl: false });
-        L.control.zoom({ position: 'topright' }).addTo(globalMap);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(globalMap);
-      } else {
-        globalMap.invalidateSize();
-      }
-      renderGlobalMap();
-    });
-  });
-}
-
-function renderGlobalMap() {
-  // Clear existing layers
-  Object.keys(globalLayers).forEach(id => { globalMap.removeLayer(globalLayers[id]); delete globalLayers[id]; });
-
-  const legend = document.getElementById('global-map-legend');
-  legend.innerHTML = '';
-
-  const voyagesWithEtapes = state.voyages.filter(v => v.etapes && v.etapes.length > 0);
-
-  if (voyagesWithEtapes.length === 0) {
-    legend.style.display = 'block';
-    legend.innerHTML = '<span style="color:var(--ink-soft)">Aucune étape à afficher.</span>';
-    globalMap.setView([20, 10], 2);
-    return;
-  }
-
-  const allCoords = [];
-
-  voyagesWithEtapes.forEach(v => {
-    const layer = L.layerGroup().addTo(globalMap);
-    globalLayers[v.id] = layer;
-
-    const coords = v.etapes.map(e => [e.lat, e.lon]);
-    allCoords.push(...coords);
-
-    if (coords.length > 1) {
-      L.polyline(coords, { color: v.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
-    }
-
-    v.etapes.forEach((e, i) => {
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 32 40">
-        <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${v.color}"/>
-        <circle cx="16" cy="16" r="10" fill="white"/>
-        <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${v.color}">${i+1}</text>
-      </svg>`;
-      const icon = L.divIcon({ html: svg, className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38] });
-      L.marker([e.lat, e.lon], { icon })
-        .bindPopup(`<b style="font-size:13px">${e.city}</b><br><span style="color:#888;font-size:12px">${e.country}</span><br><span style="color:${v.color};font-size:11px;font-weight:600">${v.name}</span>`)
-        .addTo(layer);
-    });
-
-    // Legend entry
-    const entry = document.createElement('div');
-    entry.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;';
-    entry.innerHTML = `<span style="width:12px;height:12px;border-radius:50%;background:${v.color};flex-shrink:0;display:inline-block;"></span><span style="color:var(--ink);font-weight:600;">${v.name}</span>`;
-    entry.onclick = () => {
-      const bounds = L.latLngBounds(coords);
-      if (coords.length === 1) globalMap.setView(coords[0], 6);
-      else globalMap.fitBounds(bounds, { padding: [40, 40] });
-    };
-    legend.appendChild(entry);
-  });
-
-  legend.style.display = 'block';
-
-  if (allCoords.length === 1) {
-    globalMap.setView(allCoords[0], 5);
-  } else if (allCoords.length > 1) {
-    globalMap.fitBounds(L.latLngBounds(allCoords), { padding: [50, 50] });
-  }
-}
-
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; 
-  el.classList.add('visible');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('visible'), 2500);
-}
-
-// ============================================================
-// FUSEAU HORAIRE — WorldTimeAPI (gratuit, sans clé)
-// ============================================================
-const tzCache = {}; // clé: "lat,lon" → { utcOffset, timezone }
-const PARIS_OFFSET = 1; // UTC+1 hiver, mais on utilise l'offset réel via l'API
-
-async function fetchTimezone(lat, lon) {
-  const key = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
-  if (tzCache[key] !== undefined) return tzCache[key];
-  try {
-    const url = `https://worldtimeapi.org/api/coordinates/${lat},${lon}`;
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error();
-    const data = await resp.json();
-    // utc_offset ex: "+09:00" ou "-05:30"
-    const raw = data.utc_offset || '+00:00';
-    const sign = raw[0] === '-' ? -1 : 1;
-    const [h, m] = raw.slice(1).split(':').map(Number);
-    const offsetH = sign * (h + m / 60);
-    const result = { offsetH, raw, timezone: data.timezone || null };
-    tzCache[key] = result;
-    return result;
-  } catch {
-    tzCache[key] = null;
-    return null;
-  }
-}
-
-async function fetchParisOffset() {
-  const key = 'paris';
-  if (tzCache[key] !== undefined) return tzCache[key];
-  try {
-    const resp = await fetch('https://worldtimeapi.org/api/timezone/Europe/Paris');
-    if (!resp.ok) throw new Error();
-    const data = await resp.json();
-    const raw = data.utc_offset || '+01:00';
-    const sign = raw[0] === '-' ? -1 : 1;
-    const [h, m] = raw.slice(1).split(':').map(Number);
-    const offsetH = sign * (h + m / 60);
-    tzCache[key] = { offsetH };
-    return { offsetH };
-  } catch {
-    tzCache[key] = { offsetH: 1 };
-    return { offsetH: 1 };
-  }
-}
-
-async function injectTimezoneBadge(etape, index, prevEtape) {
-  const tzEl = document.querySelector(`.etape-item[data-index="${index}"] .etape-tz`);
-  if (!tzEl) return;
-
-  const [tz, parisRef, prevTz] = await Promise.all([
-    fetchTimezone(etape.lat, etape.lon),
-    prevEtape ? null : fetchParisOffset(),
-    prevEtape ? fetchTimezone(prevEtape.lat, prevEtape.lon) : null
-  ]);
-
-  if (!tz) return;
-
-  // Référence : étape précédente ou Paris
-  const refOffset = prevEtape
-    ? (prevTz ? prevTz.offsetH : null)
-    : (parisRef ? parisRef.offsetH : 1);
-
-  if (refOffset === null) return;
-
-  const diff = tz.offsetH - refOffset;
-  if (Math.abs(diff) < 0.5) return; // pas de décalage significatif → rien
-
-  // Vérification que l'élément est toujours valide
-  const currentEl = document.querySelector(`.etape-item[data-index="${index}"] .etape-tz`);
-  if (!currentEl || currentEl !== tzEl) return;
-
-  const sign = diff >= 0 ? '+' : '';
-  const diffLabel = Number.isInteger(diff) ? `${sign}${diff}h` : `${sign}${diff.toFixed(1)}h`;
-  const utcLabel = `UTC${tz.raw}`;
-  const refLabel = prevEtape ? `vs étape préc.` : `vs Paris`;
-  const warn = Math.abs(diff) >= 3;
-
-  currentEl.innerHTML = `
-    <span class="tz-badge${warn ? ' tz-warn' : ''}">🕐 ${utcLabel}</span>
-    <span class="tz-diff">${diffLabel} ${refLabel}</span>
-  `;
-  currentEl.style.display = 'flex';
-}
-
-
-const sunCache = {}; // clé: "lat,lon,date"
-
-async function fetchSunTimes(lat, lon, date) {
-  const key = `${lat},${lon},${date}`;
-  if (sunCache[key] !== undefined) return sunCache[key];
-  try {
-    // Récupération parallèle : heures solaires (UTC) + timezone IANA du lieu
-    const [sunResp, tzData] = await Promise.all([
-      fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${date}&formatted=0`),
-      fetchTimezone(lat, lon)
-    ]);
-    if (!sunResp.ok) throw new Error();
-    const data = await sunResp.json();
-    if (data.status !== 'OK') throw new Error();
-
-    // Résolution du fuseau IANA : WorldTimeAPI fournit "timezone" (ex: "Europe/Sarajevo")
-    // On le récupère depuis le cache tzCache qui est déjà peuplé par fetchTimezone
-    const tzKey = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
-    const tzEntry = tzCache[tzKey];
-    const ianaZone = tzEntry && tzEntry.timezone ? tzEntry.timezone : 'UTC';
-
-    const fmt = iso => {
-      const d = new Date(iso);
-      return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: ianaZone });
-    };
-    const result = { rise: fmt(data.results.sunrise), set: fmt(data.results.sunset) };
-    sunCache[key] = result;
-    return result;
-  } catch {
-    sunCache[key] = null;
-    return null;
-  }
-}
-
-
-const countryFlagCache = {}; // nom pays → emoji
-
-async function fetchVoyageFlags(voyage) {
-  const flagEl = document.getElementById('voyage-flags');
-  if (!flagEl) return;
-
-  if (!voyage.etapes || !voyage.etapes.length) { flagEl.textContent = ''; return; }
-
-  // Pays distincts, dans l'ordre d'apparition, sans doublons
-  const uniqueCountries = [...new Set(
-    voyage.etapes.map(e => e.country).filter(c => c && c !== 'Point manuel')
-  )];
-
-  if (!uniqueCountries.length) { flagEl.textContent = ''; return; }
-
-  // Résolution parallèle, avec cache
-  const emojis = await Promise.all(uniqueCountries.map(async (country) => {
-    if (countryFlagCache[country] !== undefined) return countryFlagCache[country];
-    try {
-      const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fields=flag&fullText=false`;
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error();
-      const data = await resp.json();
-      const emoji = data[0]?.flag || '';
-      countryFlagCache[country] = emoji;
-      return emoji;
-    } catch {
-      countryFlagCache[country] = '';
-      return '';
-    }
-  }));
-
-  // N'afficher que si l'élément est toujours dans le DOM (navigation rapide)
-  if (document.getElementById('voyage-flags') === flagEl) {
-    flagEl.textContent = emojis.filter(Boolean).join(' ');
-  }
-}
-
-
-const weatherCache = {}; // clé: "lat,lon,dateArr,dateDep"
-
-// Attribue un score de severite (0 = grand beau, 10 = orages) a un code WMO
-function wxCodeToScore(code) {
-  if (code === 0)               return 0;
-  if (code <= 2)                return 1;
-  if (code === 3)               return 2;
-  if (code >= 45 && code <= 48) return 3;
-  if (code >= 51 && code <= 55) return 4;
-  if (code >= 71 && code <= 77) return 5;
-  if (code >= 85 && code <= 86) return 5;
-  if (code >= 61 && code <= 65) return 6;
-  if (code >= 80 && code <= 82) return 6;
-  if (code >= 66 && code <= 67) return 7;
-  if (code >= 95 && code <= 99) return 10;
-  return 3;
-}
-
-// Convertit un score moyen en libelle + icone + modificateur nuance
-function wxScoreToLabel(avgScore) {
-  if (avgScore < 0.5)  return { icon: '☀️',  label: 'Beau temps',     nuance: false };
-  if (avgScore < 1.5)  return { icon: '🌤️', label: 'Beau temps',      nuance: avgScore > 1.0 };
-  if (avgScore < 2.5)  return { icon: '⛅',  label: 'Quelques nuages', nuance: false };
-  if (avgScore < 3.5)  return { icon: '☁️',  label: 'Temps couvert',   nuance: avgScore < 3.0 };
-  if (avgScore < 5.0)  return { icon: '🌦️', label: 'Temps mitige',    nuance: avgScore < 4.2 };
-  if (avgScore < 6.5)  return { icon: '🌧️', label: 'Pluie',           nuance: avgScore < 5.8 };
-  if (avgScore < 8.5)  return { icon: '🌧️', label: 'Mauvais temps',   nuance: avgScore < 7.5 };
-  return                        { icon: '⛈️', label: 'Orages',          nuance: true  };
-}
-
-// Agrège les données journalières sur une plage de dates
-function aggregateDailyData(data, dateArr, dateDep) {
-  const times = data.daily.time;
-  const tmax  = data.daily.temperature_2m_max;
-  const tmin  = data.daily.temperature_2m_min;
-  const codes = data.daily.weathercode;
-
-  const from = dateArr || dateDep;
-  const to   = dateDep || dateArr;
-
-  const indices = [];
-  times.forEach((t, i) => { if (t >= from && t <= to) indices.push(i); });
-  if (!indices.length) return null;
-
-  const avgMax   = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
-  const avgMin   = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
-  // Score moyen pondéré sur tous les jours du séjour
-  const avgScore = indices.reduce((s, i) => s + wxCodeToScore(codes[i]), 0) / indices.length;
-
-  return { avgMax, avgMin, avgScore };
-}
-
-async function fetchWeather(etape, index) {
-  const { lat, lon, dateArr, dateDep } = etape;
-  if (!dateArr && !dateDep) return;
-
-  const cacheKey = `${lat},${lon},${dateArr||''},${dateDep||''}`;
-  if (weatherCache[cacheKey]) {
-    renderWeatherBadge(index, weatherCache[cacheKey], etape);
-    return;
-  }
-
-  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
-  if (badge) badge.innerHTML = '<span class="wx-loading">Chargement météo…</span>';
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const horizon = new Date(today);
-  horizon.setDate(today.getDate() + 16);
-
-  const refDate = new Date(dateArr || dateDep);
-  const endDate = new Date(dateDep || dateArr);
-  const isHistorical = refDate > horizon;
-
-  try {
-    let result;
-    if (isHistorical) {
-      // Normales climatiques : on interroge les mêmes jours sur les 5 dernières années
-      const samples = [];
-      for (let y = 1; y <= 5; y++) {
-        const sArr = dateArr ? shiftYear(dateArr, -y) : null;
-        const sDep = dateDep ? shiftYear(dateDep, -y) : null;
-        const from = sArr || sDep;
-        const to   = sDep || sArr;
-        const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${from}&end_date=${to}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`;
-        const resp = await fetch(url);
-        if (!resp.ok) continue;
-        const data = await resp.json();
-        const agg = aggregateDailyData(data, from, to);
-        if (agg) samples.push(agg);
-      }
-      if (!samples.length) { renderWeatherBadge(index, null, etape); return; }
-      const avgMax = Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length);
-      const avgMin = Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length);
-      // Score moyen sur tous les échantillons historiques
-      const avgScore = samples.reduce((s, x) => s + x.avgScore, 0) / samples.length;
-      result = { avgMax, avgMin, avgScore, isHistorical: true };
-    } else {
-      // Prévisions réelles
-      const from = dateArr || dateDep;
-      const to   = dateDep || dateArr;
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${from}&end_date=${to}`;
-      const resp = await fetch(url);
-      if (!resp.ok) { renderWeatherBadge(index, null, etape); return; }
-      const data = await resp.json();
-      const agg = aggregateDailyData(data, from, to);
-      if (!agg) { renderWeatherBadge(index, null, etape); return; }
-      result = { ...agg, isHistorical: false };
-    }
-
-    weatherCache[cacheKey] = result;
-    renderWeatherBadge(index, result, etape);
-  } catch(err) {
-    console.warn('Météo indisponible', err);
-    renderWeatherBadge(index, null, etape);
-  }
-}
-
-function shiftYear(dateStr, delta) {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return `${y + delta}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-}
-
-function renderWeatherBadge(index, result, etape) {
-  const badge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
-  if (!badge) return;
-  if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
-
-  const { icon, label, nuance } = wxScoreToLabel(result.avgScore);
-  const histPrefix  = result.isHistorical ? '📊' : '';
-  const nuancePrefix = (!result.isHistorical && nuance) ? 'Plutôt ' : '';
-  const prefix = histPrefix || nuancePrefix;
-
-  badge.classList.toggle('wx-historical', result.isHistorical);
-  badge.style.display = 'flex';
-  badge.innerHTML = `
-    <span class="wx-icon">${icon}</span>
-    <span class="wx-label">${prefix}${label}</span>
-    <span class="wx-temps">${result.avgMin}° / ${result.avgMax}°</span>
-  `;
-
-  // Point 6 : lever/coucher du soleil (seulement si date disponible)
-  if (etape && (etape.dateArr || etape.dateDep)) {
-    const sunDate = etape.dateArr || etape.dateDep;
-    fetchSunTimes(etape.lat, etape.lon, sunDate).then(sun => {
-      if (!sun) return;
-      // Vérifie que le badge est toujours dans le DOM et appartient au bon index
-      const currentBadge = document.querySelector(`.etape-item[data-index="${index}"] .etape-weather`);
-      if (!currentBadge || currentBadge !== badge) return;
-      // Supprime un éventuel badge soleil précédent
-      const prev = currentBadge.nextElementSibling;
-      if (prev && prev.classList.contains('etape-sun')) prev.remove();
-      const sunEl = document.createElement('div');
-      sunEl.className = 'etape-sun';
-      sunEl.innerHTML = `<span class="sun-rise">🌅 ${sun.rise}</span><span class="sun-set">🌇 ${sun.set}</span>`;
-      currentBadge.insertAdjacentElement('afterend', sunEl);
-    });
-  }
-}
-
-function fetchWeatherForAllEtapes() {
-  const voyage = getActiveVoyage();
-  if (!voyage) return;
-  voyage.etapes.forEach((e, i) => {
-    if (e.dateArr || e.dateDep) fetchWeather(e, i);
-  });
-}
-
-// ============================================================
-// COLOR PICKER (dot in trip header)
-// ============================================================
-let colorPickerOpen = false;
-
-function toggleColorPicker() {
-  const popup = document.getElementById('color-picker-popup');
-  colorPickerOpen = !colorPickerOpen;
-  popup.style.display = colorPickerOpen ? 'flex' : 'none';
-  if (colorPickerOpen) {
-    const voyage = getActiveVoyage();
-    if (!voyage) return;
-    const container = document.getElementById('voyage-color-swatches');
-    container.innerHTML = VOYAGE_COLORS.map(c =>
-      `<div class="swatch${c === voyage.color ? ' selected' : ''}" style="background:${c};width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform 0.15s,border-color 0.15s;" 
-        data-color="${c}" onclick="pickVoyageColor('${c}')"></div>`
-    ).join('');
-  }
-}
-
-function pickVoyageColor(color) {
-  const voyage = getActiveVoyage();
-  if (!voyage) return;
-  voyage.color = color;
-  saveState();
-  document.getElementById('voyage-color-dot').style.background = color;
-  // Update swatch selection
-  document.querySelectorAll('#voyage-color-swatches .swatch').forEach(s => {
-    s.classList.toggle('selected', s.dataset.color === color);
-    s.style.borderColor = s.dataset.color === color ? 'var(--ink)' : 'transparent';
-    s.style.transform = s.dataset.color === color ? 'scale(1.15)' : 'scale(1)';
-  });
-  // Close picker after short delay
-  setTimeout(() => {
-    colorPickerOpen = false;
-    document.getElementById('color-picker-popup').style.display = 'none';
-  }, 300);
-}
-
-// Close color picker when clicking outside
-document.addEventListener('click', function(e) {
-  if (!colorPickerOpen) return;
-  const dot = document.getElementById('voyage-color-dot');
-  const popup = document.getElementById('color-picker-popup');
-  if (!dot.contains(e.target) && !popup.contains(e.target)) {
-    colorPickerOpen = false;
-    popup.style.display = 'none';
-  }
-});
-
-// ============================================================
-// NOTES OVERLAY
-// ============================================================
-let notesOverlayIndex = null;
-
-function hexToRgbArr(hex) {
-  const {r, g, b} = hexToRgb(hex);
-  return [r, g, b];
-}
-
-function openNotesOverlay(index) {
-  const voyage = getActiveVoyage();
-  if (!voyage) return;
-  const etape = voyage.etapes[index];
-  if (!etape) return;
-  notesOverlayIndex = index;
-
-  const overlay = document.getElementById('notes-overlay');
-  const bg = document.getElementById('notes-overlay-bg');
-  const cityEl = document.getElementById('notes-overlay-city');
-  const countryEl = document.getElementById('notes-overlay-country');
-  const textarea = document.getElementById('notes-overlay-textarea');
-
-  cityEl.textContent = etape.city;
-  countryEl.textContent = etape.country ? etape.country.toUpperCase() : '';
-  textarea.value = etape.notes || '';
-
-  // Build premium gradient background from voyage color
-  const color = voyage.color || '#1C3557';
-  const {r, g, b} = hexToRgb(color);
-  const darken = (v, a) => Math.max(0, Math.round(v * a));
-  bg.style.background = `
-    linear-gradient(160deg,
-      rgb(${darken(r,1.1)>255?255:Math.round(r*1.05)},${darken(g,1.05)>255?255:Math.round(g*1.05)},${darken(b,1.0)>255?255:Math.round(b*1.0)}) 0%,
-      rgb(${darken(r,0.65)},${darken(g,0.65)},${darken(b,0.65)}) 45%,
-      rgb(${darken(r,0.38)},${darken(g,0.38)},${darken(b,0.38)}) 100%
-    )
-  `;
-
-  overlay.style.display = 'flex';
-  requestAnimationFrame(() => {
-    overlay.style.opacity = '1';
-    textarea.focus();
-  });
-}
-
-function closeNotesOverlay() {
-  const overlay = document.getElementById('notes-overlay');
-  overlay.style.display = 'none';
-  notesOverlayIndex = null;
-}
-
-function saveOverlayNote() {
-  if (notesOverlayIndex === null) return;
-  const value = document.getElementById('notes-overlay-textarea').value;
-  updateNote(notesOverlayIndex, value);
-  refreshEtapeReadView(notesOverlayIndex);
-}
-
-// ============================================================
-// Lancement
-// ============================================================
-window.onload = function() {
-  loadState();
-  renderHome();
-};
-window.addEventListener('resize', () => {
-  if (state.voyages.length > 0) {
-    const track = document.getElementById('carousel-track');
-    const wrapper = document.getElementById('carousel-wrapper');
-    if (!track || !wrapper) return;
-    const cw = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 14;
-    const wrapperW = wrapper.offsetWidth;
-    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
-    const offset = (wrapperW - cardW) / 2 - carouselIndex * cw;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(${offset}px)`;
-  }
-});
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Chrome a validé le Service Worker !', reg))
-      .catch(err => console.error('Échec de l\'enregistrement :', err));
-  });
-}
-  // Helpers couleur
-  function rgbToHsl(r, g, b) {
-    r /= 255; g /= 255; b /= 255;
-    const max = Math.max(r,g,b), min = Math.min(r,g,b);
-    let h, s, l = (max+min)/2;
-    if (max === min) { h = s = 0; }
-    else {
-      const d = max - min;
-      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
-      switch(max) {
-        case r: h = ((g-b)/d + (g<b?6:0))/6; break;
-        case g: h = ((b-r)/d + 2)/6; break;
-        default: h = ((r-g)/d + 4)/6;
-      }
-    }
-    return [h*360, s, l];
-  }
-
-  function hslToRgb(h, s, l) {
-    h /= 360;
-    const hue2rgb = (p,q,t) => {
-      if(t<0)t+=1; if(t>1)t-=1;
-      if(t<1/6)return p+(q-p)*6*t;
-      if(t<1/2)return q;
-      if(t<2/3)return p+(q-p)*(2/3-t)*6;
-      return p;
-    };
-    if(s===0) { const v=Math.round(l*255); return [v,v,v]; }
-    const q = l<0.5 ? l*(1+s) : l+s-l*s;
-    const p = 2*l-q;
-    return [
-      Math.round(hue2rgb(p,q,h+1/3)*255),
-      Math.round(hue2rgb(p,q,h)*255),
-      Math.round(hue2rgb(p,q,h-1/3)*255),
-    ];
-  }
-
-  function generatePassportSVG(name, color, etapes, id) {
+function generatePassportSVG(name, color, etapes, id) {
   const {r, g, b} = hexToRgb(color || '#1C3557');
-
-  const letter = (name || 'V')[0].toUpperCase();
-
-  // Seed basé sur le nom complet + id pour différencier les voyages de même initiale
   const seedStr = (name || '') + (id || '');
   const code = Array.from(seedStr).reduce(
     (acc, c, i) => (acc ^ (c.charCodeAt(0) * (i + 1) * 2654435761)) >>> 0, 0
   );
-
   const rng = (n) => {
     let t = (code * 2654435761 + n * 2246822519) >>> 0;
     t ^= t >>> 16; t = Math.imul(t, 0x45d9f3b); t ^= t >>> 16;
     return (t >>> 0) / 4294967296;
   };
-
-  // Le style de blob dépend du code distribué, plus de la seule lettre
   const curved  = code % 3 === 0;
   const angular = code % 3 === 1;
-
   const [h, s, l] = rgbToHsl(r, g, b);
-
-  // Fond basé sur la couleur du voyage, sombre et saturé
   const bgD = hslToRgb(h, Math.min(1, s*1.1),  Math.max(0.12, l*0.55));
   const bgL = hslToRgb(h, Math.min(1, s*0.95), Math.max(0.22, l*0.80));
-
-  // Blobs : teintes proches de la couleur principale, légèrement décalées
   const c1 = hslToRgb(h,             Math.min(1, s*1.1),  Math.min(0.75, l*1.1));
   const c2 = hslToRgb((h+25)%360,    Math.min(1, s*1.0),  Math.min(0.70, l*1.0));
   const c3 = hslToRgb((h-20+360)%360,Math.min(1, s*0.9),  Math.min(0.65, l*0.9));
   const c4 = hslToRgb((h+170)%360,   Math.min(1, s*0.5),  Math.min(0.60, l*1.2));
-
   const W = 200, H = 350;
   const uid = `vp${code}_${(rng(77)*65535)|0}`;
-
   let defs = `
     <linearGradient id="${uid}bg" x1="0.2" y1="0" x2="0.8" y2="1">
       <stop offset="0%"   stop-color="rgb(${bgL[0]},${bgL[1]},${bgL[2]})"/>
@@ -2697,9 +986,7 @@ if ('serviceWorker' in navigator) {
     <filter id="${uid}f" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="18"/>
     </filter>`;
-
   let blobs = '';
-
   if (curved) {
     const pts = [
       { cx:0.15+rng(1)*0.55, cy:0.05+rng(2)*0.30, rx:0.60, ry:0.45, c:c1, o:0.90 },
@@ -2714,7 +1001,6 @@ if ('serviceWorker' in navigator) {
       </radialGradient>`;
       blobs += `<ellipse cx="${p.cx*W}" cy="${p.cy*H}" rx="${p.rx*W}" ry="${p.ry*H}" fill="url(#${uid}g${i})"/>`;
     });
-
   } else if (angular) {
     const diags = [
       { cx:0.22+rng(1)*0.3, cy:0.18+rng(2)*0.2, rx:0.80, ry:0.25, rot:-28+rng(3)*40, c:c1, o:0.88 },
@@ -2735,7 +1021,6 @@ if ('serviceWorker' in navigator) {
       <stop offset="100%" stop-color="rgb(${c4[0]},${c4[1]},${c4[2]})" stop-opacity="0"/>
     </radialGradient>`;
     blobs += `<ellipse cx="${W*0.5}" cy="${H*0.5}" rx="${W*0.65}" ry="${H*0.50}" fill="url(#${uid}g3)"/>`;
-
   } else {
     const bands = [
       { cy:0.10+rng(1)*0.12, ry:0.25+rng(2)*0.14, c:c1, o:0.88 },
@@ -2751,15 +1036,1306 @@ if ('serviceWorker' in navigator) {
       blobs += `<ellipse cx="${W*0.5}" cy="${b.cy*H}" rx="${W*0.92}" ry="${b.ry*H}" fill="url(#${uid}g${i})"/>`;
     });
   }
-
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"
      xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
   <defs>${defs}</defs>
   <rect width="${W}" height="${H}" fill="url(#${uid}bg)"/>
   <g filter="url(#${uid}f)">${blobs}</g>
 </svg>`;
-
 }
+
+// ============================================================
+// VUE : ACCUEIL — CAROUSEL
+// ============================================================
+let carouselIndex = 0;
+let carouselDragging = false;
+let carouselDragDelta = 0;
+
+function renderHome() {
+  const section      = document.getElementById('home-trips-section');
+  const track        = document.getElementById('carousel-track');
+  const dots         = document.getElementById('carousel-dots');
+  const globalMapBtn = document.getElementById('btn-global-map-home');
+  const dataBar      = document.getElementById('home-data-bar');
+  if (!track) return;
+  track.innerHTML = '';
+  if (dots) dots.innerHTML = '';
+
+  if (state.voyages.length === 0) {
+    section.style.display    = 'none';
+    globalMapBtn.style.display = 'none';
+    dataBar.style.display    = 'none';
+    return;
+  }
+
+  globalMapBtn.style.display = 'block';
+  section.style.display      = 'block';
+  dataBar.style.display      = 'flex';
+  carouselIndex = 0;
+
+  state.voyages.forEach((v, idx) => {
+    const card = document.createElement('div');
+    card.className = 'home-trip-card' + (idx === 0 ? ' carousel-active-card' : '');
+    card.dataset.index = idx;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `Ouvrir le voyage ${escapeHtml(v.name)}`);
+
+    const stepsLen  = v.etapes ? v.etapes.length : 0;
+    const stepsText = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+    const dateRangeHtml = (function() {
+      if (!v.etapes || !v.etapes.length) return '';
+      const allDates = v.etapes.flatMap(e => [e.dateArr, e.dateDep]).filter(Boolean).sort();
+      if (!allDates.length) return '';
+      const fmt  = d => { const [y,m,day] = d.split('-'); return `${day}/${m}/${y.slice(2)}`; };
+      const first = fmt(allDates[0]);
+      const last  = fmt(allDates[allDates.length - 1]);
+      return first === last
+        ? `<div class="htc-dates">${escapeHtml(first)}</div>`
+        : `<div class="htc-dates">${escapeHtml(first)} → ${escapeHtml(last)}</div>`;
+    })();
+
+    card.innerHTML = `
+      <div class="htc-bg htc-passport" id="htc-bg-${escapeHtml(v.id)}"></div>
+      <div class="htc-color-bar" style="background:${escapeHtml(v.color)}"></div>
+      <button class="htc-open-btn" onclick="openVoyage('${escapeHtml(v.id)}', event)" aria-label="Ouvrir ${escapeHtml(v.name)}">→</button>
+      <div class="htc-passport-content">
+        <div class="htc-passport-name">${escapeHtml(v.name)}</div>
+      </div>
+      <div class="htc-passport-footer">
+        <div>
+          <div class="htc-meta">${escapeHtml(stepsText)}</div>
+          ${dateRangeHtml}
+        </div>
+        <button class="htc-del" onclick="deleteVoyage('${escapeHtml(v.id)}', event)" aria-label="Supprimer le voyage ${escapeHtml(v.name)}">✕</button>
+      </div>
+    `;
+
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.htc-del') || e.target.closest('.htc-open-btn')) return;
+      if (carouselDragging || Math.abs(carouselDragDelta) > 8) return;
+      openVoyage(v.id, e);
+    });
+
+    track.appendChild(card);
+
+    if (dots) {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+      dot.dataset.index = idx;
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Aller au voyage ${escapeHtml(v.name)}`);
+      dot.addEventListener('click', () => goToSlide(idx));
+      dots.appendChild(dot);
+    }
+
+    requestAnimationFrame(() => {
+      const bgEl = document.getElementById(`htc-bg-${v.id}`);
+      if (bgEl) {
+        bgEl.innerHTML = generatePassportSVG(v.name, v.color, v.etapes || [], v.id);
+        bgEl.classList.remove('loading');
+      }
+    });
+  });
+
+  initCarousel();
+}
+
+function openVoyage(id, e) {
+  state.activeVoyageId = id;
+  navigate('view-trip');
+}
+
+function initCarousel() {
+  const wrapper = document.getElementById('carousel-wrapper');
+  const track   = document.getElementById('carousel-track');
+  if (!wrapper || !track) return;
+
+  // Clone pour supprimer les anciens listeners
+  const w = wrapper.cloneNode(false);
+  while (wrapper.firstChild) w.appendChild(wrapper.firstChild);
+  wrapper.parentNode.replaceChild(w, wrapper);
+
+  carouselIndex    = 0;
+  carouselDragging = false;
+  carouselDragDelta = 0;
+
+  function getCardWidth() {
+    const card = track.querySelector('.home-trip-card');
+    return card ? card.offsetWidth + 14 : 0;
+  }
+
+  function updateCarousel(instant) {
+    const cw      = getCardWidth();
+    const wrapperW = w.offsetWidth;
+    const cardW   = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const offset  = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+    track.style.transform  = `translateX(${offset}px)`;
+    track.querySelectorAll('.home-trip-card').forEach((c, i) =>
+      c.classList.toggle('carousel-active-card', i === carouselIndex));
+    document.querySelectorAll('.carousel-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === carouselIndex));
+  }
+
+  let startX = 0, isDragging = false, moved = false;
+
+  function onPointerDown(e) {
+    isDragging = true; moved = false; carouselDragDelta = 0;
+    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+    track.style.transition = 'none';
+  }
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    const x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    carouselDragDelta = x - startX;
+    if (Math.abs(carouselDragDelta) > 5) moved = true;
+    const cw = getCardWidth(), wrapperW = w.offsetWidth;
+    const cardW = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+    const base = (wrapperW - cardW) / 2 - carouselIndex * cw;
+    track.style.transform = `translateX(${base + carouselDragDelta}px)`;
+  }
+  function onPointerUp() {
+    if (!isDragging) return;
+    isDragging = false;
+    carouselDragging = moved;
+    const total = state.voyages.length;
+    if (carouselDragDelta < -60 && carouselIndex < total - 1) carouselIndex++;
+    else if (carouselDragDelta > 60 && carouselIndex > 0)     carouselIndex--;
+    updateCarousel(false);
+    setTimeout(() => { carouselDragging = false; }, 50);
+  }
+
+  w.addEventListener('mousedown',  onPointerDown);
+  w.addEventListener('mousemove',  onPointerMove);
+  w.addEventListener('mouseup',    onPointerUp);
+  w.addEventListener('mouseleave', onPointerUp);
+  w.addEventListener('touchstart', onPointerDown, { passive: true });
+  w.addEventListener('touchmove',  onPointerMove, { passive: true });
+  w.addEventListener('touchend',   onPointerUp);
+
+  updateCarousel(true);
+  setTimeout(() => updateCarousel(true), 50);
+}
+
+function goToSlide(idx) {
+  carouselIndex = idx;
+  const track   = document.getElementById('carousel-track');
+  const wrapper = document.getElementById('carousel-wrapper');
+  if (!track || !wrapper) return;
+  const cw      = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 14;
+  const wrapperW = wrapper.offsetWidth;
+  const cardW   = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+  const offset  = (wrapperW - cardW) / 2 - idx * cw;
+  track.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+  track.style.transform  = `translateX(${offset}px)`;
+  track.querySelectorAll('.home-trip-card').forEach((c, i) =>
+    c.classList.toggle('carousel-active-card', i === idx));
+  document.querySelectorAll('.carousel-dot').forEach((d, i) =>
+    d.classList.toggle('active', i === idx));
+}
+
+// ============================================================
+// EXPORT / IMPORT
+// ============================================================
+function exportVoyages() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `voyages-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📦 Voyages exportés');
+}
+
+function importVoyages(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed || !Array.isArray(parsed.voyages)) throw new Error('Format invalide');
+      const existingIds = new Set(state.voyages.map(v => v.id));
+      const newVoyages  = parsed.voyages.filter(v => !existingIds.has(v.id));
+      // Garantit des UUIDs sur les étapes importées
+      newVoyages.forEach(v => {
+        if (!v.etapes) v.etapes = [];
+        v.etapes.forEach(e => { if (!e.id) e.id = generateId(); });
+      });
+      state.voyages.push(...newVoyages);
+      saveState();
+      renderHome();
+      toast(`✅ ${newVoyages.length} voyage(s) importé(s)`);
+    } catch(err) {
+      toast('⚠️ Fichier non reconnu', 'warn');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
+// VUE : VOYAGE
+// ============================================================
+function getActiveVoyage() {
+  return state.voyages.find(v => v.id === state.activeVoyageId);
+}
+
+function formatDate(d) {
+  if (!d) return null;
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function buildEtapeItem(e, i, voyage) {
+  const item = document.createElement('div');
+  item.className = 'etape-item';
+  item.dataset.index  = i;
+  item.dataset.etapeId = e.id; // UUID stable — clé pour les async
+  item.setAttribute('role', 'listitem');
+  item.draggable = true;
+
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr   = e.dateArr ? `<span class="date-badge">${escapeHtml(formatDate(e.dateArr))}</span>` : '';
+    const dep   = e.dateDep ? `<span class="date-badge">${escapeHtml(formatDate(e.dateDep))}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)" aria-hidden="true">→</span>` : '';
+    datesHtml   = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+
+  // escapeHtml appliqué à toutes les valeurs utilisateur
+  const notesHtml = e.notes
+    ? `<div class="etape-read-notes">${escapeHtml(e.notes)}</div>`
+    : '';
+
+  item.innerHTML = `
+    <div class="etape-handle" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="etape-num" aria-hidden="true">${i + 1}</div>
+    <div class="etape-content">
+      <div class="etape-read" onclick="openNotesOverlay(${i})" style="cursor:pointer;" role="button" tabindex="0" aria-label="Ouvrir les notes pour ${escapeHtml(e.city)}">
+        <div class="etape-read-top">
+          <div>
+            <div class="etape-city">${escapeHtml(e.city)}</div>
+            <div class="etape-country">${escapeHtml(e.country)}</div>
+          </div>
+          <button class="btn-edit-etape" onclick="event.stopPropagation();toggleEditPanel(this)" aria-label="Modifier l'étape ${escapeHtml(e.city)}">✒️</button>
+        </div>
+        ${datesHtml}
+        <div class="etape-weather" style="display:none;" aria-live="polite"></div>
+        <div class="etape-tz"     style="display:none;" aria-live="polite"></div>
+        ${notesHtml}
+      </div>
+
+      <div class="etape-edit">
+        <div class="edit-header">
+          <span class="edit-header-city">✏️ ${escapeHtml(e.city)}</span>
+          <button class="btn-close-edit" onclick="toggleEditPanel(this)" aria-label="Fermer l'éditeur">✕</button>
+        </div>
+        <span class="edit-label">Dates</span>
+        <div class="etape-dates-row">
+          <input class="etape-date-input" type="date" placeholder="Arrivée"
+            aria-label="Date d'arrivée à ${escapeHtml(e.city)}"
+            value="${escapeHtml(e.dateArr||'')}"
+            onchange="updateDate(${i},'dateArr',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i}, '${e.id}')"/>
+          <span style="font-size:12px;color:var(--ink-soft)" aria-hidden="true">→</span>
+          <input class="etape-date-input" type="date" placeholder="Départ"
+            aria-label="Date de départ de ${escapeHtml(e.city)}"
+            value="${escapeHtml(e.dateDep||'')}"
+            onchange="updateDate(${i},'dateDep',this.value); refreshEtapeReadView(${i}); fetchWeather(getActiveVoyage().etapes[${i}], ${i}, '${e.id}')"/>
+        </div>
+        <div class="edit-actions">
+          <button class="btn-del-etape" onclick="removeEtape(${i})" aria-label="Supprimer l'étape ${escapeHtml(e.city)}">🗑 Supprimer</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  item.addEventListener('dragstart', onDragStart);
+  item.addEventListener('dragover',  onDragOver);
+  item.addEventListener('drop',      onDrop);
+  item.addEventListener('dragend',   onDragEnd);
+
+  const handle = item.querySelector('.etape-handle');
+  setupTouchDrag(handle, item);
+  return item;
+}
+
+function toggleEditPanel(btn) {
+  const content   = btn.closest('.etape-content');
+  const editPanel = content.querySelector('.etape-edit');
+  const isOpen    = editPanel.classList.contains('open');
+  document.querySelectorAll('.etape-edit.open').forEach(p => p.classList.remove('open'));
+  if (!isOpen) editPanel.classList.add('open');
+}
+
+/**
+ * Reconstruit la zone de lecture d'une étape après un changement de date ou note.
+ * Utilise escapeHtml sur toutes les valeurs — fix XSS original.
+ */
+function refreshEtapeReadView(index) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  const e    = voyage.etapes[index];
+  const item = [...document.querySelectorAll('.etape-item')]
+    .find(it => parseInt(it.dataset.index) === index);
+  if (!item) return;
+
+  let datesHtml = '';
+  if (e.dateArr || e.dateDep) {
+    const arr   = e.dateArr ? `<span class="date-badge">${escapeHtml(formatDate(e.dateArr))}</span>` : '';
+    const dep   = e.dateDep ? `<span class="date-badge">${escapeHtml(formatDate(e.dateDep))}</span>` : '';
+    const arrow = (e.dateArr && e.dateDep) ? `<span style="color:var(--ink-soft)" aria-hidden="true">→</span>` : '';
+    datesHtml   = `<div class="etape-read-dates">${arr}${arrow}${dep}</div>`;
+  }
+  // escapeHtml — fix XSS critique
+  const notesHtml = e.notes
+    ? `<div class="etape-read-notes">${escapeHtml(e.notes)}</div>`
+    : '';
+
+  item.querySelectorAll('.etape-read-dates, .etape-read-notes').forEach(el => el.remove());
+  const readTop      = item.querySelector('.etape-read-top');
+  const weatherBadge = item.querySelector('.etape-weather');
+  if (weatherBadge) {
+    readTop.insertAdjacentHTML('afterend', datesHtml);
+    weatherBadge.insertAdjacentHTML('afterend', notesHtml);
+  } else {
+    readTop.insertAdjacentHTML('afterend', datesHtml + notesHtml);
+  }
+}
+
+function updateNote(index, value) {
+  const v = getActiveVoyage();
+  if (v && v.etapes[index] !== undefined) {
+    v.etapes[index].notes = value; // stocké brut, échappé à l'affichage
+    saveState();
+  }
+}
+
+function renderTrip() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return navigate('view-home');
+
+  colorPickerOpen = false;
+  const popup = document.getElementById('color-picker-popup');
+  if (popup) popup.style.display = 'none';
+
+  document.getElementById('voyage-color-dot').style.background = voyage.color;
+  document.getElementById('voyage-name-input').value = voyage.name;
+
+  const stepsLen = voyage.etapes ? voyage.etapes.length : 0;
+  document.getElementById('voyage-meta').textContent = stepsLen + (stepsLen > 1 ? ' étapes' : ' étape');
+
+  fetchVoyageFlags(voyage);
+
+  const list = document.getElementById('etapes-list');
+  list.innerHTML = '';
+  list.style.setProperty('--voyage-color', voyage.color || 'var(--navy)');
+
+  if (stepsLen === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--ink-soft);line-height:1.5;">Aucune étape.<br>Utilisez la recherche ci-dessus pour commencer.</div>';
+    return;
+  }
+
+  voyage.etapes.forEach((e, i) => list.appendChild(buildEtapeItem(e, i, voyage)));
+
+  requestAnimationFrame(fetchWeatherForAllEtapes);
+  requestAnimationFrame(() => {
+    voyage.etapes.forEach((e, i) =>
+      injectTimezoneBadge(e, i, i > 0 ? voyage.etapes[i - 1] : null));
+  });
+}
+
+// ============================================================
+// DRAG & DROP — MOUSE
+// ============================================================
+let dragSrcIndex = null;
+
+function onDragStart(e) {
+  dragSrcIndex = parseInt(this.dataset.index);
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e) {
+  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+  this.classList.add('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  const targetIndex = parseInt(this.dataset.index);
+  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+  const voyage = getActiveVoyage();
+  const moved  = voyage.etapes.splice(dragSrcIndex, 1)[0];
+  voyage.etapes.splice(targetIndex, 0, moved);
+  saveState(); renderTrip();
+}
+function onDragEnd() {
+  document.querySelectorAll('.etape-item').forEach(it =>
+    it.classList.remove('dragging', 'drag-over'));
+  dragSrcIndex = null;
+}
+
+// ============================================================
+// TOUCH DRAG
+// ============================================================
+function setupTouchDrag(handle, item) {
+  let longPressTimer = null, isDragging = false, startY = 0, clone = null, offsetY = 0;
+
+  handle.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+    longPressTimer = setTimeout(() => {
+      isDragging = true;
+      item.classList.add('dragging');
+      clone = item.cloneNode(true);
+      clone.style.cssText = `position:fixed;z-index:9999;width:${item.offsetWidth}px;left:${item.getBoundingClientRect().left}px;top:${item.getBoundingClientRect().top}px;opacity:0.88;pointer-events:none;box-shadow:0 16px 48px rgba(44,36,24,.25);transform:scale(1.02);transition:none;`;
+      document.body.appendChild(clone);
+      offsetY = startY - item.getBoundingClientRect().top;
+      if (navigator.vibrate) navigator.vibrate(40);
+    }, 400);
+  }, { passive: true });
+
+  handle.addEventListener('touchmove', function(e) {
+    if (!isDragging) { clearTimeout(longPressTimer); return; }
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    clone.style.top = (y - offsetY) + 'px';
+    clone.style.display = 'none';
+    const el = document.elementFromPoint(e.touches[0].clientX, y);
+    clone.style.display = '';
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+    if (targetItem && targetItem !== item) targetItem.classList.add('drag-over');
+  }, { passive: false });
+
+  handle.addEventListener('touchend', function(e) {
+    clearTimeout(longPressTimer);
+    if (!isDragging) return;
+    isDragging = false;
+    item.classList.remove('dragging');
+    if (clone) { clone.remove(); clone = null; }
+    const y  = e.changedTouches[0].clientY;
+    const el = document.elementFromPoint(e.changedTouches[0].clientX, y);
+    const targetItem = el ? el.closest('.etape-item') : null;
+    document.querySelectorAll('.etape-item').forEach(it => it.classList.remove('drag-over'));
+    if (targetItem && targetItem !== item) {
+      const srcIdx = parseInt(item.dataset.index);
+      const tgtIdx = parseInt(targetItem.dataset.index);
+      const voyage = getActiveVoyage();
+      const moved  = voyage.etapes.splice(srcIdx, 1)[0];
+      voyage.etapes.splice(tgtIdx, 0, moved);
+      saveState(); renderTrip();
+    }
+  });
+}
+
+document.getElementById('voyage-name-input').addEventListener('input', function() {
+  const v = getActiveVoyage();
+  if (v) { v.name = this.value; saveState(); }
+});
+
+// ============================================================
+// CARTE & MODE MANUEL
+// ============================================================
+function initMap() {
+  if (map) return;
+  map = L.map('map', { center: [48, 10], zoom: 4, zoomControl: false });
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
+  map.on('click', onMapClick);
+}
+
+function renderAllMaps() {
+  Object.keys(layers).forEach(id => { map.removeLayer(layers[id]); delete layers[id]; });
+  const active = getActiveVoyage();
+  if (!active || !active.etapes) return;
+  const layer = L.layerGroup().addTo(map);
+  layers[active.id] = layer;
+  if (active.etapes.length > 1) {
+    const coords = active.etapes.map(e => [e.lat, e.lon]);
+    L.polyline(coords, { color: active.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
+  }
+  active.etapes.forEach((e, i) => {
+    const svg  = buildMarkerSVG(i + 1, active.color);
+    const icon = L.divIcon({ html: svg, className: '', iconSize: [32,40], iconAnchor: [16,40], popupAnchor: [0,-42] });
+    L.marker([e.lat, e.lon], { icon })
+      .bindPopup(`<b style="font-size:14px">${escapeHtml(e.city)}</b><br><span style="color:#888">${escapeHtml(e.country)}</span>`)
+      .addTo(layer);
+  });
+}
+
+function buildMarkerSVG(num, color) {
+  // couleur et numéro échappés — les couleurs sont des constantes internes mais num vient des index
+  const safeColor = escapeHtml(color);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+    <path d="M16 0C7.163 0 0 7.163 0 16c0 10.844 14 24 16 24s16-13.156 16-24C32 7.163 24.837 0 16 0z" fill="${safeColor}"/>
+    <circle cx="16" cy="16" r="10" fill="white"/>
+    <text x="16" y="20.5" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="${safeColor}">${num}</text>
+  </svg>`;
+}
+
+function fitMapToActiveVoyage() {
+  const v = getActiveVoyage();
+  if (!v || !v.etapes || !v.etapes.length) { map.setView([48, 10], 4); return; }
+  const coords = v.etapes.map(e => [e.lat, e.lon]);
+  if (coords.length === 1) map.setView(coords[0], 6);
+  else map.fitBounds(L.latLngBounds(coords), { padding: [40, 40] });
+}
+
+function activateManualMode() {
+  manualMode = true;
+  document.getElementById('manual-mode-bar').classList.add('active');
+  document.getElementById('map').classList.add('selecting');
+  navigate('view-map');
+}
+
+function cancelManualMode() {
+  manualMode = false;
+  manualPendingLatLng = null;
+  document.getElementById('manual-mode-bar').classList.remove('active');
+  document.getElementById('map').classList.remove('selecting');
+  document.getElementById('manual-name-overlay').classList.remove('open');
+}
+
+/**
+ * onMapClick — remplace window.prompt() par un modal HTML dédié.
+ * Les coordonnées sont stockées dans manualPendingLatLng jusqu'à confirmation.
+ */
+function onMapClick(e) {
+  if (!manualMode) return;
+  manualPendingLatLng = e.latlng;
+  const input = document.getElementById('manual-name-input');
+  input.value = '';
+  document.getElementById('manual-name-overlay').classList.add('open');
+  setTimeout(() => input.focus(), 50);
+}
+
+function confirmManualName() {
+  const name = document.getElementById('manual-name-input').value.trim();
+  if (!name || !manualPendingLatLng) return;
+  addEtapeToActiveVoyage({
+    name,
+    country: 'Point manuel',
+    lat: manualPendingLatLng.lat,
+    lon: manualPendingLatLng.lng
+  });
+  cancelManualMode();
+  navigate('view-trip');
+}
+
+function cancelManualName() {
+  manualPendingLatLng = null;
+  document.getElementById('manual-name-overlay').classList.remove('open');
+}
+
+// ============================================================
+// RECHERCHE
+// ============================================================
+const searchInput = document.getElementById('search-input');
+const acList      = document.getElementById('autocomplete');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim();
+  if (q.length < 2) {
+    acList.classList.remove('open');
+    clearTimeout(photonDebounce);
+    if (photonController) photonController.abort();
+    return;
+  }
+  clearTimeout(photonDebounce);
+  photonDebounce = setTimeout(() => searchPhoton(q), 300);
+});
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('search-wrap').contains(e.target)) acList.classList.remove('open');
+});
+
+// ============================================================
+// ACTIONS DATA
+// ============================================================
+function addEtapeToActiveVoyage(city) {
+  const v = getActiveVoyage();
+  v.etapes.push({
+    id:      generateId(), // UUID stable dès la création
+    city:    city.name,
+    country: city.country,
+    lat:     city.lat,
+    lon:     city.lon,
+    dateArr: '',
+    dateDep: '',
+    notes:   ''
+  });
+  saveState(); renderTrip();
+  toast(`📍 ${escapeHtml(city.name)} ajouté`);
+}
+
+function removeEtape(index) {
+  getActiveVoyage().etapes.splice(index, 1);
+  saveState(); renderTrip();
+}
+
+function updateDate(index, field, value) {
+  getActiveVoyage().etapes[index][field] = value;
+  saveState();
+}
+
+function deleteVoyage(id, e) {
+  e.stopPropagation();
+  if (confirm('Supprimer ce voyage ?')) {
+    state.voyages = state.voyages.filter(v => v.id !== id);
+    saveState(); renderHome();
+    toast('Voyage supprimé');
+  }
+}
+
+// ============================================================
+// MODAL NOUVEAU VOYAGE
+// ============================================================
+let pendingColor = VOYAGE_COLORS[0];
+
+function openNewVoyageModal() {
+  pendingColor = VOYAGE_COLORS[state.voyages.length % VOYAGE_COLORS.length];
+  const swatches = document.getElementById('color-swatches');
+  swatches.innerHTML = '';
+  VOYAGE_COLORS.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch' + (c === pendingColor ? ' selected' : '');
+    s.style.background = c;
+    s.setAttribute('role', 'radio');
+    s.setAttribute('aria-checked', c === pendingColor ? 'true' : 'false');
+    s.setAttribute('aria-label', `Couleur ${c}`);
+    s.setAttribute('tabindex', '0');
+    s.onclick = () => {
+      pendingColor = c;
+      swatches.querySelectorAll('.swatch').forEach(x => {
+        x.classList.remove('selected');
+        x.setAttribute('aria-checked', 'false');
+      });
+      s.classList.add('selected');
+      s.setAttribute('aria-checked', 'true');
+    };
+    swatches.appendChild(s);
+  });
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-name').focus(), 50);
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function confirmNewVoyage() {
+  const name = document.getElementById('modal-name').value.trim() || 'Nouveau voyage';
+  const id   = 'v' + Date.now();
+  state.voyages.push({ id, name, color: pendingColor, etapes: [] });
+  state.activeVoyageId = id;
+  closeModal(); saveState();
+  navigate('view-trip');
+  toast('Voyage créé !');
+}
+
+// ============================================================
+// CARTE GLOBALE
+// ============================================================
+let globalMap, globalLayers = {};
+
+function navigateGlobalMap() {
+  const fromTrip = document.getElementById('view-trip').classList.contains('active');
+  document.getElementById('global-map-back-btn').onclick = () =>
+    navigate(fromTrip ? 'view-trip' : 'view-home');
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-global-map').classList.add('active');
+
+  const globalMapEl = document.getElementById('global-map');
+
+  if (!globalMap) {
+    globalMap = L.map('global-map', { center: [20, 10], zoom: 2, zoomControl: false });
+    L.control.zoom({ position: 'topright' }).addTo(globalMap);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(globalMap);
+    // ResizeObserver robuste pour la carte globale
+    new ResizeObserver(() => globalMap.invalidateSize()).observe(globalMapEl);
+  } else {
+    globalMap.invalidateSize();
+  }
+
+  renderGlobalMap();
+}
+
+function renderGlobalMap() {
+  Object.keys(globalLayers).forEach(id => { globalMap.removeLayer(globalLayers[id]); delete globalLayers[id]; });
+  const legend = document.getElementById('global-map-legend');
+  legend.innerHTML = '';
+  const voyagesWithEtapes = state.voyages.filter(v => v.etapes && v.etapes.length > 0);
+  if (voyagesWithEtapes.length === 0) {
+    legend.style.display = 'block';
+    legend.innerHTML = '<span style="color:var(--ink-soft)">Aucune étape à afficher.</span>';
+    globalMap.setView([20, 10], 2);
+    return;
+  }
+  const allCoords = [];
+  voyagesWithEtapes.forEach(v => {
+    const layer = L.layerGroup().addTo(globalMap);
+    globalLayers[v.id] = layer;
+    const coords = v.etapes.map(e => [e.lat, e.lon]);
+    allCoords.push(...coords);
+    if (coords.length > 1)
+      L.polyline(coords, { color: v.color, weight: 3, opacity: 0.8, dashArray: '8 5' }).addTo(layer);
+    v.etapes.forEach((e, i) => {
+      const svg  = buildMarkerSVG(i + 1, v.color).replace('width="32" height="40"', 'width="28" height="36"');
+      const icon = L.divIcon({ html: svg, className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38] });
+      L.marker([e.lat, e.lon], { icon })
+        .bindPopup(`<b style="font-size:13px">${escapeHtml(e.city)}</b><br><span style="color:#888;font-size:12px">${escapeHtml(e.country)}</span><br><span style="color:${escapeHtml(v.color)};font-size:11px;font-weight:600">${escapeHtml(v.name)}</span>`)
+        .addTo(layer);
+    });
+    const entry = document.createElement('div');
+    entry.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;';
+    entry.setAttribute('role', 'button');
+    entry.setAttribute('tabindex', '0');
+    entry.setAttribute('aria-label', `Centrer la carte sur le voyage ${escapeHtml(v.name)}`);
+    entry.innerHTML = `<span style="width:12px;height:12px;border-radius:50%;background:${escapeHtml(v.color)};flex-shrink:0;display:inline-block;" aria-hidden="true"></span><span style="color:var(--ink);font-weight:600;">${escapeHtml(v.name)}</span>`;
+    entry.onclick = () => {
+      if (coords.length === 1) globalMap.setView(coords[0], 6);
+      else globalMap.fitBounds(L.latLngBounds(coords), { padding: [40,40] });
+    };
+    legend.appendChild(entry);
+  });
+  legend.style.display = 'block';
+  if (allCoords.length === 1) globalMap.setView(allCoords[0], 5);
+  else if (allCoords.length > 1) globalMap.fitBounds(L.latLngBounds(allCoords), { padding: [50,50] });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.remove('toast-warn');
+  if (type === 'warn') el.classList.add('toast-warn');
+  el.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('visible'), 2800);
+}
+
+// ============================================================
+// FUSEAU HORAIRE — WorldTimeAPI
+// Cohérence garantie par l'UUID de l'étape (etapeId).
+// ============================================================
+async function fetchTimezone(lat, lon) {
+  const key = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
+  if (tzCache.has(key)) return tzCache.get(key);
+  try {
+    const resp = await fetch(`https://worldtimeapi.org/api/coordinates/${lat},${lon}`);
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+    const raw  = data.utc_offset || '+00:00';
+    const sign = raw[0] === '-' ? -1 : 1;
+    const [h, m] = raw.slice(1).split(':').map(Number);
+    const result = { offsetH: sign * (h + m / 60), raw, timezone: data.timezone || null };
+    tzCache.set(key, result);
+    return result;
+  } catch {
+    tzCache.set(key, null);
+    return null;
+  }
+}
+
+async function fetchParisOffset() {
+  if (tzCache.has('paris')) return tzCache.get('paris');
+  try {
+    const resp = await fetch('https://worldtimeapi.org/api/timezone/Europe/Paris');
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+    const raw  = data.utc_offset || '+01:00';
+    const sign = raw[0] === '-' ? -1 : 1;
+    const [h, m] = raw.slice(1).split(':').map(Number);
+    const result = { offsetH: sign * (h + m / 60) };
+    tzCache.set('paris', result);
+    return result;
+  } catch {
+    const fallback = { offsetH: 1 };
+    tzCache.set('paris', fallback);
+    return fallback;
+  }
+}
+
+/**
+ * injectTimezoneBadge — utilise etapeId pour vérifier la cohérence
+ * après un résultat réseau asynchrone tardif.
+ */
+async function injectTimezoneBadge(etape, index, prevEtape) {
+  const etapeId = etape.id;
+  const tzEl = document.querySelector(`.etape-item[data-etape-id="${etapeId}"] .etape-tz`);
+  if (!tzEl) return;
+
+  const [tz, parisRef, prevTz] = await Promise.all([
+    fetchTimezone(etape.lat, etape.lon),
+    prevEtape ? null : fetchParisOffset(),
+    prevEtape ? fetchTimezone(prevEtape.lat, prevEtape.lon) : null
+  ]);
+  if (!tz) return;
+
+  // Vérification cohérence : l'élément existe-t-il encore et correspond-il toujours au même ID ?
+  const currentEl = document.querySelector(`.etape-item[data-etape-id="${etapeId}"] .etape-tz`);
+  if (!currentEl) return;
+
+  const refOffset = prevEtape ? (prevTz ? prevTz.offsetH : null) : (parisRef ? parisRef.offsetH : 1);
+  if (refOffset === null) return;
+
+  const diff = tz.offsetH - refOffset;
+  if (Math.abs(diff) < 0.5) return;
+
+  const sign     = diff >= 0 ? '+' : '';
+  const diffLabel = Number.isInteger(diff) ? `${sign}${diff}h` : `${sign}${diff.toFixed(1)}h`;
+  const utcLabel  = `UTC${tz.raw}`;
+  const refLabel  = prevEtape ? `vs étape préc.` : `vs Paris`;
+  const warn      = Math.abs(diff) >= 3;
+
+  currentEl.innerHTML = `
+    <span class="tz-badge${warn ? ' tz-warn' : ''}">🕐 ${escapeHtml(utcLabel)}</span>
+    <span class="tz-diff">${escapeHtml(diffLabel)} ${escapeHtml(refLabel)}</span>
+  `;
+  currentEl.style.display = 'flex';
+}
+
+// ============================================================
+// LEVER / COUCHER DU SOLEIL
+// ============================================================
+async function fetchSunTimes(lat, lon, date) {
+  const key = `${lat},${lon},${date}`;
+  if (sunCache.has(key)) return sunCache.get(key);
+  try {
+    const [sunResp] = await Promise.all([
+      fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${date}&formatted=0`)
+    ]);
+    if (!sunResp.ok) throw new Error();
+    const data = await sunResp.json();
+    if (data.status !== 'OK') throw new Error();
+
+    const tzKey   = `${Math.round(lat * 10) / 10},${Math.round(lon * 10) / 10}`;
+    const tzEntry = tzCache.get(tzKey);
+    const ianaZone = (tzEntry && tzEntry.timezone) ? tzEntry.timezone : 'UTC';
+
+    const fmt = iso => new Date(iso).toLocaleTimeString('fr-FR', {
+      hour: '2-digit', minute: '2-digit', timeZone: ianaZone
+    });
+    const result = { rise: fmt(data.results.sunrise), set: fmt(data.results.sunset) };
+    sunCache.set(key, result);
+    return result;
+  } catch {
+    sunCache.set(key, null);
+    return null;
+  }
+}
+
+// ============================================================
+// DRAPEAUX PAYS
+// ============================================================
+const countryFlagCache = new LRUCache(100);
+
+async function fetchVoyageFlags(voyage) {
+  const flagEl = document.getElementById('voyage-flags');
+  if (!flagEl) return;
+  if (!voyage.etapes || !voyage.etapes.length) { flagEl.textContent = ''; return; }
+
+  const uniqueCountries = [...new Set(
+    voyage.etapes.map(e => e.country).filter(c => c && c !== 'Point manuel')
+  )];
+  if (!uniqueCountries.length) { flagEl.textContent = ''; return; }
+
+  const emojis = await Promise.all(uniqueCountries.map(async country => {
+    if (countryFlagCache.has(country)) return countryFlagCache.get(country);
+    try {
+      const url  = `https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fields=flag&fullText=false`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error();
+      const data  = await resp.json();
+      const emoji = data[0]?.flag || '';
+      countryFlagCache.set(country, emoji);
+      return emoji;
+    } catch {
+      countryFlagCache.set(country, '');
+      return '';
+    }
+  }));
+
+  if (document.getElementById('voyage-flags') === flagEl) {
+    flagEl.textContent = emojis.filter(Boolean).join(' ');
+  }
+}
+
+// ============================================================
+// MÉTÉO
+// ============================================================
+function wxCodeToScore(code) {
+  if (code === 0)               return 0;
+  if (code <= 2)                return 1;
+  if (code === 3)               return 2;
+  if (code >= 45 && code <= 48) return 3;
+  if (code >= 51 && code <= 55) return 4;
+  if (code >= 71 && code <= 77) return 5;
+  if (code >= 85 && code <= 86) return 5;
+  if (code >= 61 && code <= 65) return 6;
+  if (code >= 80 && code <= 82) return 6;
+  if (code >= 66 && code <= 67) return 7;
+  if (code >= 95 && code <= 99) return 10;
+  return 3;
+}
+
+function wxScoreToLabel(avgScore) {
+  if (avgScore < 0.5)  return { icon: '☀️',  label: 'Beau temps',      nuance: false };
+  if (avgScore < 1.5)  return { icon: '🌤️', label: 'Beau temps',       nuance: avgScore > 1.0 };
+  if (avgScore < 2.5)  return { icon: '⛅',  label: 'Quelques nuages',  nuance: false };
+  if (avgScore < 3.5)  return { icon: '☁️',  label: 'Temps couvert',    nuance: avgScore < 3.0 };
+  if (avgScore < 5.0)  return { icon: '🌦️', label: 'Temps mitigé',     nuance: avgScore < 4.2 };
+  if (avgScore < 6.5)  return { icon: '🌧️', label: 'Pluie',            nuance: avgScore < 5.8 };
+  if (avgScore < 8.5)  return { icon: '🌧️', label: 'Mauvais temps',    nuance: avgScore < 7.5 };
+  return                        { icon: '⛈️', label: 'Orages',           nuance: true  };
+}
+
+function aggregateDailyData(data, dateArr, dateDep) {
+  const times = data.daily.time;
+  const tmax  = data.daily.temperature_2m_max;
+  const tmin  = data.daily.temperature_2m_min;
+  const codes = data.daily.weathercode;
+  const from  = dateArr || dateDep;
+  const to    = dateDep || dateArr;
+  const indices = [];
+  times.forEach((t, i) => { if (t >= from && t <= to) indices.push(i); });
+  if (!indices.length) return null;
+  const avgMax   = Math.round(indices.reduce((s, i) => s + tmax[i], 0) / indices.length);
+  const avgMin   = Math.round(indices.reduce((s, i) => s + tmin[i], 0) / indices.length);
+  const avgScore = indices.reduce((s, i) => s + wxCodeToScore(codes[i]), 0) / indices.length;
+  return { avgMax, avgMin, avgScore };
+}
+
+/**
+ * fetchWeather — paramètre etapeId ajouté pour cohérence async.
+ * Avant de muter le DOM, vérifie que l'étape visible correspond
+ * toujours à l'UUID de l'étape qui a lancé la requête.
+ */
+async function fetchWeather(etape, index, etapeId) {
+  const id = etapeId || etape.id;
+  const { lat, lon, dateArr, dateDep } = etape;
+  if (!dateArr && !dateDep) return;
+
+  const cacheKey = `${lat},${lon},${dateArr||''},${dateDep||''}`;
+  if (weatherCache.has(cacheKey)) {
+    renderWeatherBadge(id, weatherCache.get(cacheKey), etape);
+    return;
+  }
+
+  const badge = document.querySelector(`.etape-item[data-etape-id="${id}"] .etape-weather`);
+  if (badge) badge.innerHTML = '<span class="wx-loading">Chargement météo…</span>';
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today); horizon.setDate(today.getDate() + 16);
+  const refDate = new Date(dateArr || dateDep);
+  const isHistorical = refDate > horizon;
+
+  try {
+    let result;
+    if (isHistorical) {
+      const samples = [];
+      for (let y = 1; y <= 5; y++) {
+        const sArr = dateArr ? shiftYear(dateArr, -y) : null;
+        const sDep = dateDep ? shiftYear(dateDep, -y) : null;
+        const from = sArr || sDep, to = sDep || sArr;
+        const url  = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${from}&end_date=${to}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`;
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const agg  = aggregateDailyData(data, from, to);
+        if (agg) samples.push(agg);
+      }
+      if (!samples.length) { renderWeatherBadge(id, null, etape); return; }
+      result = {
+        avgMax:       Math.round(samples.reduce((s, x) => s + x.avgMax, 0) / samples.length),
+        avgMin:       Math.round(samples.reduce((s, x) => s + x.avgMin, 0) / samples.length),
+        avgScore:     samples.reduce((s, x) => s + x.avgScore, 0) / samples.length,
+        isHistorical: true
+      };
+    } else {
+      const from = dateArr || dateDep, to = dateDep || dateArr;
+      const url  = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&start_date=${from}&end_date=${to}`;
+      const resp = await fetch(url);
+      if (!resp.ok) { renderWeatherBadge(id, null, etape); return; }
+      const data = await resp.json();
+      const agg  = aggregateDailyData(data, from, to);
+      if (!agg) { renderWeatherBadge(id, null, etape); return; }
+      result = { ...agg, isHistorical: false };
+    }
+    weatherCache.set(cacheKey, result);
+    renderWeatherBadge(id, result, etape);
+  } catch(err) {
+    console.warn('Météo indisponible', err);
+    renderWeatherBadge(id, null, etape);
+  }
+}
+
+function shiftYear(dateStr, delta) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${y + delta}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+
+/**
+ * renderWeatherBadge — cible l'étape par son UUID stable,
+ * éliminant la race condition index vs étape visible.
+ */
+function renderWeatherBadge(etapeId, result, etape) {
+  const badge = document.querySelector(`.etape-item[data-etape-id="${etapeId}"] .etape-weather`);
+  if (!badge) return;
+  if (!result) { badge.innerHTML = ''; badge.style.display = 'none'; return; }
+
+  const { icon, label, nuance } = wxScoreToLabel(result.avgScore);
+  const histPrefix   = result.isHistorical ? '📊' : '';
+  const nuancePrefix = (!result.isHistorical && nuance) ? 'Plutôt ' : '';
+  const prefix       = histPrefix || nuancePrefix;
+
+  badge.classList.toggle('wx-historical', result.isHistorical);
+  badge.style.display = 'flex';
+  badge.innerHTML = `
+    <span class="wx-icon" aria-hidden="true">${icon}</span>
+    <span class="wx-label">${escapeHtml(prefix + label)}</span>
+    <span class="wx-temps">${result.avgMin}° / ${result.avgMax}°</span>
+  `;
+
+  if (etape && (etape.dateArr || etape.dateDep)) {
+    const sunDate = etape.dateArr || etape.dateDep;
+    fetchSunTimes(etape.lat, etape.lon, sunDate).then(sun => {
+      if (!sun) return;
+      // Vérification UUID : le badge appartient-il toujours à la même étape ?
+      const currentBadge = document.querySelector(`.etape-item[data-etape-id="${etapeId}"] .etape-weather`);
+      if (!currentBadge) return;
+      const prev = currentBadge.nextElementSibling;
+      if (prev && prev.classList.contains('etape-sun')) prev.remove();
+      const sunEl = document.createElement('div');
+      sunEl.className = 'etape-sun';
+      sunEl.setAttribute('aria-label', `Lever du soleil ${sun.rise}, coucher ${sun.set}`);
+      sunEl.innerHTML = `<span class="sun-rise" aria-hidden="true">🌅 ${escapeHtml(sun.rise)}</span><span class="sun-set" aria-hidden="true">🌇 ${escapeHtml(sun.set)}</span>`;
+      currentBadge.insertAdjacentElement('afterend', sunEl);
+    });
+  }
+}
+
+function fetchWeatherForAllEtapes() {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.etapes.forEach((e, i) => {
+    if (e.dateArr || e.dateDep) fetchWeather(e, i, e.id);
+  });
+}
+
+// ============================================================
+// COLOR PICKER
+// ============================================================
+let colorPickerOpen = false;
+
+function toggleColorPicker() {
+  const popup = document.getElementById('color-picker-popup');
+  colorPickerOpen = !colorPickerOpen;
+  popup.style.display = colorPickerOpen ? 'flex' : 'none';
+  if (colorPickerOpen) {
+    const voyage    = getActiveVoyage();
+    if (!voyage) return;
+    const container = document.getElementById('voyage-color-swatches');
+    container.innerHTML = VOYAGE_COLORS.map(c =>
+      `<div class="swatch${c === voyage.color ? ' selected' : ''}"
+        style="background:${escapeHtml(c)};width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform 0.15s,border-color 0.15s;"
+        data-color="${escapeHtml(c)}"
+        role="radio"
+        aria-checked="${c === voyage.color ? 'true' : 'false'}"
+        aria-label="Couleur ${escapeHtml(c)}"
+        tabindex="0"
+        onclick="pickVoyageColor('${escapeHtml(c)}')"></div>`
+    ).join('');
+  }
+}
+
+function pickVoyageColor(color) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  voyage.color = color;
+  saveState();
+  document.getElementById('voyage-color-dot').style.background = color;
+  document.querySelectorAll('#voyage-color-swatches .swatch').forEach(s => {
+    const sel = s.dataset.color === color;
+    s.classList.toggle('selected', sel);
+    s.style.borderColor = sel ? 'var(--ink)' : 'transparent';
+    s.style.transform   = sel ? 'scale(1.15)' : 'scale(1)';
+    s.setAttribute('aria-checked', sel ? 'true' : 'false');
+  });
+  setTimeout(() => {
+    colorPickerOpen = false;
+    document.getElementById('color-picker-popup').style.display = 'none';
+  }, 300);
+}
+
+document.addEventListener('click', function(e) {
+  if (!colorPickerOpen) return;
+  const dot   = document.getElementById('voyage-color-dot');
+  const popup = document.getElementById('color-picker-popup');
+  if (!dot.contains(e.target) && !popup.contains(e.target)) {
+    colorPickerOpen = false;
+    popup.style.display = 'none';
+  }
+});
+
+// ============================================================
+// NOTES OVERLAY
+// ============================================================
+let notesOverlayIndex = null;
+
+function openNotesOverlay(index) {
+  const voyage = getActiveVoyage();
+  if (!voyage) return;
+  const etape = voyage.etapes[index];
+  if (!etape) return;
+  notesOverlayIndex = index;
+
+  const overlay  = document.getElementById('notes-overlay');
+  const bg       = document.getElementById('notes-overlay-bg');
+  const cityEl   = document.getElementById('notes-overlay-city');
+  const countryEl = document.getElementById('notes-overlay-country');
+  const textarea = document.getElementById('notes-overlay-textarea');
+
+  // textContent — pas de risque XSS ici (pas d'innerHTML)
+  cityEl.textContent    = etape.city;
+  countryEl.textContent = etape.country ? etape.country.toUpperCase() : '';
+  textarea.value        = etape.notes || '';
+
+  const color    = voyage.color || '#1C3557';
+  const {r,g,b}  = hexToRgb(color);
+  const dk = (v, a) => Math.max(0, Math.round(v * a));
+  bg.style.background = `
+    linear-gradient(160deg,
+      rgb(${Math.min(255,Math.round(r*1.05))},${Math.min(255,Math.round(g*1.05))},${b}) 0%,
+      rgb(${dk(r,.65)},${dk(g,.65)},${dk(b,.65)}) 45%,
+      rgb(${dk(r,.38)},${dk(g,.38)},${dk(b,.38)}) 100%
+    )`;
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => { overlay.style.opacity = '1'; textarea.focus(); });
+}
+
+function closeNotesOverlay() {
+  document.getElementById('notes-overlay').style.display = 'none';
+  notesOverlayIndex = null;
+}
+
+function saveOverlayNote() {
+  if (notesOverlayIndex === null) return;
+  updateNote(notesOverlayIndex, document.getElementById('notes-overlay-textarea').value);
+  refreshEtapeReadView(notesOverlayIndex);
+}
+
+// ============================================================
+// SERVICE WORKER — Enregistrement via Blob URL
+// Stratégie cache-first pour les tuiles de carte (CartoCSS),
+// network-first pour les API météo / tz / drapeaux.
+// Reste mono-fichier : le SW est injecté comme Blob.
+// ============================================================
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+
+  const swCode = `
+const CACHE_NAME = 'voyages-v1';
+const TILE_HOSTS = ['tile.openstreetmap.org', 'basemaps.cartocdn.com'];
+const API_HOSTS  = ['api.open-meteo.com', 'archive-api.open-meteo.com',
+                    'worldtimeapi.org', 'api.sunrise-sunset.org',
+                    'restcountries.com', 'photon.komoot.io'];
+
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+
+  // Tuiles cartographiques : cache-first (immutables par zoom/x/y)
+  if (TILE_HOSTS.some(h => url.hostname.includes(h))) {
+    e.respondWith(
+      caches.open(CACHE_NAME).then(cache =>
+        cache.match(e.request).then(cached => {
+          if (cached) return cached;
+          return fetch(e.request).then(resp => {
+            if (resp && resp.status === 200) cache.put(e.request, resp.clone());
+            return resp;
+          }).catch(() => cached || new Response('', { status: 503 }));
+        })
+      )
+    );
+    return;
+  }
+
+  // API météo / tz : network-first, fallback cache
+  if (API_HOSTS.some(h => url.hostname.includes(h))) {
+    e.respondWith(
+      fetch(e.request).then(resp => {
+        if (resp && resp.status === 200) {
+          caches.open(CACHE_NAME).then(c => c.put(e.request, resp.clone()));
+        }
+        return resp;
+      }).catch(() =>
+        caches.match(e.request).then(cached =>
+          cached || new Response(JSON.stringify({ error: 'offline' }), {
+            headers: { 'Content-Type': 'application/json' }, status: 503
+          })
+        )
+      )
+    );
+    return;
+  }
+
+  // Tout le reste : réseau direct
+  e.respondWith(fetch(e.request).catch(() => new Response('', { status: 503 })));
+});
+`;
+
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const url  = URL.createObjectURL(blob);
+
+  navigator.serviceWorker.register(url, { scope: '/' })
+    .then(() => console.log('Service Worker enregistré (Blob)'))
+    .catch(err => console.warn('SW non enregistré :', err));
+}
+
+// ============================================================
+// RESIZE — carousel
+// ============================================================
+window.addEventListener('resize', () => {
+  if (!state.voyages.length) return;
+  const track   = document.getElementById('carousel-track');
+  const wrapper = document.getElementById('carousel-wrapper');
+  if (!track || !wrapper) return;
+  const cw      = (track.querySelector('.home-trip-card')?.offsetWidth || 0) + 14;
+  const wrapperW = wrapper.offsetWidth;
+  const cardW   = track.querySelector('.home-trip-card')?.offsetWidth || 0;
+  const offset  = (wrapperW - cardW) / 2 - carouselIndex * cw;
+  track.style.transition = 'none';
+  track.style.transform  = `translateX(${offset}px)`;
+});
+
+// ============================================================
+// LANCEMENT
+// ============================================================
+window.onload = function() {
+  loadState();
+  renderHome();
+  registerServiceWorker();
+};
 </script>
 </body>
 </html>
